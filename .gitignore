@@ -2,5 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-
+*.snp
+*.geno
+*.ind
 /.quarto/
