@@ -26,6 +26,16 @@ plot_model(model, proportions = TRUE, samples = schedule)
 
 ts <- msprime(model, samples = schedule, sequence_length = 50e6, recombination_rate = 1e-8) %>% ts_mutate(1e-8)
 
+
+
+
+
+# get an EIGENSTRAT data set out of this and inspect it in the terminal
+
+
+
+
+
 # Verify that all the samples we've scheduled for recording really are in the tree sequence
 ts_samples(ts)
 ts_samples(ts) %>% filter(pop == "popX") %>% group_by(pop, time) %>% tally
