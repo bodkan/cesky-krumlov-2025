@@ -30,6 +30,7 @@ model <- compile_model(
 plot_model(model, proportions = TRUE)
 plot_model(model, proportions = TRUE, log = TRUE)
 
+# solution to exercise #2 starts here -------------------------------------
 
 # if the command below takes way too much time to run, feel free to go down from
 # 100 Mb sequence_length to even 10Mb (it doesn't matter much)
@@ -43,7 +44,7 @@ tend - tstart
 # define sampling events
 nea_samples <- schedule_sampling(model, times = c(70000, 40000), list(nea, 1))
 present_samples <- schedule_sampling(model, times = 0, list(chimp, 1), list(afr, 10), list(eur, 10))
-emh_samples <- schedule_sampling(model, times = runif(n = 40, min = 10000, max = 40000), list(eur, 1))
+emh_samples <- schedule_sampling(model, times = seq(50000, 2000, by = -2000), list(eur, 1))
 
 schedule <- rbind(nea_samples, present_samples, emh_samples)
 

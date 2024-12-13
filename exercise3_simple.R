@@ -2,7 +2,8 @@ library(slendr)
 init_env()
 
 
-# Exercise 3 -- part a ----------------------------------------------------
+
+# solution to exercise #2 starts here -- part a) --------------------------
 
 simulate_afs <- function(Ne) {
   # create a slendr model with a given N size
@@ -23,7 +24,6 @@ simulate_afs <- function(Ne) {
   afs
 }
 
-
 afs_1k <- simulate_afs(1000)
 afs_10k <- simulate_afs(10000)
 afs_30k <- simulate_afs(30000)
@@ -33,7 +33,7 @@ plot(afs_10k, type = "o", main = "AFS, Ne = 10000")
 plot(afs_30k, type = "o", main = "AFS, Ne = 30000")
 
 
-# Exercise 2 -- part b ----------------------------------------------------
+# solution to exercise #2 starts here -- part b) --------------------------
 
 afs_observed <- c(2520, 1449, 855, 622, 530, 446, 365, 334, 349, 244,
                   264, 218,  133, 173, 159, 142, 167, 129, 125, 143)

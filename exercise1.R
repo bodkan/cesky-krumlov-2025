@@ -1,3 +1,5 @@
+# solution to exercise #1 starts here -------------------------------------
+
 library(slendr)
 init_env()
 
@@ -31,7 +33,7 @@ plot_model(model, sizes = FALSE, log = TRUE, proportions = TRUE)
 # schedule sampling of a defined set of individuals
 nea_samples <- schedule_sampling(model, times = c(70000, 40000), list(nea, 1))
 present_samples <- schedule_sampling(model, times = 0, list(chimp, 1), list(afr, 5), list(eur, 10))
-emh_samples <- schedule_sampling(model, times = runif(n = 40, min = 10000, max = 40000), list(eur, 1))
+emh_samples <- schedule_sampling(model, times = seq(50000, 2000, by = -2000), list(eur, 1))
 
 schedule <- rbind(nea_samples, present_samples, emh_samples)
 schedule
