@@ -11,7 +11,7 @@ plot_model(model, proportions = TRUE)
 
 plot_map(model, gene_flow = TRUE)
 
-schedule <- landscape_sampling(model, n = 10)
+schedule <- landscape_sampling(model, n = 25)
 
 plot_model(model, proportions = TRUE, samples = schedule)
 
@@ -22,6 +22,6 @@ samples <- ts_samples(ts)
 ts_eigenstrat(ts, "exercise5")
 
 plot_grid(
-  plot_map(model, gene_flow = TRUE),
+  plot_map(model, gene_flow = TRUE, labels = TRUE),
   plot_pca("exercise5", samples, color = "pop")
 )
