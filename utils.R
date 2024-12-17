@@ -25,10 +25,12 @@ plot_pca <- function(prefix, samples, pc = c(1, 2), color = c("time", "pop"), re
 
   if (color == "time") {
     gg_point <- geom_point(aes(x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]), shape = pop, color = time))
-    gg_label <- geom_label_repel(data = pop_df, aes(label = pop, x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]), shape = pop, color = time))
+    gg_label <- geom_label_repel(data = pop_df, aes(label = pop, x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]),
+                                                    shape = pop, color = time), show.legend = FALSE)
     gg_theme <- scale_color_viridis_c(option = "viridis")
   } else {
-    gg_label <- geom_label_repel(data = pop_df, aes(label = pop, x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]), color = pop))
+    gg_label <- geom_label_repel(data = pop_df, aes(label = pop, x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]),
+                                                    color = pop), show.legend = FALSE)
     if (length(unique(samples$pop)) > 6) {
       gg_point <- geom_point(aes(x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]), color = pop))
     } else {
