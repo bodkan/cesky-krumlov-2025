@@ -118,17 +118,21 @@ landscape_model <- function(rate, Ne) {
 }
 
 landscape_sampling <- function(model, n) {
+  if (is.numeric(n)) {
+    n <- rep(n, 10)
+    names(n) <- paste0("p", 1:10)
+  }
   schedule <- schedule_sampling(model, times = model$orig_length,
-                                list(model$populations$p1, n),
-                                list(model$populations$p2, n),
-                                list(model$populations$p3, n),
-                                list(model$populations$p4, n),
-                                list(model$populations$p5, n),
-                                list(model$populations$p6, n),
-                                list(model$populations$p7, n),
-                                list(model$populations$p8, n),
-                                list(model$populations$p9, n),
-                                list(model$populations$p10, n))
+                                list(model$populations$p1, n[["p1"]]),
+                                list(model$populations$p2, n[["p2"]]),
+                                list(model$populations$p3, n[["p3"]]),
+                                list(model$populations$p4, n[["p4"]]),
+                                list(model$populations$p5, n[["p5"]]),
+                                list(model$populations$p6, n[["p6"]]),
+                                list(model$populations$p7, n[["p7"]]),
+                                list(model$populations$p8, n[["p8"]]),
+                                list(model$populations$p9, n[["p9"]]),
+                                list(model$populations$p10, n[["p10"]]))
   schedule
 }
 
