@@ -16,7 +16,7 @@ plot_pca <- function(prefix, samples, pc = c(1, 2), color = c("time", "pop"), re
 
   pc_cols <- paste0("PC", pc)
   pca_df <- pca$pca.sample_coordinates[, pc_cols]
-  pca_df$pop <- factor(samples$pop, levels = unique(samples$pop))
+  pca_df$pop <- factor(samples$pop, levels = unique(samples$pop)[order(as.integer(gsub("^p", "", unique(samples$pop))))])
   pca_df$time <- samples$time
 
   variance_explained <- pca$pca.eigenvalues[2, ] %>% {. / sum(.) * 100} %>% round(1)
@@ -57,9 +57,13 @@ plot_pca <- function(prefix, samples, pc = c(1, 2), color = c("time", "pop"), re
 }
 
 landscape_model <- function(rate, Ne) {
-  start_pops <- 5000
-  start_gf <- 8000
-  simulation_length <- 20000
+  if (is.numeric(Ne)) {
+    Ne <- rep(Ne, 10)
+    names(Ne) <- paste0("p", 1:10)
+  }
+  start_pops <- 2500
+  start_gf <- 4000
+  simulation_length <- 10000
 
   xrange <- c(-90, -20)
   yrange <- c(-58, 15)
@@ -67,18 +71,19 @@ landscape_model <- function(rate, Ne) {
   map <- world(xrange = xrange, yrange = yrange, crs = "EPSG:31970")
 
   # non-spatial ancestral population
-  p_anc <- population("p_ancestor", N = Ne, time = 1, remove = start_pops + 1)
+  p_anc <- population("p_ancestor", N = 10000, time = 1, remove = start_pops + 1)
 
   # spatial populations
-  p1 <- population("p1", N = Ne, time = start_pops, parent = p_anc, map = map, center = c(-75, 0), radius = 200e3)
-  p2 <- population("p2", N = Ne, time = start_pops, parent = p_anc, map = map, center = c(-60, 5), radius = 200e3)
-  p3 <- population("p3", N = Ne, time = start_pops, parent = p_anc, map = map, center = c(-65, -5), radius = 200e3)
-  p4 <- population("p4", N = Ne, time = start_pops, parent = p_anc, map = map, center = c(-60, -20), radius = 200e3)
-  p5 <- population("p5", N = Ne, time = start_pops, parent = p_anc, map = map, center = c(-65, -35), radius = 200e3)
-  p6 <- population("p6", N = Ne, time = start_pops, parent = p_anc, map = map, center = c(-69, -42), radius = 200e3)
-  p7 <- population("p7", N = Ne, time = start_pops, parent = p_anc, map = map, center = c(-51, -10), radius = 200e3)
-  p8 <- population("p8", N = Ne, time = start_pops, parent = p_anc, map = map, center = c(-45, -15), radius = 200e3)
-  p9 <- population("p9", N = Ne, time = start_pops, parent = p_anc, map = map, center = c(-71, -12), radius = 200e3)
+  p1 <- population("p1", N = Ne[["p1"]], time = start_pops, parent = p_anc, map = map, center = c(-75, 0), radius = 200e3)
+  p2 <- population("p2", N = Ne[["p2"]], time = start_pops, parent = p_anc, map = map, center = c(-60, 5), radius = 200e3)
+  p3 <- population("p3", N = Ne[["p3"]], time = start_pops, parent = p_anc, map = map, center = c(-65, -5), radius = 200e3)
+  p4 <- population("p4", N = Ne[["p4"]], time = start_pops, parent = p_anc, map = map, center = c(-60, -20), radius = 200e3)
+  p5 <- population("p5", N = Ne[["p5"]], time = start_pops, parent = p_anc, map = map, center = c(-65, -35), radius = 200e3)
+  p6 <- population("p6", N = Ne[["p6"]], time = start_pops, parent = p_anc, map = map, center = c(-69, -42), radius = 200e3)
+  p7 <- population("p7", N = Ne[["p7"]], time = start_pops, parent = p_anc, map = map, center = c(-51, -10), radius = 200e3)
+  p8 <- population("p8", N = Ne[["p8"]], time = start_pops, parent = p_anc, map = map, center = c(-45, -15), radius = 200e3)
+  p9 <- population("p9", N = Ne[["p9"]], time = start_pops, parent = p_anc, map = map, center = c(-71, -12), radius = 200e3)
+  p10 <- population("p10", N = Ne[["p10"]], time = start_pops, parent = p_anc, map = map, center = c(-72, -52), radius = 200e3)
 
   gf <- list(
     gene_flow(p1, p2, rate, start = start_gf, end = simulation_length, overlap = FALSE),
@@ -98,11 +103,13 @@ landscape_model <- function(rate, Ne) {
     gene_flow(p1, p9, rate, start = start_gf, end = simulation_length, overlap = FALSE),
     gene_flow(p9, p1, rate, start = start_gf, end = simulation_length, overlap = FALSE),
     gene_flow(p4, p9, rate, start = start_gf, end = simulation_length, overlap = FALSE),
-    gene_flow(p9, p4, rate, start = start_gf, end = simulation_length, overlap = FALSE)
+    gene_flow(p9, p4, rate, start = start_gf, end = simulation_length, overlap = FALSE),
+    gene_flow(p10, p6, rate, start = start_gf, end = simulation_length, overlap = FALSE),
+    gene_flow(p6, p10, rate, start = start_gf, end = simulation_length, overlap = FALSE)
   )
 
   suppressWarnings(model <- compile_model(
-    populations = list(p_anc, p1, p2, p3, p4, p5, p6, p7, p8, p9), gene_flow = gf,
+    populations = list(p_anc, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10), gene_flow = gf,
     generation_time = 1, simulation_length = simulation_length,
     serialize = FALSE
   ))
@@ -120,7 +127,8 @@ landscape_sampling <- function(model, n) {
                                 list(model$populations$p6, n),
                                 list(model$populations$p7, n),
                                 list(model$populations$p8, n),
-                                list(model$populations$p9, n))
+                                list(model$populations$p9, n),
+                                list(model$populations$p10, n))
   schedule
 }
 
