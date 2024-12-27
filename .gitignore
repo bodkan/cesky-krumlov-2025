@@ -6,3 +6,4 @@
 *.geno
 *.ind
 /.quarto/
+.DS_Store
