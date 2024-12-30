@@ -1684,7 +1684,7 @@
       "RemoteHost": "api.github.com",
       "RemoteRepo": "slendr",
       "RemoteUsername": "bodkan",
-      "RemoteSha": "cce66665555290b04134d5157302631581da0eaa",
+      "RemoteSha": "a95c644deaa0ab35832509968715ccd842c80f69",
       "Requirements": [
         "R",
         "ape",
@@ -1702,7 +1702,7 @@
         "shinyWidgets",
         "tidyr"
       ],
-      "Hash": "2589df1b58ab4fe51d1298aea8b95d72"
+      "Hash": "838444699863f80894cb1bdb1443cfe4"
     },
     "smartsnp": {
       "Package": "smartsnp",
