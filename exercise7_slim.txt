@@ -8,7 +8,7 @@ initialize() {
 
     // compose a trajectory file based on given parameters
     defineConstant("traj_file", PATH + "/" +
-                                "trajectory_" + onset_time + "_" + origin_pop + ".tsv");
+                                "trajectory_s" + s + "_t" + onset_time + "_" + origin_pop + ".tsv");
 }
 
 // Because we want to simulate non-neutral evolution, we have to provide a
@@ -39,7 +39,7 @@ function (void) add_mutation(void) {
     write_log("adding beneficial mutation to population " + origin_pop);
 
     // write the header of the trajectory file
-    writeFile(traj_file, "time\tpop\tfreq");
+    writeFile(traj_file, "time\tpop\tfreq\tonset");
 }
 
 tick(onset_time) late() {
@@ -69,6 +69,6 @@ tick(onset_time):SIMULATION_END late() {
         writeFile(traj_file,
                   model_time(community.tick) + "\t" +
                   filter(POPULATIONS, "pop_id", id).getValue("pop") + "\t" +
-                  freq, append = T);
+                  freq + "\t" + onset_time, append = T);
     }
 }
