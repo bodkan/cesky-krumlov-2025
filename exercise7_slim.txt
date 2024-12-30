@@ -4,13 +4,13 @@
 initialize() {
     defineConstant("s", {{s}});
     defineConstant("onset_time", {{onset_time}});
-    defineConstant("target_pop", "{{target_pop}}");
     defineConstant("origin_pop", "{{origin_pop}}");
 
     // compose a trajectory file based on given parameters
     defineConstant("traj_file", PATH + "/" +
-                                "traj_" + target_pop + "_" + origin_pop + ".tsv");
+                                "trajectory_" + onset_time + "_" + origin_pop + ".tsv");
 }
+
 // Because we want to simulate non-neutral evolution, we have to provide a
 // custom initialization callback -- slendr will use it to replace its default
 // neutral genomic architecture (i.e. the initialize() {...} callback it uses
@@ -36,9 +36,10 @@ function (void) add_mutation(void) {
     // save the mutation for later reference
     defineGlobal("MUTATION", mut);
 
-    write_log("adding beneficial mutation to population " + target_pop);
+    write_log("adding beneficial mutation to population " + origin_pop);
 
-    writeFile(traj_file, "time\tfreq_origin\tfreq_target");
+    // write the header of the trajectory file
+    writeFile(traj_file, "time\tpop\tfreq");
 }
 
 tick(onset_time) late() {
@@ -51,24 +52,23 @@ tick(onset_time) late() {
 tick(onset_time):SIMULATION_END late() {
     // the mutation is not segregating and is not fixed either -- we must restart
     if (!MUTATION.isSegregating & !MUTATION.isFixed) {
-        write_log("mutation lost -- restarting");
+        write_log("mutation lost (simulation will be restarted)");
 
         reset_state();
 
         add_mutation();
     }
 
-    // compute the frequency of the mutation of interest and save it (if the
-    // mutation is missing at this time, save its frequency as NA)
-    freq_origin = "NA";
-    freq_target = "NA";
-    if (population(origin_pop, check = T))
-      freq_origin = population(origin_pop).genomes.mutationFrequenciesInGenomes();
-    if (population(target_pop, check = T))
-      freq_target = population(target_pop).genomes.mutationFrequenciesInGenomes();
+    // compute the frequency of the mutation of interest in each population
+    // and save it (if the mutation is missing at this time, save its frequency as NA)
+    for (id in seq(0, num_rows(POPULATIONS) - 1)) {
+        freq = "NA";
+        if (population(id, check = T))
+            freq = population(id).genomes.mutationFrequenciesInGenomes();
 
-    writeFile(traj_file,
-              model_time(community.tick) + "\t" +
-              freq_origin + "\t" +
-              freq_target, append = T);
+        writeFile(traj_file,
+                  model_time(community.tick) + "\t" +
+                  filter(POPULATIONS, "pop_id", id).getValue("pop") + "\t" +
+                  freq, append = T);
+    }
 }
