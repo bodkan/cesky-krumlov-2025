@@ -66,16 +66,16 @@ tick(onset_time):SIMULATION_END late() {
 
     // compute the frequency of the mutation of interest in each population
     // and save it (if the mutation is missing at this time, save its frequency as NA)
-    for (id in seq(0, num_rows(POPULATIONS) - 1)) {
+    for (pop in c("EHG", "ANA", "EUR", "YAM")) {
         freq = "NA";
         // if a population exists in the current generation, compute allele frequency
-        if (population(id, check = T))
-            freq = population(id).genomes.mutationFrequenciesInGenomes();
+        if (population(pop, check = T))
+            freq = population(pop).genomes.mutationFrequenciesInGenomes();
 
         // write the frequency in this population to a trajectory file
         writeFile(traj_file,
                   model_time(community.tick) + "\t" +
-                  filter(POPULATIONS, "pop_id", id).getValue("pop") + "\t" +
+                  pop + "\t" +
                   freq + "\t" + onset_time, append = T);
     }
 }
