@@ -7,8 +7,7 @@ initialize() {
     defineConstant("origin_pop", "{{origin_pop}}");
 
     // compose a trajectory file based on given parameters
-    defineConstant("traj_file", PATH + "/" +
-                                "trajectory_s" + s + "_t" + onset_time + "_" + origin_pop + ".tsv");
+    defineConstant("traj_file", PATH + "/" + "trajectory.tsv");
 }
 
 // Because we want to simulate non-neutral evolution, we have to provide a
@@ -18,19 +17,24 @@ initialize() {
 // constants SEQUENCE_LENGTH and RECOMBINATION_RATE, which will carry values
 // passed through from R via slendr's slim() R function.
 initialize() {
+    // initialize a mutation type of a benefitial mutation
     initializeMutationType("m1", 0.5, "f", s);
-
     initializeGenomicElementType("g1", m1, 1.0);
+
+    // create a single "chromosome"" segment of a length given by slendr
     initializeGenomicElement(g1, 0, SEQUENCE_LENGTH - 1);
 
+    // we won't be simulating neutral mutations in SLiM
     initializeMutationRate(0);
+
+    // but we will simulate recombination at a rate given by slendr
     initializeRecombinationRate(RECOMBINATION_RATE);
 }
 
 function (void) add_mutation(void) {
     // sample one target carrier of the new mutation...
     target = sample(population(origin_pop).genomes, 1);
-    // ... and add the mutation in the middle of it
+    // ... and add the mutation in the middle of its "chromosome"
     mut = target.addNewDrawnMutation(m1, position = asInteger(SEQUENCE_LENGTH / 2));
 
     // save the mutation for later reference
@@ -50,7 +54,8 @@ tick(onset_time) late() {
 }
 
 tick(onset_time):SIMULATION_END late() {
-    // the mutation is not segregating and is not fixed either -- we must restart
+    // the mutation is not segregating and is not fixed either -- we must restart,
+    // because this means the simulation has lost it
     if (!MUTATION.isSegregating & !MUTATION.isFixed) {
         write_log("mutation lost (simulation will be restarted)");
 
@@ -63,9 +68,11 @@ tick(onset_time):SIMULATION_END late() {
     // and save it (if the mutation is missing at this time, save its frequency as NA)
     for (id in seq(0, num_rows(POPULATIONS) - 1)) {
         freq = "NA";
+        // if a population exists in the current generation, compute allele frequency
         if (population(id, check = T))
             freq = population(id).genomes.mutationFrequenciesInGenomes();
 
+        // write the frequency in this population to a trajectory file
         writeFile(traj_file,
                   model_time(community.tick) + "\t" +
                   filter(POPULATIONS, "pop_id", id).getValue("pop") + "\t" +
