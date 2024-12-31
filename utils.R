@@ -4,6 +4,7 @@ library(smartsnp)
 library(dplyr)
 library(ggplot2)
 library(ggrepel)
+library(cowplot)
 library(readr)
 library(tidyr)
 
@@ -163,9 +164,9 @@ plot_tracts <- function(tracts, ind) {
 
 # Tajima's D --------------------------------------------------------------
 
-read_trajectory <- function(path, origin_pop, s, onset_time) {
-  read_tsv(sprintf("%s/trajectory_s%s_t%s_%s.tsv", path, s, onset_time, origin_pop),
-           show_col_types = FALSE) %>%
+read_trajectory <- function(path) {
+  list.files(path, pattern = ".tsv$", full.names = TRUE) %>%
+  read_tsv(show_col_types = FALSE) %>%
     mutate(pop = factor(pop, levels = c("AFR", "OOA", "EHG", "ANA", "EUR", "YAM")))
 }
 
@@ -174,7 +175,8 @@ plot_trajectory <- function(traj_df) {
     geom_line() +
     scale_x_reverse() +
     facet_wrap(~ pop) +
-    coord_cartesian(ylim = c(0, 1), xlim = c(20e3, 0)) +
+    coord_cartesian(ylim = c(0, 1), xlim = c(15e3, 0)) +
+    theme_bw() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     geom_vline(aes(xintercept = onset), linetype = "dashed", alpha = 0.6)
 }
