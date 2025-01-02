@@ -98,7 +98,7 @@ present_samples <- schedule_sampling(model, times = 0, list(chimp, 1), list(afr,
 
 # We also schedule the recording of one European sample between 50kya and 2kya,
 # every 2000 years
-emh_samples <- schedule_sampling(model, times = seq(50000, 2000, by = -2000), list(eur, 1))
+emh_samples <- schedule_sampling(model, times = seq(40000, 2000, by = -2000), list(eur, 1))
 
 # Because those functions produce nothing but a data frame, we can bind
 # individual sampling schedules together
@@ -124,7 +124,7 @@ plot_model(model, sizes = FALSE, log = TRUE, samples = schedule)
 # tstart <- Sys.time()
 ts <-
   msprime(model, sequence_length = 100e6, recombination_rate = 1e-8, samples = schedule, random_seed = 1269258439) %>%
-  ts_mutate(mutation_rate = 1e-8)
+  ts_mutate(mutation_rate = 1e-8, random_seed = 1269258439)
 # tend <- Sys.time()
 # tend - tstart # Time difference of 1.926204 mins
 

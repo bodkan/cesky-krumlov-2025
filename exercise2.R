@@ -102,12 +102,12 @@ arrange(div_df, divergence)
 
 # Comparing two Africans vs Neanderthal should not reveal any deviation from
 # the null hypothesis (this should be consistent with a tree with no admixture)
-f4_null <- ts_f4(ts, W = "AFR_1", X = "AFR_2", Y = "NEA_1", Z = "CHIMP_1")
+f4_null <- ts_f4(ts, W = "AFR_1", X = "AFR_2", Y = "NEA_1", Z = "CHIMP_1", mode = "branch")
 f4_null
 
 # On the other hand, an African-European comparison should reveal an excess
 # of sharing of Neanderthal alleles with Europeans (i.e. more ABBA sites)
-f4_alt <- ts_f4(ts, W = "AFR_1", X = "EUR_1", Y = "NEA_1", Z = "CHIMP_1")
+f4_alt <- ts_f4(ts, W = "AFR_1", X = "EUR_1", Y = "NEA_1", Z = "CHIMP_1", mode = "branch")
 f4_alt
 
 # We can see that the second test has ~50 times higher f3, although this is
@@ -117,9 +117,9 @@ f4_alt$f4 / f4_null$f4
 
 # Let's compute the f4 statistic for all Africans and Europeans to see the
 # f4 introgression patterns more clearly
-f4_afr <- lapply(sample_sets$AFR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1")) %>% bind_rows()
+f4_afr <- lapply(sample_sets$AFR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "branch")) %>% bind_rows()
 f4_afr
-f4_eur <- lapply(sample_sets$EUR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1")) %>% bind_rows()
+f4_eur <- lapply(sample_sets$EUR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "branch")) %>% bind_rows()
 f4_eur
 
 # Let's add population columns to each of the two results, and bind them together
