@@ -21,11 +21,11 @@ plot_pca <- function(prefix, ts, pc = c(1, 2), color = c("time", "pop"), return 
 
   tmp_pca <- file.path(tempdir(), paste0(prefix, "_pca.rds"))
   if (!file.exists(tmp_pca)) {
-    message("PCA cache for the EIGENSTRAT was not found. Generating it now (this will take a moment)...")
+    message("PCA cache for the given EIGENSTRAT data was not found. Generating it now (this will take a moment)...")
     suppressMessages(pca <- smart_pca(snp_data = paste0(prefix, ".geno"), program_svd = "bootSVD", sample_group = samples$pop))
     saveRDS(file = tmp_pca, object = pca)
   } else {
-    message("PCA cache for the EIGENSTRAT was found. Loading it to save computational time...")
+    message("PCA cache for the given EIGENSTRAT data was found. Loading it to save computational time...")
     pca <- readRDS(tmp_pca)
   }
 
