@@ -27,127 +27,109 @@ model <- compile_model(
   generation_time = 30
 )
 
-# Schedule sampling of a defined set of individuals -- note that this function
-# produces a plain data frame, nothing magical about it...
-nea_samples <- schedule_sampling(model, times = c(70000, 40000), list(nea, 1))
-nea_samples
-present_samples <- schedule_sampling(model, times = 0, list(chimp, 1), list(afr, 5), list(eur, 10))
-emh_samples <- schedule_sampling(model, times = seq(50000, 2000, by = -2000), list(eur, 1))
-
-# ... which means we can bind individual sampling schedules together
-schedule <- rbind(nea_samples, present_samples, emh_samples)
-schedule
-
-# The schedules can be also visualized on the graphical representation of
-# a slendr model (although the result is often a bit wonky)
-plot_model(model, log = TRUE, samples = schedule)
 
 
 
-# Part 1 -- simulating a tree sequence ------------------------------------
 
-# The command below will likely take a few minutes to run, so feel free to go
-# down from 100 Mb sequence_length to even 10Mb (it doesn't matter much)
-tstart <- Sys.time()
-ts <-
-  msprime(model, sequence_length = 100e6, recombination_rate = 1e-8, samples = schedule) %>%
-  ts_mutate(mutation_rate = 1e-8)
-tend <- Sys.time()
-tend - tstart
+# Part 1 -- read a previously saved .trees file ---------------------------
 
-# Inspect the (tskit/Python-based) summary of the tree sequence
-ts
+# This can allow us to save a bit of computational time (and also enhances
+# reproducibility because anyone with the .trees file can follow the downstream
+# workflow)
+ts <- ts_read("introgression.trees", model = model)
 
-ts_nodes(ts)
-ts_table(ts, "nodes")
-ts_table(ts, "edges")
-ts_table(ts, "individuals")
-ts_table(ts, "mutations")
+# It's always a good idea to check that the data we're working with is
+# really what we think it is!
+ts_samples(ts) %>% nrow
+ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
 
-# ts_write(ts, "exercise2.trees")
-# ts <- ts_read("exercise2.trees", model)
 
-# First let's make sure that the tree sequence contains exactly the samples that
-# we've scheduled to be recorded -- `ts_samples()` is just the function to
-# do that.
 
-ts_samples(ts)
 
-ts_samples(ts) %>% group_by(pop, present_day = time == 0) %>% tally
 
-# Exercise #4 ------------------------------------------------------------------
+# Part 2 -- computing nucleotide diversity
 
-# First get a named list of individuals in each population
-
+# Let's first get a named list of individuals in each group we want to be
+# working with (slendr tree-sequence statistic functions generally operate
+# with this kind of structure)
 sample_sets <- ts_names(ts, split = "pop")
 sample_sets
 
 # Compute nucleotide diversity (pi) in each population
-
 pi_pop <- ts_diversity(ts, sample_sets = sample_sets)
-
 arrange(pi_pop, diversity)
 
-# Compute heterozygosity in all individuals
+# Compute the same thing in each individual separately (so computing the
+# individual-based heterozygosity). We can do this by passing the vector of
+# individual names directory as the `sample_sets =` argument, rather than
+# in a list of groups as we did above.
 
-samples <- ts_samples(ts)
-pi_ind <- ts_diversity(ts, sample_sets = samples$name)
-pi_ind <- inner_join(samples, pi_ind, by = join_by(name == set))
+# For convenience, we first get a table of all individuals (which of course
+# contains also their names) and just add their heterozygosities as a new column.
+pi_df <- ts_samples(ts)
+pi_df$name
 
-ggplot(pi_ind, aes(pop, diversity, color = pop, group = pop)) +
+pi_df$diversity <- ts_diversity(ts, sample_sets = pi_df$name)$diversity
+pi_df
+
+ggplot(pi_df, aes(pop, diversity, color = pop, group = pop)) +
   geom_boxplot(outlier.shape = NA) +
   geom_jitter() +
   theme_bw()
 
 
-# Compute pairwise population divergence
-
-div <- ts_divergence(ts, sample_sets)
-
-arrange(div, divergence)
 
 
-# Outgroup f3
 
-ts_f3(ts, B = "AFR_1", C = "EUR_1", A = "CHIMP_1")
+# Part 3 -- Computing pairwise divergence ---------------------------------
 
-ts_f3(ts, B = sample_sets["AFR"], C = sample_sets["EUR"], A = "CHIMP_1")
+# We will again use the `sample_sets` list of individual names defined above
+sample_sets
 
-ts_f3(ts, B = sample_sets["AFR"], C = sample_sets["NEA"], A = "CHIMP_1")
-
-ts_f3(ts, B = sample_sets["EUR"], C = sample_sets["NEA"], A = "CHIMP_1")
-
-
-# Outgroup f3 as a linear combination of f2 statistics
-
-# branch-based version
-ts_f3(ts, B = "AFR_1", C = "AFR_2", A = "CHIMP_1")
-
-homemade_f3 <- (
-  ts_f2(ts, A = "AFR_1", B = "CHIMP_1")$f2 +
-  ts_f2(ts, A = "AFR_2", B = "CHIMP_1")$f2 -
-  ts_f2(ts, A = "AFR_1", B = "AFR_2")$f2
-) / 2
-homemade_f3
+div_df <- ts_divergence(ts, sample_sets)
+arrange(div_df, divergence)
 
 
-# Detecting Neanderthal admixture in Europeans
 
-#                            BABA - ABBA
-# D(AFR, EUR; NEA, CHIMP) = -------------
-#                            BABA + ABBA
 
-ts_f4(ts, W = "AFR_1", X = "AFR_2", Y = "NEA_1", Z = "CHIMP_1")
 
-ts_f4(ts, W = "AFR_1", X = "EUR_1", Y = "NEA_1", Z = "CHIMP_1")
 
+# Part 4 -- Detecting Neanderthal admixture in Europeans ------------------
+
+#                                BABA - ABBA
+# f4(AFR, Test; NEA, CHIMP) ~   -------------
+#                                   #SNPs
+
+# Comparing two Africans vs Neanderthal should not reveal any deviation from
+# the null hypothesis (this should be consistent with a tree with no admixture)
+f4_null <- ts_f4(ts, W = "AFR_1", X = "AFR_2", Y = "NEA_1", Z = "CHIMP_1")
+f4_null
+
+# On the other hand, an African-European comparison should reveal an excess
+# of sharing of Neanderthal alleles with Europeans (i.e. more ABBA sites)
+f4_alt <- ts_f4(ts, W = "AFR_1", X = "EUR_1", Y = "NEA_1", Z = "CHIMP_1")
+f4_alt
+
+# We can see that the second test has ~50 times higher f3, although this is
+# not a real test of significance (no Z-score or standard error as given by
+# jackknife procedure in ADMIXTOOLS)
+f4_alt$f4 / f4_null$f4
+
+# Let's compute the f4 statistic for all Africans and Europeans to see the
+# f4 introgression patterns more clearly
 f4_afr <- lapply(sample_sets$AFR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1")) %>% bind_rows()
+f4_afr
 f4_eur <- lapply(sample_sets$EUR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1")) %>% bind_rows()
+f4_eur
 
+# Let's add population columns to each of the two results, and bind them together
+# for plotting
 f4_afr$pop <- "AFR"
 f4_eur$pop <- "EUR"
 
-rbind(f4_afr, f4_eur) %>%
+f4_results <- rbind(f4_afr, f4_eur)
+
+f4_results %>%
   ggplot(aes(pop, f4, color = pop)) +
   geom_boxplot() +
   geom_jitter() +
@@ -156,7 +138,55 @@ rbind(f4_afr, f4_eur) %>%
   theme_bw()
 
 
-# Trajectory of Neanderthal ancestry in Europeans over time
+
+
+
+
+# Bonus exercises ---------------------------------------------------------
+
+
+
+
+
+
+# Bonus 1 -- outgroup f3 statistic ----------------------------------------
+
+# f3(A, B; C) = E[ (A - C) * (B - C) ]
+# This means that in tskit, C is the outgroup (different from ADMIXTOOLS!)
+
+# We can compute f3 for individuals...
+ts_f3(ts, B = "AFR_1", C = "EUR_1", A = "CHIMP_1")
+
+# ... but also whole populations (or population samples)
+ts_f3(ts, B = sample_sets["AFR"], C = sample_sets["EUR"], A = "CHIMP_1")
+
+ts_f3(ts, B = sample_sets["AFR"], C = sample_sets["NEA"], A = "CHIMP_1")
+
+ts_f3(ts, B = sample_sets["EUR"], C = sample_sets["NEA"], A = "CHIMP_1")
+
+
+
+
+
+# Bonus 2 -- outgroup f3 as a linear combination of f2 --------------------
+
+# standard f3
+ts_f3(ts, B = "AFR_1", C = "AFR_2", A = "CHIMP_1")
+
+# a "homemade" f3 statistic as a linear combination of f2 statistics
+# f3(A, B; C) = f2(A, C) + f2(B, C) - f2(A, B) / 2
+homemade_f3 <- (
+  ts_f2(ts, A = "AFR_1", B = "CHIMP_1")$f2 +
+  ts_f2(ts, A = "AFR_2", B = "CHIMP_1")$f2 -
+  ts_f2(ts, A = "AFR_1", B = "AFR_2")$f2
+) / 2
+homemade_f3
+
+
+
+
+
+# Bonus 3 -- trajectory of Neanderthal ancestry in Europe over time -------
 
 # Extract table with names and times of sampled Europeans (ancient and present day)
 eur_inds <- ts_samples(ts) %>% filter(pop == "EUR")
@@ -174,30 +204,41 @@ eur_inds %>%
   geom_point() +
   geom_smooth(method = "lm", linetype = 2, color = "red", linewidth = 0.5) +
   xlim(40000, 0) +
-  coord_cartesian(ylim = c(0, 0.1)) +
+  coord_cartesian(ylim = c(0, 0.2)) +
   labs(x = "time [years ago]", y = "Neanderthal ancestry proportion")
 
 
-# unique quartets
+
+
+
+# Bonus 4 -- how many unique f4 quartets are there? -----------------------
 
 # # install a combinatorics R package
 # install.packages("combinat")
 
+library(combinat)
+
+# These are the four samples we can create quartet combinations from
 quartet <- c("AFR_1", "EUR_1", "NEA_1", "CHIMP_1")
+quartets <- permn(quartet)
+quartets
 
-quartets <- combinat::permn(quartet)
-
-# how many permutations there are in total?
+# How many permutations there are in total?
 #   4! = 4 * 3 * 2 * 1 = 24
+factorial(4)
 
+# We should therefore have 24 different quartet combinations of samples
 length(quartets)
 
-# loop across all quartets, computing the corresponding f4 statistic
+# Loop across all quartets, computing the corresponding f4 statistic (we want
+# to do this using branch lengths, not mutations, as the mutation-based computation
+# would involve statistical noise)
 all_f4s <- lapply(quartets, function(q) ts_f4(ts, q[1], q[2], q[3], q[4], mode = "branch"))
 
-# bind the list of f4 results into a single data frame
+# Bind the list of f4 results into a single data frame and inspect the results
 all_f4s <- bind_rows(all_f4s) %>% arrange(abs(f4))
 print(all_f4s, n = Inf)
 
+# Narrow down the results to only unique f4 values
 distinct(all_f4s, f4, .keep_all = TRUE)
 distinct(all_f4s, abs(f4), .keep_all = TRUE)

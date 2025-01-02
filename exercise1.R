@@ -56,7 +56,7 @@ ts <- msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, debug = T
 # For debugging of technical issues (with msprime, with slendr, or both), it is
 # very useful to have the `msprime()` function dump the "raw" command-line to
 # run the simulation on the terminal
-ts <- msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, run = FALSE)
+msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, run = FALSE)
 
 # Typing out the object with the result shows that it's a good old tskit
 # tree-sequence object
@@ -73,12 +73,10 @@ ts_table(ts, "sites")
 
 # slendr provides a convenient function `ts_samples()` which allows us to
 # inspect the contents of a simulated tree sequence in a more human-readable,
-# simplified way
-
-# We can see that our tree sequence contains a massive number of individuals.
-# Too many, in fact (we recorded every single individual alive at the end
-# of our simulation -- something we're unlikely to be ever lucky enough to
-# have, regardless of which species we study)
+# simplified way. We can see that our tree sequence contains a massive number
+# of individuals. Too many, in fact (we recorded every single individual alive
+# at the end of our simulation -- something we're unlikely to be ever lucky
+# enough to have, regardless of which species we study)
 ts_samples(ts) %>% nrow()
 
 
@@ -125,7 +123,7 @@ plot_model(model, sizes = FALSE, log = TRUE, samples = schedule)
 # down from 100 Mb sequence_length to even 10Mb (it doesn't matter much)
 # tstart <- Sys.time()
 ts <-
-  msprime(model, sequence_length = 100e6, recombination_rate = 1e-8, samples = schedule) %>%
+  msprime(model, sequence_length = 100e6, recombination_rate = 1e-8, samples = schedule, random_seed = 1269258439) %>%
   ts_mutate(mutation_rate = 1e-8)
 # tend <- Sys.time()
 # tend - tstart # Time difference of 1.926204 mins
