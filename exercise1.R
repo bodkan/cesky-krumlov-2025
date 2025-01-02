@@ -1,6 +1,14 @@
 library(slendr)
 init_env()
 
+library(dplyr)
+library(tidyr)
+
+
+
+
+# Part 1 -- building a slendr model ---------------------------------------
+
 # Chimpanzee outgroup
 chimp <- population("CHIMP", time = 7e6, N = 5000)
 
@@ -22,23 +30,117 @@ model <- compile_model(
   generation_time = 30
 )
 
+
+
+
+
+
+# Part 2 -- inspecting the model visually ---------------------------------
+
 # Verify the correctness of our model visually
 plot_model(model)
 plot_model(model, sizes = FALSE)
 plot_model(model, sizes = FALSE, log = TRUE)
 plot_model(model, sizes = FALSE, log = TRUE, proportions = TRUE)
 
-# Schedule sampling of a defined set of individuals -- note that this function
-# produces a plain data frame, nothing magical about it...
+
+
+
+
+
+# Part 3 -- simulating genomic data ---------------------------------------
+
+ts <- msprime(model, sequence_length = 1e6, recombination_rate = 1e-8)
+ts <- msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, debug = TRUE)
+
+# For debugging of technical issues (with msprime, with slendr, or both), it is
+# very useful to have the `msprime()` function dump the "raw" command-line to
+# run the simulation on the terminal
+ts <- msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, run = FALSE)
+
+# Typing out the object with the result shows that it's a good old tskit
+# tree-sequence object
+ts
+
+# slendr provides a helper function which allows access to all the low-level
+# components of every tree-sequence object
+ts_table(ts, "nodes")
+ts_table(ts, "edges")
+ts_table(ts, "individuals")
+ts_table(ts, "mutations")
+ts_table(ts, "sites")
+
+
+# slendr provides a convenient function `ts_samples()` which allows us to
+# inspect the contents of a simulated tree sequence in a more human-readable,
+# simplified way
+
+# We can see that our tree sequence contains a massive number of individuals.
+# Too many, in fact (we recorded every single individual alive at the end
+# of our simulation -- something we're unlikely to be ever lucky enough to
+# have, regardless of which species we study)
+ts_samples(ts) %>% nrow()
+
+
+
+
+
+# Part 4 -- scheduling sampling events ------------------------------------
+
+# We can precisely define which individuals (from which populations, and at
+# which times) should be recorded in a tree sequence using the slendr
+# function `schedule_sampling()`.
+
+# Here we scheduled the sampling of two Neanderthals at 70kya and 40kya
 nea_samples <- schedule_sampling(model, times = c(70000, 40000), list(nea, 1))
-nea_samples
+nea_samples # (this function produces a plain old data frame!)
+
+# Here we schedule one Chimpanzee sample, 5 African samples, and 10 European samples
 present_samples <- schedule_sampling(model, times = 0, list(chimp, 1), list(afr, 5), list(eur, 10))
+
+# We also schedule the recording of one European sample between 50kya and 2kya,
+# every 2000 years
 emh_samples <- schedule_sampling(model, times = seq(50000, 2000, by = -2000), list(eur, 1))
 
-# ... which means we can bind individual sampling schedules together
+# Because those functions produce nothing but a data frame, we can bind
+# individual sampling schedules together
 schedule <- rbind(nea_samples, present_samples, emh_samples)
 schedule
 
 # The schedules can be also visualized on the graphical representation of
 # a slendr model (although the result is often a bit wonky)
 plot_model(model, sizes = FALSE, log = TRUE, samples = schedule)
+
+
+
+
+
+
+# Part 5 -- simulating a defined set of individuals -----------------------
+
+# Let's simulate a more realistic set of samples, using the schedule we've
+# defined above
+
+# The command below will likely take a few minutes to run, so feel free to go
+# down from 100 Mb sequence_length to even 10Mb (it doesn't matter much)
+# tstart <- Sys.time()
+ts <-
+  msprime(model, sequence_length = 100e6, recombination_rate = 1e-8, samples = schedule) %>%
+  ts_mutate(mutation_rate = 1e-8)
+# tend <- Sys.time()
+# tend - tstart # Time difference of 1.926204 mins
+
+# We can save a tree sequence object using a slendr function `ts_write()` (this
+# can be useful if we want to save the results of a simulation for later use).
+ts_write(ts, "introgression.trees")
+
+# A saved slendr tree sequence can be later read via function `ts_read()` (but
+# note that this function needs slendr-specific metadata stored in a model
+# object!)
+ts <- ts_read(file = "introgression.trees", model = model)
+
+# Inspect the (tskit/Python-based) summary of the (now smaller) tree sequence
+ts
+
+ts_samples(ts)
+ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
