@@ -47,25 +47,24 @@ subset <- filter(samples, pop %in% c("popX", "popY"), time == 0)
 subset
 
 ts_XY0 <- ts_simplify(ts, simplify_to = subset$name)
-ts_eigenstrat(ts_XY0, "eigenstrat/XY0")
+ts_eigenstrat(ts_XY0, "data/XY0")
 
 # EIGENSTRAT with all X and Y individuals (i.e. trajectories of samples over time)
 subset <- filter(samples, pop %in% c("popX", "popY"))
 subset
 
 ts_XYall <- ts_simplify(ts, simplify_to = subset$name)
-ts_eigenstrat(ts_XYall, "eigenstrat/XYall")
+ts_eigenstrat(ts_XYall, "data/XYall")
 
 # EIGENSTRAT with only "present-day" X,Y, and Z individuals
 subset <- filter(samples, time == 0)
 print(subset, n = Inf)
 
 ts_XYZ0 <- ts_simplify(ts, simplify_to = subset$name)
-ts_eigenstrat(ts_XYZ0, "eigenstrat/XYZ0")
+ts_eigenstrat(ts_XYZ0, "data/XYZ0")
 
 # EIGENSTRAT file with all individuals
-ts_eigenstrat(ts, "eigenstrat/XYZall")
-
+ts_eigenstrat(ts, "data/XYZall")
 
 
 
@@ -73,24 +72,24 @@ ts_eigenstrat(ts, "eigenstrat/XYZall")
 
 # Part 2 -- computing and visualizing PCA patterns ------------------------
 
-plot_pca("eigenstrat/XY0", ts_XY0, color_by = "pop")
-plot_pca("eigenstrat/XYall", ts_XYall, color_by = "time")
-plot_pca("eigenstrat/XYZ0", ts_XYZ0, color_by = "pop")
+plot_pca("data/XY0", ts_XY0, color_by = "pop")
+plot_pca("data/XYall", ts_XYall, color_by = "time")
+plot_pca("data/XYZ0", ts_XYZ0, color_by = "pop")
 
-plot_pca("eigenstrat/XYZall", ts, pc = c(1, 2), color_by = "time")
-plot_pca("eigenstrat/XYZall", ts, pc = c(1, 2), color_by = "pop")
+plot_pca("data/XYZall", ts, pc = c(1, 2), color_by = "time")
+plot_pca("data/XYZall", ts, pc = c(1, 2), color_by = "pop")
 
-plot_pca("eigenstrat/XYZall", ts, pc = c(2, 3), color_by = "time")
-plot_pca("eigenstrat/XYZall", ts, pc = c(2, 3), color_by = "pop")
+plot_pca("data/XYZall", ts, pc = c(2, 3), color_by = "time")
+plot_pca("data/XYZall", ts, pc = c(2, 3), color_by = "pop")
 
-plot_pca("eigenstrat/XYZall", ts, pc = c(3, 4), color_by = "time")
-plot_pca("eigenstrat/XYZall", ts, pc = c(3, 4), color_by = "pop")
+plot_pca("data/XYZall", ts, pc = c(3, 4), color_by = "time")
+plot_pca("data/XYZall", ts, pc = c(3, 4), color_by = "pop")
 
-plot_pca("eigenstrat/XYZall", ts, pc = c(4, 5), color_by = "time")
-plot_pca("eigenstrat/XYZall", ts, pc = c(4, 5), color_by = "pop")
+plot_pca("data/XYZall", ts, pc = c(4, 5), color_by = "time")
+plot_pca("data/XYZall", ts, pc = c(4, 5), color_by = "pop")
 
-plot_pca("eigenstrat/XYZall", ts, pc = c(5, 6), color_by = "time")
-plot_pca("eigenstrat/XYZall", ts, pc = c(5, 6), color_by = "pop")
+plot_pca("data/XYZall", ts, pc = c(5, 6), color_by = "time")
+plot_pca("data/XYZall", ts, pc = c(5, 6), color_by = "pop")
 
 
 

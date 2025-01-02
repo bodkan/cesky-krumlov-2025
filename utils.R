@@ -195,7 +195,8 @@ plot_trajectory <- function(traj_df) {
     coord_cartesian(ylim = c(0, 1), xlim = c(15e3, 0)) +
     theme_bw() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    geom_vline(aes(xintercept = onset), linetype = "dashed", alpha = 0.6)
+    geom_vline(aes(xintercept = onset), linetype = "dashed", alpha = 0.6) +
+    ggtitle("Trajectory of the allele frequency under positive selection")
 }
 
 process_tajima <- function(tajima_wins) {

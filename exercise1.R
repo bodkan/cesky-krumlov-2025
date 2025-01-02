@@ -130,12 +130,12 @@ ts <-
 
 # We can save a tree sequence object using a slendr function `ts_write()` (this
 # can be useful if we want to save the results of a simulation for later use).
-ts_write(ts, "introgression.trees")
+ts_write(ts, "data/introgression.trees")
 
 # A saved slendr tree sequence can be later read via function `ts_read()` (but
 # note that this function needs slendr-specific metadata stored in a model
 # object!)
-ts <- ts_read(file = "introgression.trees", model = model)
+ts <- ts_read("data/introgression.trees", model = model)
 
 # Inspect the (tskit/Python-based) summary of the (now smaller) tree sequence
 ts

@@ -36,7 +36,7 @@ model <- compile_model(
 # This can allow us to save a bit of computational time (and also enhances
 # reproducibility because anyone with the .trees file can follow the downstream
 # workflow)
-ts <- ts_read("introgression.trees", model = model)
+ts <- ts_read("data/introgression.trees", model = model)
 
 # It's always a good idea to check that the data we're working with is
 # really what we think it is!
@@ -121,9 +121,9 @@ f4_alt$f4 / f4_null$f4
 
 # Let's compute the f4 statistic for all Africans and Europeans to see the
 # f4 introgression patterns more clearly
-f4_afr <- lapply(sample_sets$AFR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "site")) %>% bind_rows()
+f4_afr <- lapply(sample_sets$AFR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "branch")) %>% bind_rows()
 f4_afr
-f4_eur <- lapply(sample_sets$EUR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "site")) %>% bind_rows()
+f4_eur <- lapply(sample_sets$EUR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "branch")) %>% bind_rows()
 f4_eur
 
 # Let's add population columns to each of the two results, and bind them together
@@ -215,12 +215,16 @@ eur_inds %>%
   geom_smooth(method = "lm", linetype = 2, color = "red", linewidth = 0.5) +
   xlim(40000, 0) +
   coord_cartesian(ylim = c(0, 0.1)) +
-  labs(x = "time [years ago]", y = "Neanderthal ancestry proportion")
-
+  labs(x = "time [years ago]", y = "Neanderthal ancestry proportion") +
+  theme_bw() +
+  ggtitle("Neanderthal ancestry proportion in Europeans over time")
 
 # Does this match observation in real data?
 # See figure 1 in this paper: https://www.pnas.org/doi/full/10.1073/pnas.1814338116,
 # and figure 2 in this paper: https://www.nature.com/articles/nature17993
+
+
+
 
 
 # Bonus 4 -- how many unique f4 quartets are there? -----------------------
