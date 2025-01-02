@@ -35,35 +35,36 @@ samples %>% group_by(pop) %>% count()
 
 # Part 1 -- create EIGENSTRAT for different subsets of samples ------------
 
-
 # Our goal is to investigate how is PCA structure affected by different factors related
 # to sampling (sample sizes, dates of samples, etc.). Right now, our tree sequence contains
 # every single sample. Let's create smaller subsets of the data using process called
 # "simplification".
+
+dir.create("eigenstrat")
 
 # EIGENSTRAT with only "present-day" X and Y individuals
 subset <- filter(samples, pop %in% c("popX", "popY"), time == 0)
 subset
 
 ts_XY0 <- ts_simplify(ts, simplify_to = subset$name)
-ts_eigenstrat(ts_XY0, "XY0")
+ts_eigenstrat(ts_XY0, "eigenstrat/XY0")
 
 # EIGENSTRAT with all X and Y individuals (i.e. trajectories of samples over time)
 subset <- filter(samples, pop %in% c("popX", "popY"))
 subset
 
 ts_XYall <- ts_simplify(ts, simplify_to = subset$name)
-ts_eigenstrat(ts_XYall, "XYall")
+ts_eigenstrat(ts_XYall, "eigenstrat/XYall")
 
 # EIGENSTRAT with only "present-day" X,Y, and Z individuals
 subset <- filter(samples, time == 0)
 print(subset, n = Inf)
 
 ts_XYZ0 <- ts_simplify(ts, simplify_to = subset$name)
-ts_eigenstrat(ts_XYZ0, "XYZ0")
+ts_eigenstrat(ts_XYZ0, "eigenstrat/XYZ0")
 
 # EIGENSTRAT file with all individuals
-ts_eigenstrat(ts, "model_XYZall")
+ts_eigenstrat(ts, "eigenstrat/XYZall")
 
 
 
@@ -72,42 +73,32 @@ ts_eigenstrat(ts, "model_XYZall")
 
 # Part 2 -- computing and visualizing PCA patterns ------------------------
 
-plot_pca("XY0", ts_XY0, color = "pop")
-plot_pca("XYall", ts_XYall, color = "time")
-plot_pca("XYZ0", ts_XYZ0, color = "pop")
+plot_pca("eigenstrat/XY0", ts_XY0, color_by = "pop")
+plot_pca("eigenstrat/XYall", ts_XYall, color_by = "time")
+plot_pca("eigenstrat/XYZ0", ts_XYZ0, color_by = "pop")
 
-plot_pca("model_XYZall", ts, pc = c(1, 2))
-plot_pca("model_XYZall", ts, pc = c(1, 2), color = "pop")
+plot_pca("eigenstrat/XYZall", ts, pc = c(1, 2), color_by = "time")
+plot_pca("eigenstrat/XYZall", ts, pc = c(1, 2), color_by = "pop")
 
-plot_pca("model_XYZall", ts, pc = c(2, 3))
+plot_pca("eigenstrat/XYZall", ts, pc = c(2, 3), color_by = "time")
+plot_pca("eigenstrat/XYZall", ts, pc = c(2, 3), color_by = "pop")
 
-plot_pca("model_XYZall", ts, pc = c(3, 4))
-plot_pca("model_XYZall", ts, pc = c(3, 4), color = "pop")
+plot_pca("eigenstrat/XYZall", ts, pc = c(3, 4), color_by = "time")
+plot_pca("eigenstrat/XYZall", ts, pc = c(3, 4), color_by = "pop")
 
-plot_pca("model_XYZall", ts, pc = c(4, 5))
-plot_pca("model_XYZall", ts, pc = c(4, 5), color = "pop")
+plot_pca("eigenstrat/XYZall", ts, pc = c(4, 5), color_by = "time")
+plot_pca("eigenstrat/XYZall", ts, pc = c(4, 5), color_by = "pop")
 
-plot_pca("model_XYZall", ts, pc = c(5, 6))
-plot_pca("model_XYZall", ts, pc = c(5, 6), color = "pop")
-
-
-
+plot_pca("eigenstrat/XYZall", ts, pc = c(5, 6), color_by = "time")
+plot_pca("eigenstrat/XYZall", ts, pc = c(5, 6), color_by = "pop")
 
 
 
-# Bonus -- PCA of present-day X and Y and pre-split Z lineage -------------
 
-subset <- samples %>% filter(pop %in% c("popX", "popY") | (pop == "popZ" & time >= 1500))
-ts_XYall_Zancient <- ts_simplify(ts, simplify_to = subset$name)
-ts_eigenstrat(ts_XYall_Zancient, "XYall_Zancient")
 
-# when the whole X and Y trajectories are in but only ancient Z lineage, X and Y are
-# not actually separated from one another (only based on time)
-# -- also note that this series seems to kind of replicate the previous series of
-#    figures, except that X and Y are always mingled
-plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(1, 2), color = "time")
-plot_pca("model_XYZall", ts, pc = c(1, 2), color = "time")
+# Bonus -- code up a PCA using another software you know ------------------
 
-plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(2, 3), color = "pop")
-plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(3, 4), color = "pop")
-plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(4, 5), color = "pop")
+# In addition to `ts_eigenstrat()`, slendr also provides an interface to
+# tskit's VCF functionality as its R function `ts_vcf()`. Use these tools
+# to test whether your own PCA software of choice produces the same results!
+

@@ -10,18 +10,18 @@ library(scales)
 library(tidyr)
 library(viridis)
 
-plot_pca <- function(prefix, ts, pc = c(1, 2), color = c("time", "pop"), return = c("plot", "pca", "both")) {
+plot_pca <- function(prefix, ts, pc = c(1, 2), color_by = c("time", "pop"), return = c("plot", "pca", "both")) {
   if (length(pc) != 2)
     stop("The 'pc' argument of 'plot_pca' must be an integer vector of length two", call. = FALSE)
 
   samples <- ts_samples(ts) %>% mutate(pop = factor(pop, levels = c("popZ", "popX", "popY")))
 
   return <- match.arg(return)
-  color <- match.arg(color)
+  color_by <- match.arg(color_by)
 
-  tmp_pca <- file.path(tempdir(), paste0(prefix, "_pca.rds"))
+  tmp_pca <- file.path(tempdir(), paste0(basename(prefix), "_pca.rds"))
   if (!file.exists(tmp_pca)) {
-    message("PCA cache for the given EIGENSTRAT data was not found. Generating it now (this will take a moment)...")
+    message("PCA cache for the given EIGENSTRAT data was not found. Generating it now (this might take a moment)...")
     suppressMessages(pca <- smart_pca(snp_data = paste0(prefix, ".geno"), program_svd = "bootSVD", sample_group = samples$pop))
     saveRDS(file = tmp_pca, object = pca)
   } else {
@@ -39,7 +39,7 @@ plot_pca <- function(prefix, ts, pc = c(1, 2), color = c("time", "pop"), return 
 
   pop_df <- group_by(pca_df, pop, time) %>% summarise_all(mean)
 
-  if (color == "time") {
+  if (color_by == "time") {
     gg_point <- geom_point(aes(x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]), shape = pop, color = time))
     # gg_label <- geom_label_repel(data = pop_df, aes(label = pop, x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]),
     #                                                 shape = pop, color = time), show.legend = FALSE)
