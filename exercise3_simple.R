@@ -3,10 +3,14 @@ init_env()
 
 
 
-# solution to exercise #2 starts here -- part a) --------------------------
+
+
+
+
+# Part 1 -- a custom function Ne -> AFS vector ----------------------------
 
 simulate_afs <- function(Ne) {
-  # create a slendr model with a given N size
+  # create a slendr model with a single population of size Ne = N
   pop <- population("pop", N = Ne, time = 1)
   model <- compile_model(pop, generation_time = 1, simulation_length = 100000)
 
@@ -24,16 +28,23 @@ simulate_afs <- function(Ne) {
   afs
 }
 
+# Let's use our custom function to simulate AFS vector for Ne = 1k, 10k, and 30k
 afs_1k <- simulate_afs(1000)
 afs_10k <- simulate_afs(10000)
 afs_30k <- simulate_afs(30000)
 
-plot(afs_1k, type = "o", main = "AFS, Ne = 1000")
-plot(afs_10k, type = "o", main = "AFS, Ne = 10000")
-plot(afs_30k, type = "o", main = "AFS, Ne = 30000")
+plot(afs_30k, type = "o", main = "AFS, Ne = 30000", col = "cyan",)
+lines(afs_10k, type = "o", main = "AFS, Ne = 10000", col = "purple")
+lines(afs_1k, type = "o", main = "AFS, Ne = 1000", col = "blue")
+legend("topright", legend = c("Ne = 1k", "Ne = 10k", "Ne = 30k"),
+       fill = c("blue", "purple", "cyan"))
 
 
-# solution to exercise #2 starts here -- part b) --------------------------
+
+
+
+
+# Part 2 -- estimating Ne from empirical data -----------------------------
 
 afs_observed <- c(2520, 1449, 855, 622, 530, 446, 365, 334, 349, 244,
                   264, 218,  133, 173, 159, 142, 167, 129, 125, 143)
