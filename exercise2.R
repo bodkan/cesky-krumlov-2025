@@ -100,6 +100,10 @@ arrange(div_df, divergence)
 # f4(AFR, Test; NEA, CHIMP) ~   -------------
 #                                   #SNPs
 
+# We will be comparing two modes of tskit tree-sequence-based computation
+mode <- "branch"
+# mode <- "site"
+
 # Comparing two Africans vs Neanderthal should not reveal any deviation from
 # the null hypothesis (this should be consistent with a tree with no admixture)
 f4_null <- ts_f4(ts, W = "AFR_1", X = "AFR_2", Y = "NEA_1", Z = "CHIMP_1", mode = "branch")
@@ -117,9 +121,9 @@ f4_alt$f4 / f4_null$f4
 
 # Let's compute the f4 statistic for all Africans and Europeans to see the
 # f4 introgression patterns more clearly
-f4_afr <- lapply(sample_sets$AFR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "branch")) %>% bind_rows()
+f4_afr <- lapply(sample_sets$AFR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "site")) %>% bind_rows()
 f4_afr
-f4_eur <- lapply(sample_sets$EUR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "branch")) %>% bind_rows()
+f4_eur <- lapply(sample_sets$EUR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "site")) %>% bind_rows()
 f4_eur
 
 # Let's add population columns to each of the two results, and bind them together
@@ -137,7 +141,9 @@ f4_results %>%
   ggtitle("f4(AFR, EUR; NEA, CHIMP)") +
   theme_bw()
 
-
+# Why the difference between the "branch" and "site" modes?
+# See this tutorial (and particularly directly the linked section):
+# https://tskit.dev/tutorials/no_mutations.html#genealogy-based-measures-are-less-noisy
 
 
 
@@ -150,6 +156,9 @@ f4_results %>%
 
 
 # Bonus 1 -- outgroup f3 statistic ----------------------------------------
+
+# How do the outgroup f3 results compare to your expectation based on simple
+# population relationships (and to the divergence computation above)?
 
 # f3(A, B; C) = E[ (A - C) * (B - C) ]
 # This means that in tskit, C is the outgroup (different from ADMIXTOOLS!)
@@ -192,7 +201,8 @@ homemade_f3
 eur_inds <- ts_samples(ts) %>% filter(pop == "EUR")
 eur_inds
 
-# Compute f4-ration statistic (this will take ~30s)
+# Compute f4-ration statistic (this will take ~30s) -- note that we can provide
+# a vector of names for the X sample set to the `ts_f4ratio()` function
 nea_ancestry <- ts_f4ratio(ts, X = eur_inds$name, A = "NEA_1", B = "NEA_2", C = "AFR_1", O = "CHIMP_1")
 nea_ancestry
 
@@ -204,11 +214,13 @@ eur_inds %>%
   geom_point() +
   geom_smooth(method = "lm", linetype = 2, color = "red", linewidth = 0.5) +
   xlim(40000, 0) +
-  coord_cartesian(ylim = c(0, 0.2)) +
+  coord_cartesian(ylim = c(0, 0.1)) +
   labs(x = "time [years ago]", y = "Neanderthal ancestry proportion")
 
 
-
+# Does this match observation in real data?
+# See figure 1 in this paper: https://www.pnas.org/doi/full/10.1073/pnas.1814338116,
+# and figure 2 in this paper: https://www.nature.com/articles/nature17993
 
 
 # Bonus 4 -- how many unique f4 quartets are there? -----------------------
