@@ -21,7 +21,8 @@ schedule <- schedule_sampling(model, times = seq(3000, 0, by = -200), list(popZ,
 # are defined correctly (there's no such thing as too many sanity checks when doing research)
 plot_model(model, proportions = TRUE, samples = schedule)
 
-ts <- msprime(model, samples = schedule, sequence_length = 50e6, recombination_rate = 1e-8) %>% ts_mutate(1e-8)
+ts <- msprime(model, samples = schedule, sequence_length = 50e6, recombination_rate = 1e-8, random_seed = 1702182272) %>%
+  ts_mutate(1e-8)
 
 # Save the samples table to a data frame (and process it a bit for tidier plotting later)
 samples <- ts_samples(ts) %>% mutate(pop = factor(pop, levels = c("popZ", "popX", "popY")))
@@ -65,18 +66,27 @@ ts_eigenstrat(ts_XYZ0, "XYZ0")
 ts_eigenstrat(ts, "model_XYZall")
 
 
+
+
+
+
+# Part 2 -- computing and visualizing PCA patterns ------------------------
+
 plot_pca("XY0", ts_XY0, color = "pop")
 plot_pca("XYall", ts_XYall, color = "time")
 plot_pca("XYZ0", ts_XYZ0, color = "pop")
 
 plot_pca("model_XYZall", ts, pc = c(1, 2))
 plot_pca("model_XYZall", ts, pc = c(1, 2), color = "pop")
+
 plot_pca("model_XYZall", ts, pc = c(2, 3))
-plot_pca("model_XYZall", ts, pc = c(2, 3), color = "pop")
+
 plot_pca("model_XYZall", ts, pc = c(3, 4))
 plot_pca("model_XYZall", ts, pc = c(3, 4), color = "pop")
+
 plot_pca("model_XYZall", ts, pc = c(4, 5))
 plot_pca("model_XYZall", ts, pc = c(4, 5), color = "pop")
+
 plot_pca("model_XYZall", ts, pc = c(5, 6))
 plot_pca("model_XYZall", ts, pc = c(5, 6), color = "pop")
 
@@ -85,24 +95,19 @@ plot_pca("model_XYZall", ts, pc = c(5, 6), color = "pop")
 
 
 
-
+# Bonus -- PCA of present-day X and Y and pre-split Z lineage -------------
 
 subset <- samples %>% filter(pop %in% c("popX", "popY") | (pop == "popZ" & time >= 1500))
 ts_XYall_Zancient <- ts_simplify(ts, simplify_to = subset$name)
 ts_eigenstrat(ts_XYall_Zancient, "XYall_Zancient")
-
 
 # when the whole X and Y trajectories are in but only ancient Z lineage, X and Y are
 # not actually separated from one another (only based on time)
 # -- also note that this series seems to kind of replicate the previous series of
 #    figures, except that X and Y are always mingled
 plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(1, 2), color = "time")
-plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(1, 2), color = "pop")
+plot_pca("model_XYZall", ts, pc = c(1, 2), color = "time")
+
 plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(2, 3), color = "pop")
 plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(3, 4), color = "pop")
 plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(4, 5), color = "pop")
-
-
-
-
-
