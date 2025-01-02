@@ -19,7 +19,13 @@ plot_pca <- function(prefix, ts, pc = c(1, 2), color = c("time", "pop"), return 
   return <- match.arg(return)
   color <- match.arg(color)
 
-  suppressMessages(pca <- smart_pca(snp_data = paste0(prefix, ".geno"), program_svd = "bootSVD", sample_group = samples$pop))
+  tmp_pca <- file.path(tempdir(), paste0(prefix, "_pca.rds"))
+  if (!file.exists(tmp_pca)) {
+    suppressMessages(pca <- smart_pca(snp_data = paste0(prefix, ".geno"), program_svd = "bootSVD", sample_group = samples$pop))
+    saveRDS(file = tmp_pca, object = pca)
+  } else {
+    pca <- readRDS(tmp_pca)
+  }
 
   pc_cols <- paste0("PC", pc)
   pca_df <- pca$pca.sample_coordinates[, pc_cols]
