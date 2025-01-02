@@ -1,16 +1,20 @@
 # PCA ---------------------------------------------------------------------
 
-library(smartsnp)
+library(cowplot)
 library(dplyr)
 library(ggplot2)
 library(ggrepel)
-library(cowplot)
 library(readr)
+library(smartsnp)
+library(scales)
 library(tidyr)
+library(viridis)
 
-plot_pca <- function(prefix, samples, pc = c(1, 2), color = c("time", "pop"), return = c("plot", "pca", "both")) {
+plot_pca <- function(prefix, ts, pc = c(1, 2), color = c("time", "pop"), return = c("plot", "pca", "both")) {
   if (length(pc) != 2)
     stop("The 'pc' argument of 'plot_pca' must be an integer vector of length two", call. = FALSE)
+
+  samples <- ts_samples(ts) %>% mutate(pop = factor(pop, levels = c("popZ", "popX", "popY")))
 
   return <- match.arg(return)
   color <- match.arg(color)
@@ -19,7 +23,8 @@ plot_pca <- function(prefix, samples, pc = c(1, 2), color = c("time", "pop"), re
 
   pc_cols <- paste0("PC", pc)
   pca_df <- pca$pca.sample_coordinates[, pc_cols]
-  pca_df$pop <- factor(samples$pop, levels = unique(samples$pop)[order(as.integer(gsub("^p", "", unique(samples$pop))))])
+  # pca_df$pop <- factor(samples$pop, levels = unique(samples$pop)[order(as.integer(gsub("^p", "", unique(samples$pop))))])
+  pca_df$pop <- samples$pop
   pca_df$time <- samples$time
 
   variance_explained <- pca$pca.eigenvalues[2, ] %>% {. / sum(.) * 100} %>% round(1)
@@ -28,12 +33,12 @@ plot_pca <- function(prefix, samples, pc = c(1, 2), color = c("time", "pop"), re
 
   if (color == "time") {
     gg_point <- geom_point(aes(x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]), shape = pop, color = time))
-    gg_label <- geom_label_repel(data = pop_df, aes(label = pop, x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]),
-                                                    shape = pop, color = time), show.legend = FALSE)
+    # gg_label <- geom_label_repel(data = pop_df, aes(label = pop, x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]),
+    #                                                 shape = pop, color = time), show.legend = FALSE)
     gg_theme <- scale_color_viridis_c(option = "viridis")
   } else {
-    gg_label <- geom_label_repel(data = pop_df, aes(label = pop, x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]),
-                                                    color = pop), show.legend = FALSE)
+    # gg_label <- geom_label_repel(data = pop_df, aes(label = pop, x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]),
+    #                                                 color = pop), show.legend = FALSE)
     if (length(unique(samples$pop)) > 6) {
       gg_point <- geom_point(aes(x = !!dplyr::sym(pc_cols[1]), y = !!dplyr::sym(pc_cols[2]), color = pop))
     } else {
@@ -44,12 +49,16 @@ plot_pca <- function(prefix, samples, pc = c(1, 2), color = c("time", "pop"), re
 
   plot <- ggplot(pca_df) +
     gg_point +
-    gg_label +
+    # gg_label +
     scale_shape_discrete(drop = FALSE) +
     labs(x = sprintf("%s [%.1f %%]", pc_cols[1], variance_explained[pc[1]]),
          y = sprintf("%s [%.1f %%]", pc_cols[2], variance_explained[pc[2]])) +
     theme_bw() +
     gg_theme
+
+  p_model <- plot_model(attr(ts, "model"), proportions = TRUE, samples = schedule)
+
+  plot <- plot_grid(p_model, plot)
 
   if (return == "plot")
     return(plot)

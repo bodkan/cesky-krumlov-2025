@@ -1,22 +1,19 @@
-devtools::load_all("~/Projects/slendr")
+library(slendr)
 init_env()
 
 source("utils.R")
 
-library(smartsnp)
 
-library(dplyr)
-library(scales)
-library(cowplot)
-library(ggplot2)
-library(viridis)
+
+
+
+# Create a model, simulate tree sequence, get EIGENSTRAT data -------------
 
 popZ <- population("popZ", time = 3000, N = 5000)
 popX <- population("popX", time = 1500, N = 5000, parent = popZ)
 popY <- population("popY", time = 1500, N = 5000, parent = popZ)
 
-gf <- gene_flow(from = popX, to = popY, rate = 0.5, start = 200, end = 0)
-model <- compile_model(list(popZ, popX, popY), generation_time = 1, gene_flow = NULL)
+model <- compile_model(list(popZ, popX, popY), generation_time = 1)
 
 schedule <- schedule_sampling(model, times = seq(3000, 0, by = -200), list(popZ, 10), list(popX, 10), list(popY, 10))
 
@@ -26,73 +23,84 @@ plot_model(model, proportions = TRUE, samples = schedule)
 
 ts <- msprime(model, samples = schedule, sequence_length = 50e6, recombination_rate = 1e-8) %>% ts_mutate(1e-8)
 
-
-
-
-
-# get an EIGENSTRAT data set out of this and inspect it in the terminal
-
-
-
-
-
-# Verify that all the samples we've scheduled for recording really are in the tree sequence
-ts_samples(ts)
-ts_samples(ts) %>% filter(pop == "popX") %>% group_by(pop, time) %>% tally
-ts_samples(ts) %>% filter(pop == "popY") %>% group_by(pop, time) %>% tally
-ts_samples(ts) %>% filter(pop == "popZ") %>% group_by(pop, time) %>% tally %>% print(n = Inf)
-
 # Save the samples table to a data frame (and process it a bit for tidier plotting later)
 samples <- ts_samples(ts) %>% mutate(pop = factor(pop, levels = c("popZ", "popX", "popY")))
-samples
+
+samples %>% group_by(pop) %>% count()
+
+
+
+
+
+# Part 1 -- create EIGENSTRAT for different subsets of samples ------------
+
 
 # Our goal is to investigate how is PCA structure affected by different factors related
 # to sampling (sample sizes, dates of samples, etc.). Right now, our tree sequence contains
 # every single sample. Let's create smaller subsets of the data using process called
 # "simplification".
-samples_XYpresent <- samples %>% filter(pop %in% c("popX", "popY"), time == 0)
-samples_XYpresent %>% group_by(pop, time) %>% tally
-ts_simplify(ts, simplify_to = samples_XYpresent$name) %>% ts_eigenstrat("model_XYpresent")
 
-samples_XYall <- samples %>% filter(pop %in% c("popX", "popY"))
-samples_XYall %>% group_by(pop, time) %>% tally %>% print(n = Inf)
-ts_simplify(ts, simplify_to = samples_XYall$name) %>% ts_eigenstrat("model_XYall")
+# EIGENSTRAT with only "present-day" X and Y individuals
+subset <- filter(samples, pop %in% c("popX", "popY"), time == 0)
+subset
 
-samples_XYZpresent <- samples %>% filter(time == 0)
-ts_simplify(ts, simplify_to = samples_XYZpresent$name) %>% ts_eigenstrat("model_XYZpresent")
+ts_XY0 <- ts_simplify(ts, simplify_to = subset$name)
+ts_eigenstrat(ts_XY0, "XY0")
 
-samples_XYZall <- samples
+# EIGENSTRAT with all X and Y individuals (i.e. trajectories of samples over time)
+subset <- filter(samples, pop %in% c("popX", "popY"))
+subset
+
+ts_XYall <- ts_simplify(ts, simplify_to = subset$name)
+ts_eigenstrat(ts_XYall, "XYall")
+
+# EIGENSTRAT with only "present-day" X,Y, and Z individuals
+subset <- filter(samples, time == 0)
+print(subset, n = Inf)
+
+ts_XYZ0 <- ts_simplify(ts, simplify_to = subset$name)
+ts_eigenstrat(ts_XYZ0, "XYZ0")
+
+# EIGENSTRAT file with all individuals
 ts_eigenstrat(ts, "model_XYZall")
 
-samples_XYall_Zancient <- samples %>% filter(pop %in% c("popX", "popY") | (pop == "popZ" & time >= 1500))
-ts_eigenstrat(ts, "model_XYall_Zancient")
 
-p_model <- plot_model(model, proportions = TRUE, samples = schedule)
-p_model
+plot_pca("XY0", ts_XY0, color = "pop")
+plot_pca("XYall", ts_XYall, color = "time")
+plot_pca("XYZ0", ts_XYZ0, color = "pop")
 
-plot_grid(p_model, plot_pca("model_XYpresent", samples_XYpresent, color = "pop"))
-plot_grid(p_model, plot_pca("model_XYall", samples_XYall, color = "time"))
+plot_pca("model_XYZall", ts, pc = c(1, 2))
+plot_pca("model_XYZall", ts, pc = c(1, 2), color = "pop")
+plot_pca("model_XYZall", ts, pc = c(2, 3))
+plot_pca("model_XYZall", ts, pc = c(2, 3), color = "pop")
+plot_pca("model_XYZall", ts, pc = c(3, 4))
+plot_pca("model_XYZall", ts, pc = c(3, 4), color = "pop")
+plot_pca("model_XYZall", ts, pc = c(4, 5))
+plot_pca("model_XYZall", ts, pc = c(4, 5), color = "pop")
+plot_pca("model_XYZall", ts, pc = c(5, 6))
+plot_pca("model_XYZall", ts, pc = c(5, 6), color = "pop")
 
-plot_grid(p_model, plot_pca("model_XYZpresent", samples_XYZpresent, color = "pop"))
 
-plot_grid(p_model, plot_pca("model_XYZall", samples_XYZall, pc = c(1, 2)))
-plot_grid(p_model, plot_pca("model_XYZall", samples_XYZall, pc = c(1, 2), color = "pop"))
-plot_grid(p_model, plot_pca("model_XYZall", samples_XYZall, pc = c(2, 3)))
-plot_grid(p_model, plot_pca("model_XYZall", samples_XYZall, pc = c(2, 3), color = "pop"))
-plot_grid(p_model, plot_pca("model_XYZall", samples_XYZall, pc = c(3, 4)))
-plot_grid(p_model, plot_pca("model_XYZall", samples_XYZall, pc = c(3, 4), color = "pop"))
-plot_grid(p_model, plot_pca("model_XYZall", samples_XYZall, pc = c(4, 5)))
-plot_grid(p_model, plot_pca("model_XYZall", samples_XYZall, pc = c(4, 5), color = "pop"))
+
+
+
+
+
+
+subset <- samples %>% filter(pop %in% c("popX", "popY") | (pop == "popZ" & time >= 1500))
+ts_XYall_Zancient <- ts_simplify(ts, simplify_to = subset$name)
+ts_eigenstrat(ts_XYall_Zancient, "XYall_Zancient")
+
 
 # when the whole X and Y trajectories are in but only ancient Z lineage, X and Y are
 # not actually separated from one another (only based on time)
 # -- also note that this series seems to kind of replicate the previous series of
 #    figures, except that X and Y are always mingled
-plot_grid(p_model, plot_pca("model_XYall_Zancient", samples_XYall_Zancient, pc = c(1, 2), color = "time"))
-plot_grid(p_model, plot_pca("model_XYall_Zancient", samples_XYall_Zancient, pc = c(1, 2), color = "pop"))
-plot_grid(p_model, plot_pca("model_XYall_Zancient", samples_XYall_Zancient, pc = c(2, 3), color = "pop"))
-plot_grid(p_model, plot_pca("model_XYall_Zancient", samples_XYall_Zancient, pc = c(3, 4), color = "pop"))
-plot_grid(p_model, plot_pca("model_XYall_Zancient", samples_XYall_Zancient, pc = c(4, 5), color = "pop"))
+plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(1, 2), color = "time")
+plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(1, 2), color = "pop")
+plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(2, 3), color = "pop")
+plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(3, 4), color = "pop")
+plot_pca("XYall_Zancient", ts_XYall_Zancient, pc = c(4, 5), color = "pop")
 
 
 
