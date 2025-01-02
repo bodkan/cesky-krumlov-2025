@@ -31,7 +31,7 @@ yam <- population("YAM", time = 8000, N = 5000, parent = ehg, remove = 2500)
 gf <- list(
   gene_flow(from = ana, to = yam, rate = 0.75, start = 7500, end = 6000),
   gene_flow(from = ana, to = eur, rate = 0.5, start = 6000, end = 5000),
-  gene_flow(from = yam, to = eur, rate = 0.65, start = 4000, end = 3500)
+  gene_flow(from = yam, to = eur, rate = 0.6, start = 4000, end = 3500)
 )
 
 # Compile all populations into a single slendr model object
@@ -41,7 +41,7 @@ model <- compile_model(
 )
 
 # Schedule the sampling from four European populations roughly before their
-# disappearance (or before the end of the simulation).
+# disappearance (or before the end of the simulation)
 schedule <- rbind(
   schedule_sampling(model, times = 0, list(eur, 50)),
   schedule_sampling(model, times = 6000, list(ehg, 50)),
@@ -85,7 +85,7 @@ ts_tajima(ts, sample_sets = samples)
 # Part 3 -- computing Tajima's D in windows -------------------------------
 
 # Pre-compute genomic windows for window-based computation of Tajima's D
-windows <- as.integer(seq(0, ts$sequence_length, length.out = 100))
+windows <- round(seq(0, ts$sequence_length, length.out = 100))
 windows
 
 # Compute genome-wide Tajima's D for each population in individual windows
@@ -118,8 +118,7 @@ plot_tajima(tajima_df)
 # the function `substitute_values()`.
 
 # First, let's simulate selection happening only in the EUR lineage.
-extension <- substitute_values(
-  template = "exercise7_slim.txt",
+extension <- substitute_values(template = "exercise7_slim.txt",
   origin_pop = "EUR",
   s = 0.1,
   onset_time = 12000
@@ -135,7 +134,7 @@ extension
 model <- compile_model(
   populations = list(afr, ooa, ehg, eur, ana, yam),
   gene_flow = gf, generation_time = 30,
-  extension = extension   # <======== this is different to the neutral example!
+  extension = extension   # <======== this is missing in the neutral example!
 )
 # We can finally run our selection simulation
 
