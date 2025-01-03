@@ -2,13 +2,13 @@
 
 Slides, exercise materials, and example source code for the practical activity session at the [**Workshop on population and speciation genomics**](http://evomics.org/workshops/workshop-on-population-and-speciation-genomics/2025-workshop-on-population-and-speciation-genomics-cesky-krumlov/) to be held in Český Krumlov in January 2025.
 
-Contents of this git repository:
+**Contents of this git repository**:
 
--   [slides](https://bodkan.quarto.pub/cesky-krumlov-2025/) and [single-page handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-onepage/) with a crash course introduction on using the *slendr* toolkit for simulations in population genomics
+-   [slides](https://bodkan.quarto.pub/cesky-krumlov-2025/) and [single-page handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-onepage/) with a crash course introduction on using the *slendr* toolkit for simulations in population genomics (you will be using those for reference as you are working on the exercises)
 
--   [exercise materials](exercises.md)
+-   [exercise materials](exercises.md) (this is the content of the five exercises)
 
--   [solutions](https://github.com/bodkan/cesky-krumlov-2025/tree/main/solutions) to the exercises
+-   [solutions](https://github.com/bodkan/cesky-krumlov-2025/tree/main/solutions) to the exercises (one self-contained R script for each exercise)
 
 ## Information for TAs
 
