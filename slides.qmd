@@ -1,0 +1,1082 @@
+---
+title: "Building intuition into popgen concepts and simulation-based inference"
+subtitle: "[Workshop on population and speciation genomics](http://evomics.org/workshops/workshop-on-population-and-speciation-genomics/2025-workshop-on-population-and-speciation-genomics-cesky-krumlov/)"
+author:
+  - "Martin Petr"
+  - "[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)"
+date: "January 2025"
+date-format: "MMMM YYYY"
+format:
+  revealjs:
+    echo: true
+    code-line-numbers: false
+    fig-align: center
+    slide-number: true
+  # html:
+  #   echo: true
+  #   code-line-numbers: false
+  #   fig-align: center
+---
+
+# First things first
+
+These slides and other resources are (and always will be) at:
+
+[github.com/bodkan/cesky-krumlov-2025](https://github.com/bodkan/cesky-krumlov-2025)
+
+<br><br>
+
+**Open this link now so you have everything at hand later.**
+
+# 
+
+::::: columns
+::: {.column width="70%"}
+> Many problems in population genetics cannot be solved by a mathematician, no matter how gifted. \[It\] is already clear that computer methods are very powerful. This is good. It \[...\] **permits people with limited mathematical knowledge to work on important problems** \[...\].
+:::
+
+::: {.column width="30%"}
+![](images/crow.jpeg)
+
+[James F. Crow](https://en.wikipedia.org/wiki/James_F._Crow) -- [interview](http://www.gnxp.com/blog/2006/06/10-questions-for-jim-crow.php)
+:::
+:::::
+
+# Why use simulations?
+
+1.  Making sense of inferred statistics
+2.  Fitting model parameters (i.e. [ABC](https://en.wikipedia.org/wiki/Approximate_Bayesian_computation))
+3.  Ground truth for method development
+
+## Making sense of inferred statistics
+
+<center>![](images/fstats_sims.png)</center>
+
+::: aside
+Image from [Peter (2016)](https://academic.oup.com/genetics/article/202/4/1485/5930214)
+:::
+
+## Making sense of inferred statistics
+
+<center>![](images/admixture.png)</center>
+
+::: aside
+Image from [Lawson *et al.* (2018)](https://www.nature.com/articles/s41467-018-05257-7)
+:::
+
+## Fitting model parameters (i.e. [ABC](https://en.wikipedia.org/wiki/Approximate_Bayesian_computation))
+
+<center>![](images/abc_scheme.png){width="50%"}</center>
+
+::: aside
+Image from [Wikipedia on ABC](https://en.wikipedia.org/wiki/Approximate_Bayesian_computation)
+:::
+
+## Ground truth for method development
+
+<center>![](images/mcmc.png)</center>
+
+::: aside
+Image from [Schiffels and Durbin (2014)](https://www.nature.com/articles/ng.3015)
+:::
+
+# Simulation software
+
+The most famous and widely used are [SLiM](https://messerlab.org/slim/) and [*msprime*](https://tskit.dev/msprime/docs/stable/intro.html).
+
+They are <u>very</u> powerful but both require:
+
+::: fragment
+-   quite a bit of programming knowledge,
+-   a lot of code for non-trivial simulations (🐛🪲🐜).
+:::
+
+::: fragment
+
+<center>
+
+<h3>**The exercises will focus on the [*slendr*](http://www.slendr.net)**<br>popgen simulation toolkit for R.</h3>
+
+</center>
+:::
+
+::: fragment
+<br>
+<center>But let's look at SLiM and *msprime* at least a little bit.</center>
+:::
+
+## 
+
+:::::::: columns
+:::::: {.column width="60%"}
+<h2>What is SLiM?</h2>
+
+-   **A forward-time simulator**
+
+::: fragment
+-   It's fully programmable!
+:::
+
+::: fragment
+-   Massive library of functions for:
+    -   demographic events
+    -   various mating systems
+    -   selection, quantitative traits, ...
+:::
+
+::: fragment
+-   \> 700 pages long [manual](https://github.com/MesserLab/SLiM/releases/download/v3.7.1/SLiM_Manual.pdf)!
+:::
+::::::
+
+::: {.column width="40%"}
+<center>
+
+![Modified from [Alexei Drummond](http://alexeidrummond.org/bayesian_phylo_lectures/lecture10/)](images/sim_sketches.001.png){width="100%"}
+
+</center>
+:::
+::::::::
+
+## Simple neutral simulation in SLiM
+
+```{bash}
+#| echo: false
+cat examples/script.slim
+```
+
+## 
+
+::::::: columns
+::::: {.column width="60%"}
+<h2>What is *msprime*?</h2>
+
+-   A Python module for writing **coalescent simulations**
+
+::: fragment
+-   Extremely fast (genome-scale, population-scale data)
+:::
+
+::: fragment
+-   You must know Python fairly well to build complex models
+:::
+:::::
+
+::: {.column width="40%"}
+<center>
+
+![Modified from [Alexei Drummond](http://alexeidrummond.org/bayesian_phylo_lectures/lecture10/)](images/sim_sketches.002.png){width="100%"}
+
+</center>
+:::
+:::::::
+
+## Simple simulation using *msprime*
+
+```{bash}
+#| echo: false
+cat examples/script.py
+```
+
+# 
+
+<center>
+
+<h2>[www.slendr.net](https://www.slendr.net)</h2>
+
+![](images/slendr_logo.png){width="30%"}
+
+</center>
+
+::: fragment
+<center>
+
+<h2>Why a new package?</h2>
+
+</center>
+:::
+
+## Spatial simulations!
+
+<center>![](images/animation.gif){width="70%"}</center>
+
+## 
+
+<h2>Why a new package?</h2>
+
+-   Most researchers are not expert programmers
+
+-   All but the most trivial simulations require lots of code
+
+::: fragment
+-   90% <sup><font color="blue">\[citation needed\]</font></sup> of simulations are basically the same!
+
+    -   create populations (splits and $N_e$ changes)
+
+    -   specify if/how they should mix (rates and times)
+:::
+
+::: fragment
+-   Lot of code duplication across projects
+:::
+
+::: fragment
+<center>***slendr*** **makes "standard" demographic simulations trivial**<br>and unlocks new kinds of spatial simulations</center>
+:::
+
+# Let's get started
+
+## Everything we do will be in R
+
+<br><br>
+
+You can write your _slendr_ code however you like, but I recommed using RStudio, for convenience.
+
+<br>
+
+Always start your R scripts with this:
+
+```{r}
+library(slendr)
+init_env()
+```
+
+::: aside
+(If you get a note about missing SLiM, safely ignore it for now.)
+:::
+
+
+## Typical steps of a *slendr* R workflow
+
+<br>
+
+1.  creating populations
+2.  scheduling population splits
+3.  programming $N_e$ size changes
+4.  encoding gene-flow events
+5.  simulation sequence of a given size
+6.  computing statistics from simulated outputs
+
+## Creating a `population()`
+
+Each needs a name, size and time of appearance:
+
+```{r}
+pop1 <- population("pop1", N = 1000, time = 1)
+```
+
+. . .
+
+<br>
+
+This creates a normal R object. Typing it out gives a summary:
+
+```{r}
+pop1
+```
+
+## Programming population splits
+
+Splits are indicated by the `parent = <pop>` argument:
+
+```{r}
+pop2 <- population("pop2", N = 100, time = 50, parent = pop1)
+```
+
+. . .
+
+<br>
+
+The split is reported in the "historical summary":
+
+```{r}
+pop2
+```
+
+## Scheduling resize events -- `resize()`
+
+Step size decrease:
+
+```{r}
+#| code-line-numbers: "2"
+pop1 <- population("pop1", N = 1000, time = 1)
+pop1_step <- resize(pop1, N = 100, time = 500, how = "step")
+```
+
+<br>
+
+Exponential increase:
+
+```{r}
+#| code-line-numbers: "2"
+pop2 <- population("pop2", N = 100, time = 50, parent = pop1)
+pop2_exp <- resize(pop2, N = 10000, time = 500, end = 2000, how = "exponential")
+```
+
+## Tidyverse-style [pipe](https://magrittr.tidyverse.org) `%>%` interface
+
+A more concise way to express the same thing as before.
+
+<br>
+
+Step size decrease:
+
+```{r}
+pop1 <-
+  population("pop1", N = 1000, time = 1) %>%
+  resize(N = 100, time = 500, how = "step")
+```
+
+<br>
+
+Exponential increase:
+
+```{r}
+pop2 <-
+  population("pop2", N = 1000, time = 1) %>%
+  resize(N = 10000, time = 500, end = 2000, how = "exponential")
+```
+
+## A more complex model
+
+```{r}
+pop1 <- population("pop1", N = 1000, time = 1)
+
+pop2 <-
+  population("pop2", N = 1000, time = 300, parent = pop1) %>%
+  resize(N = 100, how = "step", time = 1000)
+
+pop3 <-
+  population("pop3", N = 1000, time = 400, parent = pop2) %>%
+  resize(N = 2500, how = "step", time = 800)
+
+pop4 <-
+  population("pop4", N = 1500, time = 500, parent = pop3) %>%
+  resize(N = 700, how = "exponential", time = 1200, end = 2000)
+
+pop5 <-
+  population("pop5", N = 100, time = 600, parent = pop4) %>%
+  resize(N = 50, how = "step", time = 900) %>%
+  resize(N = 1000, how = "exponential", time = 1600, end = 2200)
+```
+
+## Each object carries its history!
+
+```{r}
+pop5
+```
+
+## Gene flow / admixture
+
+We can schedule `gene_flow()` from `pop1` into `pop2` with:
+
+```{r}
+gf <- gene_flow(from = pop1, to = pop2, start = 2000, end = 2200, rate = 0.13)
+```
+
+. . .
+
+Here `rate = 0.13` means 13% migrants over the given time window will come from "pop1" into "pop2".
+
+. . .
+
+<br>
+
+Multiple gene-flow events can be gathered in a list:
+
+```{r}
+#| eval: false
+gf <- list(
+  gene_flow(from = pop1, to = pop2, start = 500, end = 600, rate = 0.13),
+  gene_flow(from = ..., to = ..., start = ..., end = ..., rate = ...),
+  ...
+)
+```
+
+## Last step before simulation: `compile_model()`
+
+<br>
+
+```{r}
+#| code-line-numbers: true
+model <- compile_model(
+  list(pop1, pop2, pop3, pop4, pop5),
+  generation_time = 1,
+  simulation_length = 3000,
+  direction = "forward"
+)
+```
+
+<br>
+
+<center>**Compilation takes a list of model components, performs internal consistency checks, returns a single model object.**</center>
+
+## Last step before simulation: `compile_model()`
+
+<br>
+
+```{r}
+#| code-line-numbers: "3"
+model <- compile_model(
+  list(pop1, pop2, pop3, pop4, pop5),
+  gene_flow = gf,      # <----- in case our model includes gene flow
+  generation_time = 1,
+  simulation_length = 3000,
+  direction = "forward"
+)
+```
+
+<br>
+
+<center>**Gene flow(s) that we programmed are included**<br>via the `gene_flow` argument.</center>
+
+## Model summary
+
+Typing the compiled `model` into R prints a brief summary:
+
+```{r}
+model
+```
+
+## Model visualization
+
+```{r}
+#| fig-width: 7
+#| fig-align: center
+plot_model(model, proportions = TRUE)
+```
+
+# So we build a model
+
+<center>
+
+<h3>How do we simulate data from it?</h3>
+
+</center>
+
+## Built-in "simulation engines"
+
+*slendr* has two built-in simulation "engine scripts":
+
+-   SLiM engine ([source](https://github.com/bodkan/slendr/blob/main/inst/scripts/script.slim))
+-   *msprime* engine ([source](https://github.com/bodkan/slendr/blob/main/inst/scripts/script.py))
+
+They are designed to understand *slendr* models.
+
+. . .
+
+<br>All you need to simulate data is this one line of code:
+
+```{r}
+#| eval: false
+ts <- msprime(model, sequence_length = 100e6, recombination_rate = 1e-8)
+```
+
+<center>
+
+<br>
+
+<h3>**You don't have to write *msprime* or SLiM code!**</h3>
+
+</center>
+
+# The result of a *slendr* simulation is a **tree sequence (`ts`)**
+
+## What is tree sequence?
+
+![](images/tree_sequence_diagram_no_muts.png){width="80%" fig-align="center"}
+
+-   a record of full genetic ancestry of a set of samples
+-   an encoding of DNA sequence carried by those samples
+-   an efficient analysis framework
+
+# Why tree sequence?
+
+<br>
+
+<h3>Why not VCF or a normal genotype table?</h3>
+
+## What we usually have
+
+<center>![](images/vcf_screenshot.png){width="90%"}</center>
+
+## What we usually *want*
+
+An understanding of our samples' evolutionary history:
+
+<center>![](images/tree_sequence_diagram_no_muts.png)</center>
+
+::: fragment
+<center>
+
+<h3>**This is exactly what a tree sequence *is*!**</h3>
+
+</center>
+:::
+
+## The magic of tree sequences
+
+They allow computing of popgen statistics *without genotypes*!
+
+<center>![](images/tree_sequence_diagram_no_muts.png)</center>
+
+There is a "duality" between mutations and branch lengths.
+
+::: aside
+See an amazing paper by [Ralph et al. (2020)](https://academic.oup.com/genetics/article/215/3/779/5930459) for more detail.
+:::
+
+## What if we need mutations though?
+
+::: fragment
+Coalescent and mutation processes can be decoupled!
+
+<center>![](images/tree_sequence_diagram_no_muts.png)</center>
+:::
+
+## What if we need mutations though?
+
+Coalescent and mutation processes can be decoupled!
+
+<center>
+
+![](images/tree_sequence_diagram.png)
+
+::: fragment
+<h3>With *slendr*, we can add mutations *after* the simulation using `ts_mutate()`.</h3>
+:::
+
+</center>
+
+<!-- ## Tree-sequence simulation in practice -->
+
+<!-- Let' say we have a compiled `model` object. -->
+
+<!-- Then, we can simulate a tree sequence like this: -->
+
+<!-- ```{r} -->
+
+<!-- ts <- msprime(model, sequence_length = 10e6, recombination_rate = 1e-8) -->
+
+<!-- ``` -->
+
+<!-- But we can also simulate mutations like this: -->
+
+<!-- ```{r} -->
+
+<!-- ts <- -->
+
+<!--   msprime(model, sequence_length = 10e6, recombination_rate = 1e-8) %>% -->
+
+<!--   ts_mutate(mutation_rate = 1e-8) -->
+
+<!-- ``` -->
+
+<!-- <br> -->
+
+<!-- <center>We will be using `ts_mutate()` throughout.</center> -->
+
+<!-- ## Tree sequences are _very_ efficient -->
+
+<!-- <br> -->
+
+<!-- This simulates 2 $\times$ 10000 chromosomes of 100 Mb: -->
+
+<!-- ```{r} -->
+
+<!-- #| eval: false -->
+
+<!-- pop <- population("pop", time = 1e6, N = 10000) -->
+
+<!-- model <- compile_model(pop, generation_time = 30, direction = "backward") -->
+
+<!-- ts <- msprime(model, sequence_length = 100e6, recombination_rate = 1e-8) -->
+
+<!-- ``` -->
+
+<!-- . . . -->
+
+<!-- <br> -->
+
+<!-- **Runs in less than 30 seconds on my laptop!** -->
+
+<!-- **Takes about 66 Mb of memory!** -->
+
+<!-- ## How does this work?! -->
+
+<!-- . . . -->
+
+<!-- <center> -->
+
+<!-- ![](images/tables.jpeg) -->
+
+<!-- <center> -->
+
+<!-- ## Tree-sequence tables -->
+
+<!-- ::: row -->
+
+<!-- ::: columns -->
+
+<!-- ::: {.column width="60%"} -->
+
+<!-- A tree (sequence) can be represented by -->
+
+<!-- ::: incremental -->
+
+<!-- -   a table of <font color="orange">n</font><font color="green">o</font><font color="darkblue">d</font><font color="green">e</font><font color="darkblue">s</font>, -->
+
+<!-- -   a table of [edges]{.underline} between nodes, -->
+
+<!-- -   a table of <font color="red">mutations</font> on edges -->
+
+<!-- ::: -->
+
+<!-- ::: -->
+
+<!-- ::: {.column width="40%"} -->
+
+<!-- <br> -->
+
+<!-- <center>![](images/tree_diagram.png)</center> -->
+
+<!-- ::: -->
+
+<!-- ::: -->
+
+<!-- ::: -->
+
+<!-- . . . -->
+
+<!-- <center> -->
+
+<!-- <h3>**A set of such tables is a tree sequence.**</h3> -->
+
+<!-- </center> -->
+
+<!-- ::: aside -->
+
+<!-- You can find much more information in  ([tskit docs](https://tskit.dev/tutorials/tables_and_editing.html)) -->
+
+<!-- ::: -->
+
+<!-- ## Tree-sequence tables in practice -->
+
+<!-- ::: columns -->
+
+<!-- ::: {.column width="50%"} -->
+
+<!-- ```{r} -->
+
+<!-- #| echo: false -->
+
+<!-- #| fig-height: 13 -->
+
+<!-- set.seed(123) -->
+
+<!-- ts <- msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, random_seed = 42) %>% ts_mutate(1e-8, random_seed = 42) -->
+
+<!-- # make a tiny example simplified tree sequence -->
+
+<!-- ts_tiny <- ts_samples(ts) %>% sample_n(4) %>% pull(name) %>% ts_simplify(ts, simplify_to = .) -->
+
+<!-- # extract tree #1 as an ape tree and also a tskit tree -->
+
+<!-- t_phylo <- ts_phylo(ts_tiny, 1, quiet = TRUE) -->
+
+<!-- t_tskit <- ts_tree(ts_tiny, 1) -->
+
+<!-- # plot the phylo tree with ape -->
+
+<!-- suppressPackageStartupMessages(library(ggtree)) -->
+
+<!-- nodes <- ts_nodes(t_phylo) %>% as_tibble %>% dplyr::select(node = phylo_id, pop, node_id) -->
+
+<!-- ggtree(t_phylo, branch.length = "none") %<+% nodes + -->
+
+<!--   geom_label(aes(label = node_id), size = 15) +  -->
+
+<!--   guides(color = "none") -->
+
+<!-- ``` -->
+
+<!-- ::: -->
+
+<!-- ::: {.column width="50%"} -->
+
+<!-- ::: fragment -->
+
+<!-- nodes: -->
+
+<!-- ```{r} -->
+
+<!-- #| echo: false -->
+
+<!-- ts_nodes(t_phylo) %>% head(3) %>% .[, c("node_id", "pop_id", "time")] %>% as.data.frame() -->
+
+<!-- ``` -->
+
+<!-- ::: -->
+
+<!-- ::: fragment -->
+
+<!-- edges: -->
+
+<!-- ```{r} -->
+
+<!-- #| echo: false -->
+
+<!-- ts_edges(t_phylo) %>% head(3) %>% .[, c("child_node_id", "parent_node_id")] %>% as.data.frame() -->
+
+<!-- ``` -->
+
+<!-- ::: -->
+
+<!-- ::: fragment -->
+
+<!-- mutations: -->
+
+<!-- ```{r} -->
+
+<!-- #| echo: false -->
+
+<!-- ts_table(ts_tiny, "mutations") %>% filter(node %in% c(53, 22, 20, 74, 9)) %>% head(3) %>% .[, c("id", "site", "node", "time")] %>% as.data.frame() -->
+
+<!-- ``` -->
+
+<!-- ::: -->
+
+<!-- ::: -->
+
+<!-- ::: -->
+
+## Let's take the `model` from earlier...
+
+```{r}
+#| fig-align: center
+#| echo: false
+plot_model(model)
+```
+
+## ... and simulate data from it
+
+<br>
+
+In our script we'll have something like this:
+
+```{r}
+#| eval: false
+#| code-line-numbers: 1-3|5-6
+<... population() definitions ...>
+
+model <- compile_model(...)
+  
+ts <-
+  msprime(model, sequence_length = 50e6, recombination_rate = 1e-8)
+```
+
+## ... and simulate data from it
+
+<br>
+
+In our script we'll have something like this:
+
+```{r}
+#| eval: false
+#| code-line-numbers: "5-7"
+<... population() definitions ...>
+
+model <- compile_model(...)
+  
+ts <-
+  msprime(model, sequence_length = 50e6, recombination_rate = 1e-8) %>%
+  ts_mutate(mutation_rate = 1e-8)
+```
+
+```{r}
+#| echo: false
+ts <-
+  msprime(model, sequence_length = 1e6, recombination_rate = 1e-8) %>%
+  ts_mutate(mutation_rate = 1e-8)
+```
+
+::: fragment
+<br>
+
+<center>
+
+<h3>Always use `ts_mutate()` during exercises! Otherwise you'll get weird results due to the lack of mutations on the tree sequence.</h3>
+
+</center>
+:::
+
+# So we can simulate data
+
+<center>
+
+<h3>How do we work with this `ts` thing?</h3>
+
+</center>
+
+## Standard genotype formats
+
+If a tree sequence doesn't cut it, you can always:
+
+-   export genotypes to a VCF file:
+
+```{r}
+#| eval: false
+ts_vcf(ts, path = "path/to/a/file.vcf.gz")
+```
+
+-   export genotypes in an EIGENSTRAT format:
+
+```{r}
+#| eval: false
+ts_eigenstrat(ts, prefix = "path/to/eigenstrat/prefix")
+```
+
+-   access genotypes in a data frame:
+
+```{r}
+#| eval: false
+ts_genotypes(ts)
+```
+
+
+```{r}
+#| echo: false
+ts_genotypes(ts) %>% as.data.frame() %>% .[1:2, 1:7]
+```
+
+
+## *slendr*'s R interface to [*tskit*](https://tskit.dev/tskit) statistics
+
+<center>![](images/slendr_tskit.png)</center>
+
+Allele-frequecy spectrum, diversity $\pi$, $F_{ST}$, Tajima's D, etc.
+
+**Find help at [slendr.net/reference](https://slendr.net/reference) or in R under `?ts_fst` etc.**
+
+## Specifying individuals to compute on
+
+We can get samples recorded in `ts` with `ts_samples()`:
+
+```{r}
+ts_samples(ts) %>% head(2)
+```
+
+. . .
+
+A shortcut `ts_names()` can also be useful:
+
+```{r}
+ts_names(ts) %>% head(5)
+```
+
+. . .
+
+We can also get a per-population list of individuals:
+
+```{r}
+#| eval: false
+ts_names(ts, split = "pop")
+```
+
+```{r}
+#| echo: false
+ts_names(ts, split = "pop") %>% lapply(sample, 5) %>% .[1]
+```
+
+#
+
+<center><h2>All _slendr_ statistics accept this as their second (and further) arguments.</h2></center>
+
+<br>
+
+<center>This is modelled after the `sample_sets=` argument of the respective [_tskit_ Python methods](https://tskit.dev/tskit/docs/stable/python-api.html#statistics) (except that you use "symbolic names" of individuals, not tree-sequence node numbers).</center>
+
+## Example: [nucleotide diversity](https://en.wikipedia.org/wiki/Nucleotide_diversity)
+
+```{r}
+#| echo: false
+pop1 <- population("pop1", N = 10000, time = 1)
+pop2 <- population("pop2", N = 1000, time = 5000, parent = pop1)
+
+model <- compile_model(
+  populations = list(pop1, pop2),
+  generation_time = 1,
+  simulation_length = 10000
+)
+
+ts <-
+  msprime(model, sequence_length = 10e6, recombination_rate = 1e-8) %>%
+  ts_mutate(mutation_rate = 1e-8)
+```
+
+```{r}
+#| echo: false
+set.seed(42)
+```
+
+:::: {.columns}
+
+::: {.column width="45%"}
+Get list of individuals in each population:
+
+```{r}
+samples <- ts_names(ts, split = "pop")
+
+names(samples)
+```
+
+<br>
+
+::: fragment
+```{r}
+samples$pop1 %>% head(3)
+```
+:::
+
+::: fragment
+```{r}
+samples$pop2 %>% head(3)
+```
+:::
+
+:::
+
+::: {.column width="2%"}
+ 
+:::
+
+::: {.column width="53%"}
+
+::: fragment
+Compute nucleotide diversity:
+
+```{r}
+ts_diversity(ts, sample_sets = samples)
+```
+:::
+
+:::
+
+::::
+
+
+
+## Example: [allele frequency spectrum](https://en.wikipedia.org/wiki/Allele_frequency_spectrum)
+
+```{r}
+#| echo: false
+pop <- population("pop", N = 10000, time = 1)
+
+model <- compile_model(pop, generation_time = 1, simulation_length = 10000)
+
+ts <-
+  msprime(model, sequence_length = 10e6, recombination_rate = 1e-8) %>%
+  ts_mutate(mutation_rate = 1e-8)
+```
+
+```{r}
+#| echo: false
+set.seed(42)
+```
+
+:::::::: columns
+:::: {.column width="45%"}
+Get names of all individuals:
+
+```{r}
+samples <- ts_names(ts)[1:5]
+samples
+```
+
+::: fragment
+<br>
+
+Compute the AFS:
+
+```{r}
+afs <- ts_afs(ts, sample_sets = list(samples))
+
+afs[-1]
+```
+:::
+::::
+
+::: {.column width="2%"}
+ 
+:::
+
+:::: {.column width="53%"}
+::: fragment
+```{r}
+#| eval: false
+plot(afs[-1], type = "b",
+     xlab = "allele count bin",
+     ylab = "frequency")
+```
+
+```{r}
+#| echo: false
+#| fig-height: 8
+plot(afs[-1], type = "b",
+     xlab = "allele count bin",
+     ylab = "frequency", lwd = 3,
+     cex = 1.5, cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
+```
+:::
+::::
+::::::::
+
+
+
+
+
+
+## Working with "multi-population" statistics
+
+For multipopulation statistics, you need a (named) list of samples recorded in each population.
+
+`ts_names()` has a `split = "pop"` option just for this:
+
+```{r}
+#| eval: false
+samples <- ts_names(ts, split = "pop")
+samples
+```
+
+```{r}
+#| echo: false
+ts_tmp <- msprime(model, sequence_length = 1, recombination_rate = 0)
+tmp_list <- ts_names(ts_tmp, split = "pop") %>% lapply(`[`, 1:3) %>% .[c("AFR", "NEA")]
+tmp_list
+```
+
+You can use this in place of `sample_names` in code like:
+
+```{r}
+#| eval: false
+ts_diversity(ts, sample_sets = samples)
+```
+
+
+## More information
+
+<br>
+
+-   *slendr* paper is now in [PCI EvolBiol](https://evolbiol.peercommunityin.org/articles/rec?id=630)
+
+-   documentation, tutorials is [here](https://www.slendr.net)
+
+-   GitHub repo (bug reports!) is [here](http://github.com/bodkan/slendr)
+
+<hr>
+
+-   check out my new [_demografr_](http://github.com/bodkan/demografr) inference package
+
+<hr>
+
+-   contact details at [bodkan.net](https://bodkan.net)
