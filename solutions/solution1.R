@@ -129,7 +129,7 @@ ts <-
   msprime(model, sequence_length = 100e6, recombination_rate = 1e-8, samples = schedule, random_seed = 1269258439) %>%
   ts_mutate(mutation_rate = 1e-8, random_seed = 1269258439)
 # tend <- Sys.time()
-# tend - tstart # Time difference of 1.926204 mins
+# tend - tstart # Time difference of 2.141642 mins
 
 # We can save a tree sequence object using a slendr function `ts_write()` (this
 # can be useful if we want to save the results of a simulation for later use).
