@@ -92,7 +92,6 @@ They are <u>very</u> powerful but both require:
 :::
 
 ::: fragment
-
 <center>
 
 <h3>**The exercises will focus on the [*slendr*](http://www.slendr.net)**<br>popgen simulation toolkit for R.</h3>
@@ -102,6 +101,7 @@ They are <u>very</u> powerful but both require:
 
 ::: fragment
 <br>
+
 <center>But let's look at SLiM and *msprime* at least a little bit.</center>
 :::
 
@@ -230,7 +230,7 @@ cat examples/script.py
 
 <br><br>
 
-You can write your _slendr_ code however you like, but I recommed using RStudio, for convenience.
+You can write your *slendr* code however you like, but I recommed using RStudio, for convenience.
 
 <br>
 
@@ -244,7 +244,6 @@ init_env()
 ::: aside
 (If you get a note about missing SLiM, safely ignore it for now.)
 :::
-
 
 ## Typical steps of a *slendr* R workflow
 
@@ -843,12 +842,10 @@ ts_eigenstrat(ts, prefix = "path/to/eigenstrat/prefix")
 ts_genotypes(ts)
 ```
 
-
 ```{r}
 #| echo: false
 ts_genotypes(ts) %>% as.data.frame() %>% .[1:2, 1:7]
 ```
-
 
 ## *slendr*'s R interface to [*tskit*](https://tskit.dev/tskit) statistics
 
@@ -888,13 +885,17 @@ ts_names(ts, split = "pop")
 ts_names(ts, split = "pop") %>% lapply(sample, 5) %>% .[1]
 ```
 
-#
+# 
 
-<center><h2>All _slendr_ statistics accept this as their second (and further) arguments.</h2></center>
+<center>
+
+<h2>All *slendr* statistics accept this as their second (and further) arguments.</h2>
+
+</center>
 
 <br>
 
-<center>This is modelled after the `sample_sets=` argument of the respective [_tskit_ Python methods](https://tskit.dev/tskit/docs/stable/python-api.html#statistics) (except that you use "symbolic names" of individuals, not tree-sequence node numbers).</center>
+<center>This is modelled after the `sample_sets=` argument of the respective [*tskit* Python methods](https://tskit.dev/tskit/docs/stable/python-api.html#statistics) (except that you use "symbolic names" of individuals, not tree-sequence node numbers).</center>
 
 ## Example: [nucleotide diversity](https://en.wikipedia.org/wiki/Nucleotide_diversity)
 
@@ -919,9 +920,8 @@ ts <-
 set.seed(42)
 ```
 
-:::: {.columns}
-
-::: {.column width="45%"}
+::::::::: columns
+::::: {.column width="45%"}
 Get list of individuals in each population:
 
 ```{r}
@@ -943,15 +943,13 @@ samples$pop1 %>% head(3)
 samples$pop2 %>% head(3)
 ```
 :::
-
-:::
+:::::
 
 ::: {.column width="2%"}
  
 :::
 
-::: {.column width="53%"}
-
+:::: {.column width="53%"}
 ::: fragment
 Compute nucleotide diversity:
 
@@ -959,12 +957,8 @@ Compute nucleotide diversity:
 ts_diversity(ts, sample_sets = samples)
 ```
 :::
-
-:::
-
 ::::
-
-
+:::::::::
 
 ## Example: [allele frequency spectrum](https://en.wikipedia.org/wiki/Allele_frequency_spectrum)
 
@@ -1031,11 +1025,6 @@ plot(afs[-1], type = "b",
 ::::
 ::::::::
 
-
-
-
-
-
 ## Working with "multi-population" statistics
 
 For multipopulation statistics, you need a (named) list of samples recorded in each population.
@@ -1062,7 +1051,6 @@ You can use this in place of `sample_names` in code like:
 ts_diversity(ts, sample_sets = samples)
 ```
 
-
 ## More information
 
 <br>
@@ -1075,7 +1063,7 @@ ts_diversity(ts, sample_sets = samples)
 
 <hr>
 
--   check out my new [_demografr_](http://github.com/bodkan/demografr) inference package
+-   check out my new [*demografr*](http://github.com/bodkan/demografr) inference package
 
 <hr>
 
