@@ -142,7 +142,7 @@ They are <u>very</u> powerful but both require:
 
 ```{bash}
 #| echo: false
-cat examples/script.slim
+cat script.slim
 ```
 
 ## 
@@ -175,7 +175,7 @@ cat examples/script.slim
 
 ```{bash}
 #| echo: false
-cat examples/script.py
+cat script.py
 ```
 
 # 
