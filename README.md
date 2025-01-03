@@ -1,5 +1,9 @@
 # **Building intuition into population genetic concepts and simulation-based inference**
 
+## Workshop on population and speciation genomics
+
+### Český Krumlov, January 2025
+
 Slides, exercise materials, and example source code for the practical activity session at the [**Workshop on population and speciation genomics**](http://evomics.org/workshops/workshop-on-population-and-speciation-genomics/2025-workshop-on-population-and-speciation-genomics-cesky-krumlov/) to be held in Český Krumlov in January 2025.
 
 **Contents of this git repository**:
