@@ -16,5 +16,5 @@ onepage:
 	git add slides*; git commit -m "Update handouts"
 
 exercises:
-	quarto publish quarto-pub --id 60af9870-2427-4b56-96bd-8d58a2b03bbf exercises.qmd
+	quarto render exercises.qmd
 	git add exercises*; git commit -m "Update exercises"
