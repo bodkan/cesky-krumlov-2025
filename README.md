@@ -6,6 +6,6 @@ Contents of this git repository:
 
 -   [slides](https://bodkan.quarto.pub/cesky-krumlov-2025/) and [single-page handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-onepage/) with a crash course introduction on using the *slendr* toolkit for simulations in population genomics
 
--   exercise materials
+-   [exercise materials](exercises.md)
 
 -   [solutions](https://github.com/bodkan/cesky-krumlov-2025/tree/main/solutions) to the exercises
