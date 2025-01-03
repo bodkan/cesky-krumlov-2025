@@ -35,7 +35,8 @@ model <- compile_model(
 
 # Part 2 -- inspecting the model visually ---------------------------------
 
-# Verify the correctness of our model visually
+# Verify the correctness of our model visually (different arguments of
+# the plotting function can make certain features more (or less) visible)
 plot_model(model)
 plot_model(model, sizes = FALSE)
 plot_model(model, sizes = FALSE, log = TRUE)
