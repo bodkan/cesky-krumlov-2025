@@ -94,3 +94,9 @@ In every previous installments of this workshop, this is all that was needed to 
 **Installing SLiM**
 
 It's unclear whether we will manage to go through the entirety of the final exercise. However, to be able to do this, having SLiM at least version 4.2 (and it being available in your unix `$PATH!`) is required. If this isn't possible for your, don't worry. You'll be able to do most of that exercise even without SLiM, and I will demonstrate the whole exercise (including the SLiM bit) for you.
+
+# How will the exercises work?
+
+Your goal for each exercise will be to write a complete script. I suggest you name the script for each exercise as `exercise1.R`, `exercise2.R`, etc., to keep things tidy.
+
+Unless you have a strong preference for another editor or IDE, I strongly suggest you use RStudio (either on your machine or in the cloud, depending on where you did the setup steps above).
