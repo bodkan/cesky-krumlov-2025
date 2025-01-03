@@ -120,13 +120,13 @@ plot_tajima(tajima_df)
 # First, let's simulate selection happening only in the EUR lineage.
 extension <- substitute_values(template = here::here("exercise5_slim.txt"),
   origin_pop = "EUR",
-  s = 0.2,
+  s = 0.15,
   onset_time = 12000
 )
 
 # When we take a look at the modified extension contents in the terminal using
-# something like the unix less command, we no longer see the {{parameters}} but
-# we see concrete values instead.
+# something like the bash `less` command, we no longer see the {{parameters}} but
+# we see concrete values instead
 extension
 
 # Using the SLiM extension is simple -- we simply provide it as an additional
@@ -143,7 +143,11 @@ model <- compile_model(
 # 'exercise5_slim.txt'). We need to be able to load both of these files after
 # the simulation and thus need a path to a location we can find those files.
 # We can do this by specifying `path = TRUE`.
+
+# tstart <- Sys.time()
 path <- slim(model, sequence_length = 10e6, recombination_rate = 1e-8, samples = schedule, path = TRUE, random_seed = 59879916)
+# tend <- Sys.time()
+# tend - tstart # Time difference of 38.82014 secs
 
 # We can verify that the path not only contains a tree-sequence file but also
 # the table of allele frequencies.
@@ -175,10 +179,11 @@ ts <- ts_read(file.path(path, "slim.trees"), model) %>%
 samples <- ts_names(ts, split = "pop")
 samples
 
-# Perhaps not unexpectedly, gneome-wide Tajima's D doesn't reveal any significant
-# deviations even in this case.
+# Overall Tajima's D across the 10Mb sequence still doesn't reveal any significant
+# deviations even in case of selection (again, not entirely unsurprising)
 ts_tajima(ts, sample_sets = samples)
 
+# So let's look at the window-based computation again...
 windows <- as.integer(seq(0, ts$sequence_length, length.out = 100))
 
 # compute genome-wide Tajima's D for each population in individual windows
