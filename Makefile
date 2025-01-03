@@ -4,4 +4,4 @@ slides:
 
 onepage:
 	quarto publish quarto-pub --id 7f5d556f-ca21-4c53-b06c-693befbfa994 slides.qmd
-	git add slides*; git commit -m "Update slides"
+	git add slides*; git commit -m "Update handouts"
