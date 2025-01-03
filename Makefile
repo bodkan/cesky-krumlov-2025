@@ -17,4 +17,4 @@ onepage:
 
 exercises:
 	quarto render exercises.qmd
-	git add exercises*; git commit -m "Update exercises"
+	(git add exercises* && git commit -m "Update exercises") || true
