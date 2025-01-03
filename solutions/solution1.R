@@ -58,7 +58,7 @@ ts <- msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, debug = T
 
 # For debugging of technical issues (with msprime, with slendr, or both), it is
 # very useful to have the `msprime()` function dump the "raw" command-line to
-# run the simulation on the terminal
+# run the simulation on the terminal using plain Python interpreter
 msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, run = FALSE)
 
 # Typing out the object with the result shows that it's a good old tskit
