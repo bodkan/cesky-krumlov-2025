@@ -12,6 +12,7 @@ format:
     code-line-numbers: false    ### slides
     fig-align: center           ### slides
     slide-number: true          ### slides
+    self-contained: true        ### slides
   # html:                       ### onepage
   #   echo: true                ### onepage
   #   code-line-numbers: false  ### onepage
