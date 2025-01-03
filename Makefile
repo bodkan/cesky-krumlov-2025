@@ -1,3 +1,5 @@
+all: slides onepage
+
 slides:
 	cp slides.qmd slides.qmd.bak
 	sed -i '/### onepage/d' slides.qmd
