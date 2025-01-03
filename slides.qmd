@@ -7,15 +7,15 @@ author:
 date: "January 2025"
 date-format: "MMMM YYYY"
 format:
-  revealjs:
-    echo: true
-    code-line-numbers: false
-    fig-align: center
-    slide-number: true
-  # html:
-  #   echo: true
-  #   code-line-numbers: false
-  #   fig-align: center
+  revealjs:                     ### slides
+    echo: true                  ### slides
+    code-line-numbers: false    ### slides
+    fig-align: center           ### slides
+    slide-number: true          ### slides
+  # html:                       ### onepage
+  #   echo: true                ### onepage
+  #   code-line-numbers: false  ### onepage
+  #   fig-align: center         ### onepage
 ---
 
 # First things first
