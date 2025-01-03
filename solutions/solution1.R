@@ -1,8 +1,6 @@
 library(slendr)
 init_env()
 
-library(dplyr)
-library(tidyr)
 
 
 
@@ -140,5 +138,11 @@ ts <- ts_read("data/introgression.trees", model = model)
 # Inspect the (tskit/Python-based) summary of the (now smaller) tree sequence
 ts
 
+
+# Get the table of all recorded samples in the tree sequence
 ts_samples(ts)
+
+# Compute the count of individuals in different time points
+library(dplyr)
+
 ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
