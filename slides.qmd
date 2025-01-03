@@ -17,6 +17,7 @@ format:
   #   echo: true                ### onepage
   #   code-line-numbers: false  ### onepage
   #   fig-align: center         ### onepage
+  #   self-contained: true      ### onepage
 ---
 
 # First things first
