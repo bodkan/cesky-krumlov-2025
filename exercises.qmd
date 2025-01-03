@@ -176,6 +176,7 @@ schedule_sampling(
 The output of `schedule_sampling()` is a plain data frame:
 
 ```{r}
+#| eval: false
 schedule_sampling(model, times = c(40000, 30000, 20000, 10000), list(eur, 1))
 ```
 
@@ -184,6 +185,7 @@ schedule_sampling(model, times = c(40000, 30000, 20000, 10000), list(eur, 1))
 We can bind multiple sampling schedules together, giving us finer control about sampling:
 
 ```{r}
+#| eval: false
 eur_samples <- schedule_sampling(model, times = c(40000, 30000, 20000, 10000, 0), list(eur, 1))
 afr_samples <- schedule_sampling(model, times = 0, list(afr, 1))
 
@@ -195,6 +197,7 @@ samples <- rbind(eur_samples, afr_samples)
 To sample individuals based on a given schedule, we use the `samples =` argument of the `msprime()` function:
 
 ```{r}
+#| eval: false
 ts <-
   msprime(model, samples = samples, sequence_length = 1e6, recombination_rate = 1e-8) %>% 
   ts_mutate(mutation_rate = 1e-8)
@@ -205,6 +208,7 @@ ts <-
 We can verify that only specific individuals are recorded:
 
 ```{r}
+#| eval: false
 ts_samples(ts)
 ```
 
@@ -221,6 +225,7 @@ Use [these](https://bodkan.quarto.pub/ku-popgen2023-onepage/) one-page handouts 
 Let's return to your introgression model:
 
 ```{r}
+#| eval: false
 #| echo: false
 #| fig-width: 6
 #| fig-align: "center"
@@ -271,6 +276,7 @@ Use $f_4$-ratio statistic to replicate the [following figure](https://www.pnas.o
 Use `msprime()` to simulate a 50Mb tree sequence `ts` from your introgression model in `model1.R` (if that takes more than two minutes, try just 10Mb).
 
 ```{r}
+#| eval: false
 #| fig-align: center
 #| fig-height: 5
 #| fig-width: 7
@@ -366,6 +372,7 @@ plot(afs_1, type ="o")
 When used in R, your function should work like this:
 
 ```{r}
+#| eval: false
 #| echo: false
 simulate_afs <- function(Ne) {
   n <- 20 # 1 is for the fixed sites included by tskit
@@ -375,6 +382,7 @@ simulate_afs <- function(Ne) {
 ```
 
 ```{r}
+#| eval: false
 simulate_afs(Ne = 1000)
 ```
 :::
@@ -382,6 +390,7 @@ simulate_afs(Ne = 1000)
 ## Part *b*: Estimating Ne using AFS
 
 ```{r}
+#| eval: false
 #| echo: false
 set.seed(42)
 TRUE_NE <- 6543
