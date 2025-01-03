@@ -6,6 +6,7 @@
 install.packages(c("combinat", "cowplot", "dplyr", "ggplot2", "ggrepel", "readr", "smartsnp", "scales", "tidyr", "viridis", "sf", "stars", "rnaturalearth", "devtools"))
 devtools::install_github("bodkan/slendr")
 
+library(admixr)
 library(combinat)
 library(cowplot)
 library(dplyr)

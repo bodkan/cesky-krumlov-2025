@@ -208,6 +208,24 @@
       ],
       "Hash": "2288423bb0f20a457800d7fc47f6aa54"
     },
+    "admixr": {
+      "Package": "admixr",
+      "Version": "0.9.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "dplyr",
+        "magrittr",
+        "readr",
+        "rlang",
+        "stats",
+        "stringr",
+        "tibble",
+        "utils"
+      ],
+      "Hash": "0928a1eb3005863f26ee9da999a00bf9"
+    },
     "ape": {
       "Package": "ape",
       "Version": "5.8-1",
@@ -1858,7 +1876,7 @@
         "shinyWidgets",
         "tidyr"
       ],
-      "Hash": "838444699863f80894cb1bdb1443cfe4"
+      "Hash": "bbfde6ca7d7bade18e52c044d2bfa733"
     },
     "smartsnp": {
       "Package": "smartsnp",
