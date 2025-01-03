@@ -12,9 +12,13 @@ Slides, exercise materials, and example source code for the practical activity s
 
 -   [slides](https://bodkan.quarto.pub/cesky-krumlov-2025/) and [single-page handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-onepage/) with a crash course introduction on using the *slendr* toolkit for simulations in population genomics (you will be using those for reference as you are working on the exercises)
 
--   [exercise materials](exercises.md) (this is the content of the five exercises)
+-   [exercise materials](exercises.md) (this is the content of the five exercises and the main focus of the session)
 
 -   [solutions](https://github.com/bodkan/cesky-krumlov-2025/tree/main/solutions) to the exercises (one self-contained R script for each exercise)
+
+## Installation, setup, and other instructions
+
+Refer to the [exercises materials](exercises.md) for all necessary information.
 
 ## Information for TAs
 
