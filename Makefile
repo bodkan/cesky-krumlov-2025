@@ -1,4 +1,4 @@
-all: slides onepage
+all: slides onepage exercises
 
 slides:
 	cp slides.qmd slides.qmd.bak
