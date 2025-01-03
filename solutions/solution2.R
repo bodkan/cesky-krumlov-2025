@@ -106,12 +106,12 @@ mode <- "branch"
 
 # Comparing two Africans vs Neanderthal should not reveal any deviation from
 # the null hypothesis (this should be consistent with a tree with no admixture)
-f4_null <- ts_f4(ts, W = "AFR_1", X = "AFR_2", Y = "NEA_1", Z = "CHIMP_1", mode = "branch")
+f4_null <- ts_f4(ts, W = "AFR_1", X = "AFR_2", Y = "NEA_1", Z = "CHIMP_1", mode = mode)
 f4_null
 
 # On the other hand, an African-European comparison should reveal an excess
 # of sharing of Neanderthal alleles with Europeans (i.e. more ABBA sites)
-f4_alt <- ts_f4(ts, W = "AFR_1", X = "EUR_1", Y = "NEA_1", Z = "CHIMP_1", mode = "branch")
+f4_alt <- ts_f4(ts, W = "AFR_1", X = "EUR_1", Y = "NEA_1", Z = "CHIMP_1", mode = mode)
 f4_alt
 
 # We can see that the second test has ~50 times higher f3, although this is
@@ -121,9 +121,9 @@ f4_alt$f4 / f4_null$f4
 
 # Let's compute the f4 statistic for all Africans and Europeans to see the
 # f4 introgression patterns more clearly
-f4_afr <- lapply(sample_sets$AFR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "branch")) %>% bind_rows()
+f4_afr <- lapply(sample_sets$AFR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = mode)) %>% bind_rows()
 f4_afr
-f4_eur <- lapply(sample_sets$EUR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "branch")) %>% bind_rows()
+f4_eur <- lapply(sample_sets$EUR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = mode)) %>% bind_rows()
 f4_eur
 
 # Let's add population columns to each of the two results, and bind them together
@@ -204,13 +204,13 @@ eur_inds
 # Compute f4-ration statistic (this will take ~30s) -- note that we can provide
 # a vector of names for the X sample set to the `ts_f4ratio()` function
 nea_ancestry <- ts_f4ratio(ts, X = eur_inds$name, A = "NEA_1", B = "NEA_2", C = "AFR_1", O = "CHIMP_1")
+
+# Add the age of each sample to the table of proportions
+nea_ancestry$time <- eur_inds$time
 nea_ancestry
 
-# Add the computed proportions to the data frame
-eur_inds$ancestry <- nea_ancestry$alpha
-
-eur_inds %>%
-  ggplot(aes(time, ancestry)) +
+nea_ancestry %>%
+  ggplot(aes(time, alpha)) +
   geom_point() +
   geom_smooth(method = "lm", linetype = 2, color = "red", linewidth = 0.5) +
   xlim(40000, 0) +
@@ -218,6 +218,9 @@ eur_inds %>%
   labs(x = "time [years ago]", y = "Neanderthal ancestry proportion") +
   theme_bw() +
   ggtitle("Neanderthal ancestry proportion in Europeans over time")
+
+# Let's test the significance of the decline over time using a linear model
+summary(lm(alpha ~ time, data = nea_ancestry))
 
 # Does this match observation in real data?
 # See figure 1 in this paper: https://www.pnas.org/doi/full/10.1073/pnas.1814338116,
