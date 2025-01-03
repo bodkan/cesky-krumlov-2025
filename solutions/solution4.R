@@ -1,7 +1,7 @@
 library(slendr)
 init_env()
 
-source("utils.R")
+source(here::here("utils.R"))
 
 
 

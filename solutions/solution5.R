@@ -1,7 +1,7 @@
 library(slendr)
 init_env()
 
-source("utils.R")
+source(here::here("utils.R"))
 
 
 
@@ -118,7 +118,7 @@ plot_tajima(tajima_df)
 # the function `substitute_values()`.
 
 # First, let's simulate selection happening only in the EUR lineage.
-extension <- substitute_values(template = "exercise5_slim.txt",
+extension <- substitute_values(template = here::here("exercise5_slim.txt"),
   origin_pop = "EUR",
   s = 0.2,
   onset_time = 12000
