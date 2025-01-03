@@ -1,212 +1,284 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
-<meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-<meta name="author" content="Martin Petr">
-<meta name="author" content="CC BY 4.0">
-
-<title>Building intuition into popgen concepts and simulation-based inference</title>
-<style>
-code{white-space: pre-wrap;}
-span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
-div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-ul.task-list{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-  width: 0.8em;
-  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
-  vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-</style>
-
-
+<html lang="en"><head>
 <script src="slides_files/libs/clipboard/clipboard.min.js"></script>
-<script src="slides_files/libs/quarto-html/quarto.js"></script>
+<script src="slides_files/libs/quarto-html/tabby.min.js"></script>
 <script src="slides_files/libs/quarto-html/popper.min.js"></script>
 <script src="slides_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="slides_files/libs/quarto-html/anchor.min.js"></script>
 <link href="slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="slides_files/libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="slides_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="slides_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="slides_files/libs/bootstrap/bootstrap-973236bd072d72a04ee9cd82dcc9cb29.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="slides_files/libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.39">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
+  <meta name="author" content="Martin Petr">
+  <meta name="author" content="CC BY 4.0">
+  <title>Building intuition into popgen concepts and simulation-based inference</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="slides_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="slides_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
     }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="slides_files/libs/revealjs/dist/theme/quarto-bbe7401fe57d4b791b917637bb662036.css">
+  <link href="slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
 </head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
 
-<body>
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Building intuition into popgen concepts and simulation-based inference</h1>
+  <p class="subtitle"><a href="http://evomics.org/workshops/workshop-on-population-and-speciation-genomics/2025-workshop-on-population-and-speciation-genomics-cesky-krumlov/">Workshop on population and speciation genomics</a></p>
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Martin Petr 
 </div>
-<main class="content page-columns page-full" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Building intuition into popgen concepts and simulation-based inference</h1>
-<p class="subtitle lead"><a href="http://evomics.org/workshops/workshop-on-population-and-speciation-genomics/2025-workshop-on-population-and-speciation-genomics-cesky-krumlov/">Workshop on population and speciation genomics</a></p>
+</div>
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 
+</div>
+</div>
 </div>
 
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Authors</div>
-    <div class="quarto-title-meta-contents">
-             <p>Martin Petr </p>
-             <p><a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">January 2025</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<section id="first-things-first" class="level1">
+  <p class="date">January 2025</p>
+</section>
+<section id="first-things-first" class="title-slide slide level1 center">
 <h1>First things first</h1>
 <p>These slides and other resources are (and always will be) at:</p>
 <p><a href="https://github.com/bodkan/cesky-krumlov-2025">github.com/bodkan/cesky-krumlov-2025</a></p>
 <p><br><br></p>
 <p><strong>Open this link now so you have everything at hand later.</strong></p>
 </section>
-<section id="section" class="level1">
+
+<section id="section" class="title-slide slide level1 center">
 <h1></h1>
 <div class="columns">
 <div class="column" style="width:70%;">
-<blockquote class="blockquote">
+<blockquote>
 <p>Many problems in population genetics cannot be solved by a mathematician, no matter how gifted. [It] is already clear that computer methods are very powerful. This is good. It […] <strong>permits people with limited mathematical knowledge to work on important problems</strong> […].</p>
 </blockquote>
 </div><div class="column" style="width:30%;">
-<p><img src="images/crow.jpeg" class="img-fluid"></p>
+<p><img data-src="images/crow.jpeg"></p>
 <p><a href="https://en.wikipedia.org/wiki/James_F._Crow">James F. Crow</a> – <a href="http://www.gnxp.com/blog/2006/06/10-questions-for-jim-crow.php">interview</a></p>
-</div>
-</div>
+</div></div>
 </section>
-<section id="why-use-simulations" class="level1 page-columns page-full">
+
+<section>
+<section id="why-use-simulations" class="title-slide slide level1 center">
 <h1>Why use simulations?</h1>
 <ol type="1">
 <li>Making sense of inferred statistics</li>
 <li>Fitting model parameters (i.e.&nbsp;<a href="https://en.wikipedia.org/wiki/Approximate_Bayesian_computation">ABC</a>)</li>
 <li>Ground truth for method development</li>
 </ol>
-<section id="making-sense-of-inferred-statistics" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="making-sense-of-inferred-statistics">Making sense of inferred statistics</h2>
-<center>
-<img src="images/fstats_sims.png" class="img-fluid">
-</center>
-
-<div class="no-row-height column-margin column-container"><div class="margin-aside">
-<p>Image from <a href="https://academic.oup.com/genetics/article/202/4/1485/5930214">Peter (2016)</a></p>
-</div></div></section>
-<section id="making-sense-of-inferred-statistics-1" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="making-sense-of-inferred-statistics-1">Making sense of inferred statistics</h2>
-<center>
-<img src="images/admixture.png" class="img-fluid">
-</center>
-
-<div class="no-row-height column-margin column-container"><div class="margin-aside">
-<p>Image from <a href="https://www.nature.com/articles/s41467-018-05257-7">Lawson <em>et al.</em> (2018)</a></p>
-</div></div></section>
-<section id="fitting-model-parameters-i.e.-abc" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="fitting-model-parameters-i.e.-abc">Fitting model parameters (i.e.&nbsp;<a href="https://en.wikipedia.org/wiki/Approximate_Bayesian_computation">ABC</a>)</h2>
-<center>
-<img src="images/abc_scheme.png" class="img-fluid" style="width:50.0%">
-</center>
-
-<div class="no-row-height column-margin column-container"><div class="margin-aside">
-<p>Image from <a href="https://en.wikipedia.org/wiki/Approximate_Bayesian_computation">Wikipedia on ABC</a></p>
-</div></div></section>
-<section id="ground-truth-for-method-development" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="ground-truth-for-method-development">Ground truth for method development</h2>
-<center>
-<img src="images/mcmc.png" class="img-fluid">
-</center>
-
-<div class="no-row-height column-margin column-container"><div class="margin-aside">
-<p>Image from <a href="https://www.nature.com/articles/ng.3015">Schiffels and Durbin (2014)</a></p>
-</div></div></section>
 </section>
-<section id="simulation-software" class="level1">
+<section id="making-sense-of-inferred-statistics" class="slide level2">
+<h2>Making sense of inferred statistics</h2>
+<center>
+<img data-src="images/fstats_sims.png">
+</center>
+
+<aside><div>
+<p>Image from <a href="https://academic.oup.com/genetics/article/202/4/1485/5930214">Peter (2016)</a></p>
+</div></aside></section>
+<section id="making-sense-of-inferred-statistics-1" class="slide level2">
+<h2>Making sense of inferred statistics</h2>
+<center>
+<img data-src="images/admixture.png">
+</center>
+
+<aside><div>
+<p>Image from <a href="https://www.nature.com/articles/s41467-018-05257-7">Lawson <em>et al.</em> (2018)</a></p>
+</div></aside></section>
+<section id="fitting-model-parameters-i.e.-abc" class="slide level2">
+<h2>Fitting model parameters (i.e.&nbsp;<a href="https://en.wikipedia.org/wiki/Approximate_Bayesian_computation">ABC</a>)</h2>
+<center>
+<img data-src="images/abc_scheme.png" style="width:50.0%">
+</center>
+
+<aside><div>
+<p>Image from <a href="https://en.wikipedia.org/wiki/Approximate_Bayesian_computation">Wikipedia on ABC</a></p>
+</div></aside></section>
+<section id="ground-truth-for-method-development" class="slide level2">
+<h2>Ground truth for method development</h2>
+<center>
+<img data-src="images/mcmc.png">
+</center>
+
+<aside><div>
+<p>Image from <a href="https://www.nature.com/articles/ng.3015">Schiffels and Durbin (2014)</a></p>
+</div></aside></section></section>
+<section>
+<section id="simulation-software" class="title-slide slide level1 center">
 <h1>Simulation software</h1>
 <p>The most famous and widely used are <a href="https://messerlab.org/slim/">SLiM</a> and <a href="https://tskit.dev/msprime/docs/stable/intro.html"><em>msprime</em></a>.</p>
 <p>They are <u>very</u> powerful but both require:</p>
@@ -218,7 +290,7 @@ window.Quarto = {
 </div>
 <div class="fragment">
 <center>
-<h3 class="anchored">
+<h3>
 <strong>The exercises will focus on the <a href="http://www.slendr.net"><em>slendr</em></a></strong><br>popgen simulation toolkit for R.
 </h3>
 </center>
@@ -229,11 +301,12 @@ window.Quarto = {
 But let’s look at SLiM and <em>msprime</em> at least a little bit.
 </center>
 </div>
-<section id="section-1" class="level2">
-<h2 class="anchored" data-anchor-id="section-1"></h2>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
 <div class="columns">
 <div class="column" style="width:60%;">
-<h2 class="anchored">
+<h2>
 What is SLiM?
 </h2>
 <ul>
@@ -262,17 +335,16 @@ What is SLiM?
 </div><div class="column" style="width:40%;">
 <center>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/sim_sketches.001.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figure>
+<p><img data-src="images/sim_sketches.001.png" style="width:100.0%"></p>
 <figcaption>Modified from <a href="http://alexeidrummond.org/bayesian_phylo_lectures/lecture10/">Alexei Drummond</a></figcaption>
 </figure>
 </div>
 </center>
-</div>
-</div>
+</div></div>
 </section>
-<section id="simple-neutral-simulation-in-slim" class="level2">
-<h2 class="anchored" data-anchor-id="simple-neutral-simulation-in-slim">Simple neutral simulation in SLiM</h2>
+<section id="simple-neutral-simulation-in-slim" class="slide level2">
+<h2>Simple neutral simulation in SLiM</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>initialize() {
@@ -307,11 +379,11 @@ What is SLiM?
 </div>
 </div>
 </section>
-<section id="section-2" class="level2">
-<h2 class="anchored" data-anchor-id="section-2"></h2>
+<section id="section-2" class="slide level2">
+<h2></h2>
 <div class="columns">
 <div class="column" style="width:60%;">
-<h2 class="anchored">
+<h2>
 What is <em>msprime</em>?
 </h2>
 <ul>
@@ -330,17 +402,16 @@ What is <em>msprime</em>?
 </div><div class="column" style="width:40%;">
 <center>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/sim_sketches.002.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figure>
+<p><img data-src="images/sim_sketches.002.png" style="width:100.0%"></p>
 <figcaption>Modified from <a href="http://alexeidrummond.org/bayesian_phylo_lectures/lecture10/">Alexei Drummond</a></figcaption>
 </figure>
 </div>
 </center>
-</div>
-</div>
+</div></div>
 </section>
-<section id="simple-simulation-using-msprime" class="level2">
-<h2 class="anchored" data-anchor-id="simple-simulation-using-msprime">Simple simulation using <em>msprime</em></h2>
+<section id="simple-simulation-using-msprime" class="slide level2">
+<h2>Simple simulation using <em>msprime</em></h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>import msprime
@@ -359,32 +430,33 @@ ts = msprime.sim_ancestry(
 )</code></pre>
 </div>
 </div>
-</section>
-</section>
-<section id="section-3" class="level1">
+</section></section>
+<section>
+<section id="section-3" class="title-slide slide level1 center">
 <h1></h1>
 <center>
-<h2 class="anchored" data-anchor-id="section-3">
+<h2>
 <a href="https://www.slendr.net">www.slendr.net</a>
 </h2>
-<p><img src="images/slendr_logo.png" class="img-fluid" style="width:30.0%"></p>
+<p><img data-src="images/slendr_logo.png" style="width:30.0%"></p>
 </center>
 <div class="fragment">
 <center>
-<h2 class="anchored">
+<h2>
 Why a new package?
 </h2>
 </center>
 </div>
-<section id="spatial-simulations" class="level2">
-<h2 class="anchored" data-anchor-id="spatial-simulations">Spatial simulations!</h2>
+</section>
+<section id="spatial-simulations" class="slide level2">
+<h2>Spatial simulations!</h2>
 <center>
-<img src="images/animation.gif" class="img-fluid" style="width:70.0%">
+<img data-src="images/animation.gif" style="width:70.0%">
 </center>
 </section>
-<section id="section-4" class="level2">
-<h2 class="anchored" data-anchor-id="section-4"></h2>
-<h2 class="anchored">
+<section id="section-4" class="slide level2">
+<h2></h2>
+<h2>
 Why a new package?
 </h2>
 <ul>
@@ -410,29 +482,28 @@ Why a new package?
 <strong><em>slendr</em></strong> <strong>makes “standard” demographic simulations trivial</strong><br>and unlocks new kinds of spatial simulations
 </center>
 </div>
-</section>
-</section>
-<section id="lets-get-started" class="level1 page-columns page-full">
+</section></section>
+<section>
+<section id="lets-get-started" class="title-slide slide level1 center">
 <h1>Let’s get started</h1>
-<section id="everything-we-do-will-be-in-r" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="everything-we-do-will-be-in-r">Everything we do will be in R</h2>
+
+</section>
+<section id="everything-we-do-will-be-in-r" class="slide level2">
+<h2>Everything we do will be in R</h2>
 <p><br><br></p>
 <p>You can write your <em>slendr</em> code however you like, but I recommed using RStudio, for convenience.</p>
 <p><br></p>
 <p>Always start your R scripts with this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(slendr)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">init_env</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The interface to all required Python modules has been activated.</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(slendr)</span>
+<span id="cb3-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">init_env</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
-<div class="no-row-height column-margin column-container"><div class="margin-aside">
+<aside><div>
 <p>(If you get a note about missing SLiM, safely ignore it for now.)</p>
-</div></div></section>
-<section id="typical-steps-of-a-slendr-r-workflow" class="level2">
-<h2 class="anchored" data-anchor-id="typical-steps-of-a-slendr-r-workflow">Typical steps of a <em>slendr</em> R workflow</h2>
+</div></aside></section>
+<section id="typical-steps-of-a-slendr-r-workflow" class="slide level2">
+<h2>Typical steps of a <em>slendr</em> R workflow</h2>
 <p><br></p>
 <ol type="1">
 <li>creating populations</li>
@@ -443,17 +514,17 @@ Why a new package?
 <li>computing statistics from simulated outputs</li>
 </ol>
 </section>
-<section id="creating-a-population" class="level2">
-<h2 class="anchored" data-anchor-id="creating-a-population">Creating a <code>population()</code></h2>
+<section id="creating-a-population" class="slide level2">
+<h2>Creating a <code>population()</code></h2>
 <p>Each needs a name, size and time of appearance:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pop1 <span class="ot">&lt;-</span> <span class="fu">population</span>(<span class="st">"pop1"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a>pop1 <span class="ot">&lt;-</span> <span class="fu">population</span>(<span class="st">"pop1"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>. . .</p>
+<div class="fragment">
 <p><br></p>
 <p>This creates a normal R object. Typing it out gives a summary:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pop1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="" aria-hidden="true" tabindex="-1"></a>pop1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>slendr 'population' object 
 -------------------------- 
@@ -465,18 +536,19 @@ population history overview:
   - time 1: created as an ancestral population (N = 1000)</code></pre>
 </div>
 </div>
+</div>
 </section>
-<section id="programming-population-splits" class="level2">
-<h2 class="anchored" data-anchor-id="programming-population-splits">Programming population splits</h2>
+<section id="programming-population-splits" class="slide level2">
+<h2>Programming population splits</h2>
 <p>Splits are indicated by the <code>parent = &lt;pop&gt;</code> argument:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pop2 <span class="ot">&lt;-</span> <span class="fu">population</span>(<span class="st">"pop2"</span>, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">time =</span> <span class="dv">50</span>, <span class="at">parent =</span> pop1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="" aria-hidden="true" tabindex="-1"></a>pop2 <span class="ot">&lt;-</span> <span class="fu">population</span>(<span class="st">"pop2"</span>, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">time =</span> <span class="dv">50</span>, <span class="at">parent =</span> pop1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>. . .</p>
+<div class="fragment">
 <p><br></p>
 <p>The split is reported in the “historical summary”:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pop2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="" aria-hidden="true" tabindex="-1"></a>pop2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>slendr 'population' object 
 -------------------------- 
@@ -488,66 +560,67 @@ population history overview:
   - time 50: split from pop1 (N = 100)</code></pre>
 </div>
 </div>
+</div>
 </section>
-<section id="scheduling-resize-events-resize" class="level2">
-<h2 class="anchored" data-anchor-id="scheduling-resize-events-resize">Scheduling resize events – <code>resize()</code></h2>
+<section id="scheduling-resize-events-resize" class="slide level2">
+<h2>Scheduling resize events – <code>resize()</code></h2>
 <p>Step size decrease:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>pop1 <span class="ot">&lt;-</span> <span class="fu">population</span>(<span class="st">"pop1"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">1</span>)</span>
-<span id="cb11-2"><a href="#cb11-2"></a>pop1_step <span class="ot">&lt;-</span> <span class="fu">resize</span>(pop1, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">time =</span> <span class="dv">500</span>, <span class="at">how =</span> <span class="st">"step"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>pop1 <span class="ot">&lt;-</span> <span class="fu">population</span>(<span class="st">"pop1"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">1</span>)</span>
+<span id="cb10-2"><a href=""></a>pop1_step <span class="ot">&lt;-</span> <span class="fu">resize</span>(pop1, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">time =</span> <span class="dv">500</span>, <span class="at">how =</span> <span class="st">"step"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <p>Exponential increase:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>pop2 <span class="ot">&lt;-</span> <span class="fu">population</span>(<span class="st">"pop2"</span>, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">time =</span> <span class="dv">50</span>, <span class="at">parent =</span> pop1)</span>
-<span id="cb12-2"><a href="#cb12-2"></a>pop2_exp <span class="ot">&lt;-</span> <span class="fu">resize</span>(pop2, <span class="at">N =</span> <span class="dv">10000</span>, <span class="at">time =</span> <span class="dv">500</span>, <span class="at">end =</span> <span class="dv">2000</span>, <span class="at">how =</span> <span class="st">"exponential"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>pop2 <span class="ot">&lt;-</span> <span class="fu">population</span>(<span class="st">"pop2"</span>, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">time =</span> <span class="dv">50</span>, <span class="at">parent =</span> pop1)</span>
+<span id="cb11-2"><a href=""></a>pop2_exp <span class="ot">&lt;-</span> <span class="fu">resize</span>(pop2, <span class="at">N =</span> <span class="dv">10000</span>, <span class="at">time =</span> <span class="dv">500</span>, <span class="at">end =</span> <span class="dv">2000</span>, <span class="at">how =</span> <span class="st">"exponential"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="tidyverse-style-pipe-interface" class="level2">
-<h2 class="anchored" data-anchor-id="tidyverse-style-pipe-interface">Tidyverse-style <a href="https://magrittr.tidyverse.org">pipe</a> <code>%&gt;%</code> interface</h2>
+<section id="tidyverse-style-pipe-interface" class="slide level2">
+<h2>Tidyverse-style <a href="https://magrittr.tidyverse.org">pipe</a> <code>%&gt;%</code> interface</h2>
 <p>A more concise way to express the same thing as before.</p>
 <p><br></p>
 <p>Step size decrease:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pop1 <span class="ot">&lt;-</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population</span>(<span class="st">"pop1"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">100</span>, <span class="at">time =</span> <span class="dv">500</span>, <span class="at">how =</span> <span class="st">"step"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="" aria-hidden="true" tabindex="-1"></a>pop1 <span class="ot">&lt;-</span></span>
+<span id="cb12-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population</span>(<span class="st">"pop1"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">100</span>, <span class="at">time =</span> <span class="dv">500</span>, <span class="at">how =</span> <span class="st">"step"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <p>Exponential increase:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pop2 <span class="ot">&lt;-</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population</span>(<span class="st">"pop2"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">10000</span>, <span class="at">time =</span> <span class="dv">500</span>, <span class="at">end =</span> <span class="dv">2000</span>, <span class="at">how =</span> <span class="st">"exponential"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="" aria-hidden="true" tabindex="-1"></a>pop2 <span class="ot">&lt;-</span></span>
+<span id="cb13-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population</span>(<span class="st">"pop2"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">10000</span>, <span class="at">time =</span> <span class="dv">500</span>, <span class="at">end =</span> <span class="dv">2000</span>, <span class="at">how =</span> <span class="st">"exponential"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="a-more-complex-model" class="level2">
-<h2 class="anchored" data-anchor-id="a-more-complex-model">A more complex model</h2>
+<section id="a-more-complex-model" class="slide level2">
+<h2>A more complex model</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pop1 <span class="ot">&lt;-</span> <span class="fu">population</span>(<span class="st">"pop1"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">1</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>pop2 <span class="ot">&lt;-</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population</span>(<span class="st">"pop2"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">300</span>, <span class="at">parent =</span> pop1) <span class="sc">%&gt;%</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">100</span>, <span class="at">how =</span> <span class="st">"step"</span>, <span class="at">time =</span> <span class="dv">1000</span>)</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>pop3 <span class="ot">&lt;-</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population</span>(<span class="st">"pop3"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">400</span>, <span class="at">parent =</span> pop2) <span class="sc">%&gt;%</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">2500</span>, <span class="at">how =</span> <span class="st">"step"</span>, <span class="at">time =</span> <span class="dv">800</span>)</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>pop4 <span class="ot">&lt;-</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population</span>(<span class="st">"pop4"</span>, <span class="at">N =</span> <span class="dv">1500</span>, <span class="at">time =</span> <span class="dv">500</span>, <span class="at">parent =</span> pop3) <span class="sc">%&gt;%</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">700</span>, <span class="at">how =</span> <span class="st">"exponential"</span>, <span class="at">time =</span> <span class="dv">1200</span>, <span class="at">end =</span> <span class="dv">2000</span>)</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>pop5 <span class="ot">&lt;-</span></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population</span>(<span class="st">"pop5"</span>, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">time =</span> <span class="dv">600</span>, <span class="at">parent =</span> pop4) <span class="sc">%&gt;%</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">50</span>, <span class="at">how =</span> <span class="st">"step"</span>, <span class="at">time =</span> <span class="dv">900</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">1000</span>, <span class="at">how =</span> <span class="st">"exponential"</span>, <span class="at">time =</span> <span class="dv">1600</span>, <span class="at">end =</span> <span class="dv">2200</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="" aria-hidden="true" tabindex="-1"></a>pop1 <span class="ot">&lt;-</span> <span class="fu">population</span>(<span class="st">"pop1"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">1</span>)</span>
+<span id="cb14-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="" aria-hidden="true" tabindex="-1"></a>pop2 <span class="ot">&lt;-</span></span>
+<span id="cb14-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population</span>(<span class="st">"pop2"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">300</span>, <span class="at">parent =</span> pop1) <span class="sc">%&gt;%</span></span>
+<span id="cb14-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">100</span>, <span class="at">how =</span> <span class="st">"step"</span>, <span class="at">time =</span> <span class="dv">1000</span>)</span>
+<span id="cb14-6"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="" aria-hidden="true" tabindex="-1"></a>pop3 <span class="ot">&lt;-</span></span>
+<span id="cb14-8"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population</span>(<span class="st">"pop3"</span>, <span class="at">N =</span> <span class="dv">1000</span>, <span class="at">time =</span> <span class="dv">400</span>, <span class="at">parent =</span> pop2) <span class="sc">%&gt;%</span></span>
+<span id="cb14-9"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">2500</span>, <span class="at">how =</span> <span class="st">"step"</span>, <span class="at">time =</span> <span class="dv">800</span>)</span>
+<span id="cb14-10"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="" aria-hidden="true" tabindex="-1"></a>pop4 <span class="ot">&lt;-</span></span>
+<span id="cb14-12"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population</span>(<span class="st">"pop4"</span>, <span class="at">N =</span> <span class="dv">1500</span>, <span class="at">time =</span> <span class="dv">500</span>, <span class="at">parent =</span> pop3) <span class="sc">%&gt;%</span></span>
+<span id="cb14-13"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">700</span>, <span class="at">how =</span> <span class="st">"exponential"</span>, <span class="at">time =</span> <span class="dv">1200</span>, <span class="at">end =</span> <span class="dv">2000</span>)</span>
+<span id="cb14-14"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="" aria-hidden="true" tabindex="-1"></a>pop5 <span class="ot">&lt;-</span></span>
+<span id="cb14-16"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population</span>(<span class="st">"pop5"</span>, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">time =</span> <span class="dv">600</span>, <span class="at">parent =</span> pop4) <span class="sc">%&gt;%</span></span>
+<span id="cb14-17"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">50</span>, <span class="at">how =</span> <span class="st">"step"</span>, <span class="at">time =</span> <span class="dv">900</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-18"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">resize</span>(<span class="at">N =</span> <span class="dv">1000</span>, <span class="at">how =</span> <span class="st">"exponential"</span>, <span class="at">time =</span> <span class="dv">1600</span>, <span class="at">end =</span> <span class="dv">2200</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="each-object-carries-its-history" class="level2">
-<h2 class="anchored" data-anchor-id="each-object-carries-its-history">Each object carries its history!</h2>
+<section id="each-object-carries-its-history" class="slide level2">
+<h2>Each object carries its history!</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pop5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="" aria-hidden="true" tabindex="-1"></a>pop5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>slendr 'population' object 
 -------------------------- 
@@ -562,63 +635,65 @@ population history overview:
 </div>
 </div>
 </section>
-<section id="gene-flow-admixture" class="level2">
-<h2 class="anchored" data-anchor-id="gene-flow-admixture">Gene flow / admixture</h2>
+<section id="gene-flow-admixture" class="slide level2">
+<h2>Gene flow / admixture</h2>
 <p>We can schedule <code>gene_flow()</code> from <code>pop1</code> into <code>pop2</code> with:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>gf <span class="ot">&lt;-</span> <span class="fu">gene_flow</span>(<span class="at">from =</span> pop1, <span class="at">to =</span> pop2, <span class="at">start =</span> <span class="dv">2000</span>, <span class="at">end =</span> <span class="dv">2200</span>, <span class="at">rate =</span> <span class="fl">0.13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="" aria-hidden="true" tabindex="-1"></a>gf <span class="ot">&lt;-</span> <span class="fu">gene_flow</span>(<span class="at">from =</span> pop1, <span class="at">to =</span> pop2, <span class="at">start =</span> <span class="dv">2000</span>, <span class="at">end =</span> <span class="dv">2200</span>, <span class="at">rate =</span> <span class="fl">0.13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>. . .</p>
+<div class="fragment">
 <p>Here <code>rate = 0.13</code> means 13% migrants over the given time window will come from “pop1” into “pop2”.</p>
-<p>. . .</p>
+</div>
+<div class="fragment">
 <p><br></p>
 <p>Multiple gene-flow events can be gathered in a list:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>gf <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gene_flow</span>(<span class="at">from =</span> pop1, <span class="at">to =</span> pop2, <span class="at">start =</span> <span class="dv">500</span>, <span class="at">end =</span> <span class="dv">600</span>, <span class="at">rate =</span> <span class="fl">0.13</span>),</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gene_flow</span>(<span class="at">from =</span> ..., <span class="at">to =</span> ..., <span class="at">start =</span> ..., <span class="at">end =</span> ..., <span class="at">rate =</span> ...),</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  ...</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="" aria-hidden="true" tabindex="-1"></a>gf <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb18-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gene_flow</span>(<span class="at">from =</span> pop1, <span class="at">to =</span> pop2, <span class="at">start =</span> <span class="dv">500</span>, <span class="at">end =</span> <span class="dv">600</span>, <span class="at">rate =</span> <span class="fl">0.13</span>),</span>
+<span id="cb18-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gene_flow</span>(<span class="at">from =</span> ..., <span class="at">to =</span> ..., <span class="at">start =</span> ..., <span class="at">end =</span> ..., <span class="at">rate =</span> ...),</span>
+<span id="cb18-4"><a href="" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb18-5"><a href="" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </section>
-<section id="last-step-before-simulation-compile_model" class="level2">
-<h2 class="anchored" data-anchor-id="last-step-before-simulation-compile_model">Last step before simulation: <code>compile_model()</code></h2>
+<section id="last-step-before-simulation-compile_model" class="slide level2">
+<h2>Last step before simulation: <code>compile_model()</code></h2>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>model <span class="ot">&lt;-</span> <span class="fu">compile_model</span>(</span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">list</span>(pop1, pop2, pop3, pop4, pop5),</span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="at">generation_time =</span> <span class="dv">1</span>,</span>
-<span id="cb20-4"><a href="#cb20-4"></a>  <span class="at">simulation_length =</span> <span class="dv">3000</span>,</span>
-<span id="cb20-5"><a href="#cb20-5"></a>  <span class="at">direction =</span> <span class="st">"forward"</span></span>
-<span id="cb20-6"><a href="#cb20-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">compile_model</span>(</span>
+<span id="cb19-2"><a href=""></a>  <span class="fu">list</span>(pop1, pop2, pop3, pop4, pop5),</span>
+<span id="cb19-3"><a href=""></a>  <span class="at">generation_time =</span> <span class="dv">1</span>,</span>
+<span id="cb19-4"><a href=""></a>  <span class="at">simulation_length =</span> <span class="dv">3000</span>,</span>
+<span id="cb19-5"><a href=""></a>  <span class="at">direction =</span> <span class="st">"forward"</span></span>
+<span id="cb19-6"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <center>
 <strong>Compilation takes a list of model components, performs internal consistency checks, returns a single model object.</strong>
 </center>
 </section>
-<section id="last-step-before-simulation-compile_model-1" class="level2">
-<h2 class="anchored" data-anchor-id="last-step-before-simulation-compile_model-1">Last step before simulation: <code>compile_model()</code></h2>
+<section id="last-step-before-simulation-compile_model-1" class="slide level2">
+<h2>Last step before simulation: <code>compile_model()</code></h2>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>model <span class="ot">&lt;-</span> <span class="fu">compile_model</span>(</span>
-<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">list</span>(pop1, pop2, pop3, pop4, pop5),</span>
-<span id="cb21-3"><a href="#cb21-3"></a>  <span class="at">gene_flow =</span> gf,      <span class="co"># &lt;----- in case our model includes gene flow</span></span>
-<span id="cb21-4"><a href="#cb21-4"></a>  <span class="at">generation_time =</span> <span class="dv">1</span>,</span>
-<span id="cb21-5"><a href="#cb21-5"></a>  <span class="at">simulation_length =</span> <span class="dv">3000</span>,</span>
-<span id="cb21-6"><a href="#cb21-6"></a>  <span class="at">direction =</span> <span class="st">"forward"</span></span>
-<span id="cb21-7"><a href="#cb21-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">compile_model</span>(</span>
+<span id="cb20-2"><a href=""></a>  <span class="fu">list</span>(pop1, pop2, pop3, pop4, pop5),</span>
+<span id="cb20-3"><a href=""></a>  <span class="at">gene_flow =</span> gf,      <span class="co"># &lt;----- in case our model includes gene flow</span></span>
+<span id="cb20-4"><a href=""></a>  <span class="at">generation_time =</span> <span class="dv">1</span>,</span>
+<span id="cb20-5"><a href=""></a>  <span class="at">simulation_length =</span> <span class="dv">3000</span>,</span>
+<span id="cb20-6"><a href=""></a>  <span class="at">direction =</span> <span class="st">"forward"</span></span>
+<span id="cb20-7"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <center>
 <strong>Gene flow(s) that we programmed are included</strong><br>via the <code>gene_flow</code> argument.
 </center>
 </section>
-<section id="model-summary" class="level2">
-<h2 class="anchored" data-anchor-id="model-summary">Model summary</h2>
+<section id="model-summary" class="slide level2">
+<h2>Model summary</h2>
 <p>Typing the compiled <code>model</code> into R prints a brief summary:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="" aria-hidden="true" tabindex="-1"></a>model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>slendr 'model' object 
 --------------------- 
@@ -630,121 +705,116 @@ time units: generations
 total running length: 3000 time units
 model type: non-spatial
 
-configuration files in: /private/var/folders/70/b_q2zdh116b9pfg29p03sx600000gn/T/RtmpohBsC8/file100a118a1e56d_slendr_model </code></pre>
+configuration files in: /private/var/folders/70/b_q2zdh116b9pfg29p03sx600000gn/T/RtmpCRnM7D/file101f33cedf48a_slendr_model </code></pre>
 </div>
 </div>
 </section>
-<section id="model-visualization" class="level2">
-<h2 class="anchored" data-anchor-id="model-visualization">Model visualization</h2>
+<section id="model-visualization" class="slide level2">
+<h2>Model visualization</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_model</span>(model, <span class="at">proportions =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="slides_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
-</figure>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_model</span>(model, <span class="at">proportions =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
-</div>
-</div>
-</section>
-</section>
-<section id="so-we-build-a-model" class="level1">
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-19-1.png" class="quarto-figure quarto-figure-center r-stretch" width="672"></section></section>
+<section>
+<section id="so-we-build-a-model" class="title-slide slide level1 center">
 <h1>So we build a model</h1>
 <center>
-<h3 class="anchored">
+<h3>
 How do we simulate data from it?
 </h3>
 </center>
-<section id="built-in-simulation-engines" class="level2">
-<h2 class="anchored" data-anchor-id="built-in-simulation-engines">Built-in “simulation engines”</h2>
+</section>
+<section id="built-in-simulation-engines" class="slide level2">
+<h2>Built-in “simulation engines”</h2>
 <p><em>slendr</em> has two built-in simulation “engine scripts”:</p>
 <ul>
 <li>SLiM engine (<a href="https://github.com/bodkan/slendr/blob/main/inst/scripts/script.slim">source</a>)</li>
 <li><em>msprime</em> engine (<a href="https://github.com/bodkan/slendr/blob/main/inst/scripts/script.py">source</a>)</li>
 </ul>
 <p>They are designed to understand <em>slendr</em> models.</p>
-<p>. . .</p>
+<div class="fragment">
 <p><br>All you need to simulate data is this one line of code:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span> <span class="fu">msprime</span>(model, <span class="at">sequence_length =</span> <span class="fl">100e6</span>, <span class="at">recombination_rate =</span> <span class="fl">1e-8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span> <span class="fu">msprime</span>(model, <span class="at">sequence_length =</span> <span class="fl">100e6</span>, <span class="at">recombination_rate =</span> <span class="fl">1e-8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <center>
 <p><br></p>
-<h3 class="anchored">
+<h3>
 <strong>You don’t have to write <em>msprime</em> or SLiM code!</strong>
 </h3>
 </center>
-</section>
-</section>
-<section id="the-result-of-a-slendr-simulation-is-a-tree-sequence-ts" class="level1">
-<h1>The result of a <em>slendr</em> simulation is a <strong>tree sequence (<code>ts</code>)</strong></h1>
-<section id="what-is-tree-sequence" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-tree-sequence">What is tree sequence?</h2>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/tree_sequence_diagram_no_muts.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
-</figure>
 </div>
-<ul>
+</section></section>
+<section>
+<section id="the-result-of-a-slendr-simulation-is-a-tree-sequence-ts" class="title-slide slide level1 center">
+<h1>The result of a <em>slendr</em> simulation is a <strong>tree sequence (<code>ts</code>)</strong></h1>
+
+</section>
+<section id="what-is-tree-sequence" class="slide level2">
+<h2>What is tree sequence?</h2>
+
+<img data-src="images/tree_sequence_diagram_no_muts.png" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"><ul>
 <li>a record of full genetic ancestry of a set of samples</li>
 <li>an encoding of DNA sequence carried by those samples</li>
 <li>an efficient analysis framework</li>
 </ul>
-</section>
-</section>
-<section id="why-tree-sequence" class="level1 page-columns page-full">
+</section></section>
+<section>
+<section id="why-tree-sequence" class="title-slide slide level1 center">
 <h1>Why tree sequence?</h1>
 <p><br></p>
-<h3 class="anchored">
+<h3>
 Why not VCF or a normal genotype table?
 </h3>
-<section id="what-we-usually-have" class="level2">
-<h2 class="anchored" data-anchor-id="what-we-usually-have">What we usually have</h2>
+</section>
+<section id="what-we-usually-have" class="slide level2">
+<h2>What we usually have</h2>
 <center>
-<img src="images/vcf_screenshot.png" class="img-fluid" style="width:90.0%">
+<img data-src="images/vcf_screenshot.png" style="width:90.0%">
 </center>
 </section>
-<section id="what-we-usually-want" class="level2">
-<h2 class="anchored" data-anchor-id="what-we-usually-want">What we usually <em>want</em></h2>
+<section id="what-we-usually-want" class="slide level2">
+<h2>What we usually <em>want</em></h2>
 <p>An understanding of our samples’ evolutionary history:</p>
 <center>
-<img src="images/tree_sequence_diagram_no_muts.png" class="img-fluid">
+<img data-src="images/tree_sequence_diagram_no_muts.png">
 </center>
 <div class="fragment">
 <center>
-<h3 class="anchored">
+<h3>
 <strong>This is exactly what a tree sequence <em>is</em>!</strong>
 </h3>
 </center>
 </div>
 </section>
-<section id="the-magic-of-tree-sequences" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="the-magic-of-tree-sequences">The magic of tree sequences</h2>
+<section id="the-magic-of-tree-sequences" class="slide level2">
+<h2>The magic of tree sequences</h2>
 <p>They allow computing of popgen statistics <em>without genotypes</em>!</p>
 <center>
-<img src="images/tree_sequence_diagram_no_muts.png" class="img-fluid">
+<img data-src="images/tree_sequence_diagram_no_muts.png">
 </center>
 <p>There is a “duality” between mutations and branch lengths.</p>
 
-<div class="no-row-height column-margin column-container"><div class="margin-aside">
+<aside><div>
 <p>See an amazing paper by <a href="https://academic.oup.com/genetics/article/215/3/779/5930459">Ralph et al.&nbsp;(2020)</a> for more detail.</p>
-</div></div></section>
-<section id="what-if-we-need-mutations-though" class="level2">
-<h2 class="anchored" data-anchor-id="what-if-we-need-mutations-though">What if we need mutations though?</h2>
+</div></aside></section>
+<section id="what-if-we-need-mutations-though" class="slide level2">
+<h2>What if we need mutations though?</h2>
 <div class="fragment">
 <p>Coalescent and mutation processes can be decoupled!</p>
 <center>
-<img src="images/tree_sequence_diagram_no_muts.png" class="img-fluid">
+<img data-src="images/tree_sequence_diagram_no_muts.png">
 </center>
 </div>
 </section>
-<section id="what-if-we-need-mutations-though-1" class="level2">
-<h2 class="anchored" data-anchor-id="what-if-we-need-mutations-though-1">What if we need mutations though?</h2>
+<section id="what-if-we-need-mutations-though-1" class="slide level2">
+<h2>What if we need mutations though?</h2>
 <p>Coalescent and mutation processes can be decoupled!</p>
 <center>
-<p><img src="images/tree_sequence_diagram.png" class="img-fluid"></p>
+<p><img data-src="images/tree_sequence_diagram.png"></p>
 <div class="fragment">
-<h3 class="anchored">
+<h3>
 With <em>slendr</em>, we can add mutations <em>after</em> the simulation using <code>ts_mutate()</code>.
 </h3>
 </div>
@@ -851,106 +921,96 @@ With <em>slendr</em>, we can add mutations <em>after</em> the simulation using <
 <!-- ::: -->
 <!-- ::: -->
 </section>
-<section id="lets-take-the-model-from-earlier" class="level2">
-<h2 class="anchored" data-anchor-id="lets-take-the-model-from-earlier">Let’s take the <code>model</code> from earlier…</h2>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="slides_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="and-simulate-data-from-it" class="level2">
-<h2 class="anchored" data-anchor-id="and-simulate-data-from-it">… and simulate data from it</h2>
+<section id="lets-take-the-model-from-earlier" class="slide level2">
+<h2>Let’s take the <code>model</code> from earlier…</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-21-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="and-simulate-data-from-it" class="slide level2">
+<h2>… and simulate data from it</h2>
 <p><br></p>
 <p>In our script we’ll have something like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="sc">&lt;</span>... <span class="fu">population</span>() definitions ...<span class="sc">&gt;</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a></span>
-<span id="cb26-3"><a href="#cb26-3"></a>model <span class="ot">&lt;-</span> <span class="fu">compile_model</span>(...)</span>
-<span id="cb26-4"><a href="#cb26-4"></a>  </span>
-<span id="cb26-5"><a href="#cb26-5"></a>ts <span class="ot">&lt;-</span></span>
-<span id="cb26-6"><a href="#cb26-6"></a>  <span class="fu">msprime</span>(model, <span class="at">sequence_length =</span> <span class="fl">50e6</span>, <span class="at">recombination_rate =</span> <span class="fl">1e-8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="1-3|5-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="sc">&lt;</span>... <span class="fu">population</span>() definitions ...<span class="sc">&gt;</span></span>
+<span id="cb25-2"><a href=""></a></span>
+<span id="cb25-3"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">compile_model</span>(...)</span>
+<span id="cb25-4"><a href=""></a>  </span>
+<span id="cb25-5"><a href=""></a>ts <span class="ot">&lt;-</span></span>
+<span id="cb25-6"><a href=""></a>  <span class="fu">msprime</span>(model, <span class="at">sequence_length =</span> <span class="fl">50e6</span>, <span class="at">recombination_rate =</span> <span class="fl">1e-8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="and-simulate-data-from-it-1" class="level2">
-<h2 class="anchored" data-anchor-id="and-simulate-data-from-it-1">… and simulate data from it</h2>
+<section id="and-simulate-data-from-it-1" class="slide level2">
+<h2>… and simulate data from it</h2>
 <p><br></p>
 <p>In our script we’ll have something like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="sc">&lt;</span>... <span class="fu">population</span>() definitions ...<span class="sc">&gt;</span></span>
-<span id="cb27-2"><a href="#cb27-2"></a></span>
-<span id="cb27-3"><a href="#cb27-3"></a>model <span class="ot">&lt;-</span> <span class="fu">compile_model</span>(...)</span>
-<span id="cb27-4"><a href="#cb27-4"></a>  </span>
-<span id="cb27-5"><a href="#cb27-5"></a>ts <span class="ot">&lt;-</span></span>
-<span id="cb27-6"><a href="#cb27-6"></a>  <span class="fu">msprime</span>(model, <span class="at">sequence_length =</span> <span class="fl">50e6</span>, <span class="at">recombination_rate =</span> <span class="fl">1e-8</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb27-7"><a href="#cb27-7"></a>  <span class="fu">ts_mutate</span>(<span class="at">mutation_rate =</span> <span class="fl">1e-8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26" data-code-line-numbers="5-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a><span class="sc">&lt;</span>... <span class="fu">population</span>() definitions ...<span class="sc">&gt;</span></span>
+<span id="cb26-2"><a href=""></a></span>
+<span id="cb26-3"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">compile_model</span>(...)</span>
+<span id="cb26-4"><a href=""></a>  </span>
+<span id="cb26-5"><a href=""></a>ts <span class="ot">&lt;-</span></span>
+<span id="cb26-6"><a href=""></a>  <span class="fu">msprime</span>(model, <span class="at">sequence_length =</span> <span class="fl">50e6</span>, <span class="at">recombination_rate =</span> <span class="fl">1e-8</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-7"><a href=""></a>  <span class="fu">ts_mutate</span>(<span class="at">mutation_rate =</span> <span class="fl">1e-8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p><br></p>
 <center>
-<h3 class="anchored">
+<h3>
 Always use <code>ts_mutate()</code> during exercises! Otherwise you’ll get weird results due to the lack of mutations on the tree sequence.
 </h3>
 </center>
 </div>
-</section>
-</section>
-<section id="so-we-can-simulate-data" class="level1">
+</section></section>
+<section>
+<section id="so-we-can-simulate-data" class="title-slide slide level1 center">
 <h1>So we can simulate data</h1>
 <center>
-<h3 class="anchored">
+<h3>
 How do we work with this <code>ts</code> thing?
 </h3>
 </center>
-<section id="standard-genotype-formats" class="level2">
-<h2 class="anchored" data-anchor-id="standard-genotype-formats">Standard genotype formats</h2>
+</section>
+<section id="standard-genotype-formats" class="slide level2">
+<h2>Standard genotype formats</h2>
 <p>If a tree sequence doesn’t cut it, you can always:</p>
 <ul>
 <li>export genotypes to a VCF file:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_vcf</span>(ts, <span class="at">path =</span> <span class="st">"path/to/a/file.vcf.gz"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_vcf</span>(ts, <span class="at">path =</span> <span class="st">"path/to/a/file.vcf.gz"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>export genotypes in an EIGENSTRAT format:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_eigenstrat</span>(ts, <span class="at">prefix =</span> <span class="st">"path/to/eigenstrat/prefix"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_eigenstrat</span>(ts, <span class="at">prefix =</span> <span class="st">"path/to/eigenstrat/prefix"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>access genotypes in a data frame:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_genotypes</span>(ts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_genotypes</span>(ts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>1 multiallelic sites (0.063% out of 1597 total) detected and removed</code></pre>
-</div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  pos pop1_1_chr1 pop1_1_chr2 pop1_2_chr1 pop1_2_chr2 pop1_3_chr1 pop1_3_chr2
-1 259           0           0           0           0           0           0
-2 317           0           0           0           0           0           0</code></pre>
+<pre><code>   pos pop1_1_chr1 pop1_1_chr2 pop1_2_chr1 pop1_2_chr2 pop1_3_chr1 pop1_3_chr2
+1  337           0           0           0           0           0           0
+2 1235           0           0           0           0           0           0</code></pre>
 </div>
 </div>
 </section>
-<section id="slendrs-r-interface-to-tskit-statistics" class="level2">
-<h2 class="anchored" data-anchor-id="slendrs-r-interface-to-tskit-statistics"><em>slendr</em>’s R interface to <a href="https://tskit.dev/tskit"><em>tskit</em></a> statistics</h2>
+<section id="slendrs-r-interface-to-tskit-statistics" class="slide level2">
+<h2><em>slendr</em>’s R interface to <a href="https://tskit.dev/tskit"><em>tskit</em></a> statistics</h2>
 <center>
-<img src="images/slendr_tskit.png" class="img-fluid">
+<img data-src="images/slendr_tskit.png">
 </center>
 <p>Allele-frequecy spectrum, diversity <span class="math inline">\(\pi\)</span>, <span class="math inline">\(F_{ST}\)</span>, Tajima’s D, etc.</p>
 <p><strong>Find help at <a href="https://slendr.net/reference">slendr.net/reference</a> or in R under <code>?ts_fst</code> etc.</strong></p>
 </section>
-<section id="specifying-individuals-to-compute-on" class="level2">
-<h2 class="anchored" data-anchor-id="specifying-individuals-to-compute-on">Specifying individuals to compute on</h2>
+<section id="specifying-individuals-to-compute-on" class="slide level2">
+<h2>Specifying individuals to compute on</h2>
 <p>We can get samples recorded in <code>ts</code> with <code>ts_samples()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_samples</span>(ts) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_samples</span>(ts) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 3
   name    time pop  
@@ -959,31 +1019,33 @@ How do we work with this <code>ts</code> thing?
 2 pop1_2  3001 pop1 </code></pre>
 </div>
 </div>
-<p>. . .</p>
+<div class="fragment">
 <p>A shortcut <code>ts_names()</code> can also be useful:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_names</span>(ts) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_names</span>(ts) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "pop1_1" "pop1_2" "pop1_3" "pop1_4" "pop1_5"</code></pre>
 </div>
 </div>
-<p>. . .</p>
+</div>
+<div class="fragment">
 <p>We can also get a per-population list of individuals:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_names</span>(ts, <span class="at">split =</span> <span class="st">"pop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_names</span>(ts, <span class="at">split =</span> <span class="st">"pop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>$pop1
-[1] "pop1_643" "pop1_108" "pop1_104" "pop1_575" "pop1_427"</code></pre>
+[1] "pop1_279" "pop1_756" "pop1_458" "pop1_198" "pop1_884"</code></pre>
 </div>
 </div>
-</section>
-</section>
-<section id="section-5" class="level1">
+</div>
+</section></section>
+<section>
+<section id="section-5" class="title-slide slide level1 center">
 <h1></h1>
 <center>
-<h2 class="anchored" data-anchor-id="section-5">
+<h2>
 All <em>slendr</em> statistics accept this as their second (and further) arguments.
 </h2>
 </center>
@@ -991,15 +1053,16 @@ All <em>slendr</em> statistics accept this as their second (and further) argumen
 <center>
 This is modelled after the <code>sample_sets=</code> argument of the respective <a href="https://tskit.dev/tskit/docs/stable/python-api.html#statistics"><em>tskit</em> Python methods</a> (except that you use “symbolic names” of individuals, not tree-sequence node numbers).
 </center>
-<section id="example-nucleotide-diversity" class="level2">
-<h2 class="anchored" data-anchor-id="example-nucleotide-diversity">Example: <a href="https://en.wikipedia.org/wiki/Nucleotide_diversity">nucleotide diversity</a></h2>
+</section>
+<section id="example-nucleotide-diversity" class="slide level2">
+<h2>Example: <a href="https://en.wikipedia.org/wiki/Nucleotide_diversity">nucleotide diversity</a></h2>
 <div class="columns">
 <div class="column" style="width:45%;">
 <p>Get list of individuals in each population:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">ts_names</span>(ts, <span class="at">split =</span> <span class="st">"pop"</span>)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">ts_names</span>(ts, <span class="at">split =</span> <span class="st">"pop"</span>)</span>
+<span id="cb37-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "pop1" "pop2"</code></pre>
 </div>
@@ -1007,7 +1070,7 @@ This is modelled after the <code>sample_sets=</code> argument of the respective 
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>samples<span class="sc">$</span>pop1 <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="" aria-hidden="true" tabindex="-1"></a>samples<span class="sc">$</span>pop1 <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "pop1_1" "pop1_2" "pop1_3"</code></pre>
 </div>
@@ -1015,7 +1078,7 @@ This is modelled after the <code>sample_sets=</code> argument of the respective 
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>samples<span class="sc">$</span>pop2 <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="" aria-hidden="true" tabindex="-1"></a>samples<span class="sc">$</span>pop2 <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "pop2_1" "pop2_2" "pop2_3"</code></pre>
 </div>
@@ -1027,27 +1090,26 @@ This is modelled after the <code>sample_sets=</code> argument of the respective 
 <div class="fragment">
 <p>Compute nucleotide diversity:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_diversity</span>(ts, <span class="at">sample_sets =</span> samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_diversity</span>(ts, <span class="at">sample_sets =</span> samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
   set   diversity
   &lt;chr&gt;     &lt;dbl&gt;
-1 pop1  0.000403 
-2 pop2  0.0000687</code></pre>
+1 pop1  0.000398 
+2 pop2  0.0000734</code></pre>
 </div>
 </div>
 </div>
-</div>
-</div>
+</div></div>
 </section>
-<section id="example-allele-frequency-spectrum" class="level2">
-<h2 class="anchored" data-anchor-id="example-allele-frequency-spectrum">Example: <a href="https://en.wikipedia.org/wiki/Allele_frequency_spectrum">allele frequency spectrum</a></h2>
+<section id="example-allele-frequency-spectrum" class="slide level2">
+<h2>Example: <a href="https://en.wikipedia.org/wiki/Allele_frequency_spectrum">allele frequency spectrum</a></h2>
 <div class="columns">
 <div class="column" style="width:45%;">
 <p>Get names of all individuals:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">ts_names</span>(ts)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>samples</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">ts_names</span>(ts)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb45-2"><a href="" aria-hidden="true" tabindex="-1"></a>samples</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "pop_1" "pop_2" "pop_3" "pop_4" "pop_5"</code></pre>
 </div>
@@ -1056,9 +1118,9 @@ This is modelled after the <code>sample_sets=</code> argument of the respective 
 <p><br></p>
 <p>Compute the AFS:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>afs <span class="ot">&lt;-</span> <span class="fu">ts_afs</span>(ts, <span class="at">sample_sets =</span> <span class="fu">list</span>(samples))</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>afs[<span class="sc">-</span><span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="" aria-hidden="true" tabindex="-1"></a>afs <span class="ot">&lt;-</span> <span class="fu">ts_afs</span>(ts, <span class="at">sample_sets =</span> <span class="fu">list</span>(samples))</span>
+<span id="cb47-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="" aria-hidden="true" tabindex="-1"></a>afs[<span class="sc">-</span><span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 3917 2151 1432  941  740  624  607  587  416  385</code></pre>
 </div>
@@ -1069,30 +1131,29 @@ This is modelled after the <code>sample_sets=</code> argument of the respective 
 </div><div class="column" style="width:53%;">
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(afs[<span class="sc">-</span><span class="dv">1</span>], <span class="at">type =</span> <span class="st">"b"</span>,</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"allele count bin"</span>,</span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(afs[<span class="sc">-</span><span class="dv">1</span>], <span class="at">type =</span> <span class="st">"b"</span>,</span>
+<span id="cb49-2"><a href="" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"allele count bin"</span>,</span>
+<span id="cb49-3"><a href="" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
 <div>
-<figure class="figure">
-<p><img src="slides_files/figure-html/unnamed-chunk-44-1.png" class="img-fluid figure-img" width="672"></p>
+<figure>
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-44-1.png" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
-</div>
-</div>
+</div></div>
 </section>
-<section id="working-with-multi-population-statistics" class="level2">
-<h2 class="anchored" data-anchor-id="working-with-multi-population-statistics">Working with “multi-population” statistics</h2>
+<section id="working-with-multi-population-statistics" class="slide level2">
+<h2>Working with “multi-population” statistics</h2>
 <p>For multipopulation statistics, you need a (named) list of samples recorded in each population.</p>
 <p><code>ts_names()</code> has a <code>split = "pop"</code> option just for this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">ts_names</span>(ts, <span class="at">split =</span> <span class="st">"pop"</span>)</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>samples</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">ts_names</span>(ts, <span class="at">split =</span> <span class="st">"pop"</span>)</span>
+<span id="cb50-2"><a href="" aria-hidden="true" tabindex="-1"></a>samples</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -1105,11 +1166,11 @@ NULL</code></pre>
 </div>
 <p>You can use this in place of <code>sample_names</code> in code like:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_diversity</span>(ts, <span class="at">sample_sets =</span> samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_diversity</span>(ts, <span class="at">sample_sets =</span> samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="more-information" class="level2">
-<h2 class="anchored" data-anchor-id="more-information">More information</h2>
+<section id="more-information" class="slide level2">
+<h2>More information</h2>
 <p><br></p>
 <ul>
 <li><p><em>slendr</em> paper is now in <a href="https://evolbiol.peercommunityin.org/articles/rec?id=630">PCI EvolBiol</a></p></li>
@@ -1124,431 +1185,446 @@ NULL</code></pre>
 <ul>
 <li>contact details at <a href="https://bodkan.net">bodkan.net</a></li>
 </ul>
-</section>
-</section>
 
-</main>
-<!-- /main column -->
-<script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
-      }
-    }
-    return false;
-  }
-  const onCopySuccess = function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="slides_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="slides_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="slides_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
         }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
-  });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-    const config = {
-      allowHTML: true,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start',
-    };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
           }
         }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
-      }
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
           });
         }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            div.style.left = 0;
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
         }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
       }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
       }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
       });
-    }
-  }
-});
-</script>
-</div> <!-- /content -->
-
-
-
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
 
 </body></html>
