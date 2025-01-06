@@ -15,5 +15,5 @@ handouts:
 	git add slides*; git commit -m "Update handouts"; git push
 
 exercises:
-	quarto publish quarto-pub --id e7689f70-4d88-4016-9e3e-8fa7165d0c7c exercises.qmd
+	quarto publish quarto-pub --id 21452ae4-076d-46a3-a620-c85e064edb1e exercises.qmd
 	git add exercises*; git commit -m "Update exercises"; git push
