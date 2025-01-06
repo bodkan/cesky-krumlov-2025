@@ -111,14 +111,14 @@ plot_tajima(tajima_df)
 
 # Part 4 -- simulating positive selection ---------------------------------
 
-# Our SLiM selection extension for slendr is in 'exercise5_slim.txt'. When
+# Our SLiM selection extension for slendr is in 'slim_extension.txt'. When
 # you inspect that file, you will se pretty much standard SLiM code with one
 # exception: the somewhat strange {{elements}} in curly brackets. Those
 # parameters of the selection model, which must be first "instantiated" using
 # the function `substitute_values()`.
 
 # First, let's simulate selection happening only in the EUR lineage.
-extension <- substitute_values(template = here::here("exercise5_slim.txt"),
+extension <- substitute_values(template = here::here("slim_extension.txt"),
   origin_pop = "EUR",
   s = 0.15,
   onset_time = 12000
@@ -140,7 +140,7 @@ model <- compile_model(
 
 # This time our model not only produces a tree sequence, but it also generates
 # a table of allele frequencies in each population (see the file
-# 'exercise5_slim.txt'). We need to be able to load both of these files after
+# 'slim_extension.txt'). We need to be able to load both of these files after
 # the simulation and thus need a path to a location we can find those files.
 # We can do this by specifying `path = TRUE`.
 
@@ -223,7 +223,7 @@ plot_tajima(tajima_df)
 
 # Solution -- use this extension in the `slim()` call, and repeat the rest.
 extension <- substitute_values(
-  template = "exercise5_slim.txt",
+  template = "slim_extension.txt",
   origin_pop = "EHG",
   s = 0.1,
   onset_time = 12000
