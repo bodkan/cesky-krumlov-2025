@@ -5,7 +5,8 @@ init_env()
 
 
 
-# Part 1 -- building a slendr model ---------------------------------------
+
+# Part 1: Building a demographic model in slendr --------------------------
 
 # Chimpanzee outgroup
 chimp <- population("CHIMP", time = 7e6, N = 5000)
@@ -33,7 +34,8 @@ model <- compile_model(
 
 
 
-# Part 2 -- inspecting the model visually ---------------------------------
+
+# Part 2: Inspecting the model visually -----------------------------------
 
 # Verify the correctness of our model visually (different arguments of
 # the plotting function can make certain features more (or less) visible)
@@ -47,7 +49,7 @@ plot_model(model, sizes = FALSE, log = TRUE, proportions = TRUE)
 
 
 
-# Part 3 -- simulating genomic data ---------------------------------------
+# Part 3: Simulating genomic data -----------------------------------------
 
 ts <- msprime(model, sequence_length = 1e6, recombination_rate = 1e-8)
 
@@ -60,6 +62,13 @@ ts <- msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, debug = T
 # very useful to have the `msprime()` function dump the "raw" command-line to
 # run the simulation on the terminal using plain Python interpreter
 msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, run = FALSE)
+
+
+
+
+
+
+# Part 4: Inspecting the tree-sequence object -----------------------------
 
 # Typing out the object with the result shows that it's a good old tskit
 # tree-sequence object
@@ -86,7 +95,7 @@ ts_samples(ts) %>% nrow()
 
 
 
-# Part 4 -- scheduling sampling events ------------------------------------
+# Part 5 -- scheduling sampling events ------------------------------------
 
 # We can precisely define which individuals (from which populations, and at
 # which times) should be recorded in a tree sequence using the slendr
@@ -117,7 +126,7 @@ plot_model(model, sizes = FALSE, log = TRUE, samples = schedule)
 
 
 
-# Part 5 -- simulating a defined set of individuals -----------------------
+# Part 6 -- simulating a defined set of individuals -----------------------
 
 # Let's simulate a more realistic set of samples, using the schedule we've
 # defined above
