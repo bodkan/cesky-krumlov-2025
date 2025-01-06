@@ -18,7 +18,7 @@ Slides, exercise materials, and example source code for the practical activity s
 
 The slides, handouts and exercises are also available for download as self-contained HTML files, just in case Quarto Pub server is down: [slides.html](slides.html), [handouts.html](handouts.html), [exercises.html](exercises.html).
 
-## Installation, setup, and other instructions
+## Installation setup, and other instructions
 
 Refer to the [exercises materials](exercises.md) for all necessary information.
 
