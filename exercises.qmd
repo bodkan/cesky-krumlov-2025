@@ -17,6 +17,10 @@ filters:
  - collapse-callout.lua
 ---
 
+<!-- TODO: Looks at these links to define a custom "Show the solution" callout -->
+<!-- https://www.youtube.com/watch?v=DDQO_3R-q74 -->
+<!-- https://examples.quarto.pub/collapse-callout/ -->
+
 # Reference materials
 
 Unless you're already an expert on the *slendr* toolkit, you will probably need some reference materials to do the exercises. Here are the options:
@@ -118,11 +122,13 @@ If you find yourself [*totally lost*](https://scryfall.com/card/gtc/54/totally-l
 
 # Start of the exercises
 
+For each exercise, you will get a brief explanation of the problem at hand and functions that could be useful to solve the exercise. **The concrete, specific task will be always written like this in bold.**
+
 ## Exercise 1
 
 ### Part 1: Building a demographic model in *slendr*
 
-**Program the following toy model of human demographic history in _slendr_.**
+Use functions such as `population()`, `gene_flow()`, and `compile_model()` to **program the following toy model of human demographic history in _slendr_.**
 
 ![](images/intro_model1.png){width="50%"}
 
@@ -174,14 +180,16 @@ gf <- gene_flow(from = nea, to = eur, rate = 0.03, start = 55000, end = 50000)
 model <- compile_model(
   populations = list(chimp, nea, afr, eur),
   gene_flow = gf,
-  generation_time = 30
+  generation_time = 30,
+  path = here::here("data/introgression"),  # <--- don't worry about these two
+  overwrite = TRUE, force = TRUE            #      lines of code (ask me if interested)
 )
 ```
 :::
 
 ### Part 2: Inspecting the model visually
 
-To visualize a *slendr* model, you can use the function `plot_model`. **Plot your compiled `model` to make sure you programmed it correctly!**
+To visualize a *slendr* model, you can use the function `plot_model()`. **Plot your compiled `model` to make sure you programmed it correctly!**
 
 ::: aside
 **Note:** Plotting of models can be sometimes a little wonky. When plotting your model, experiment with arguments `log = TRUE`, `proportions = TRUE`, `gene_flow = TRUE`. Check `?plot_model` for more information on these.
@@ -203,7 +211,7 @@ plot_model(model, sizes = FALSE, log = TRUE, proportions = TRUE)
 
 Once you have a compiled *slendr* model stored in an R variable (from now on, `model` will always mean a variable containing a compiled *slendr* model object, for simplicity), we can simulate data from it. By default, *slendr* models always produce a [tree sequence](https://tskit.dev/tutorials/what_is.html).
 
-There are two simulation engines built into *slendr* implemented by functions `msprime` and `slim`. For traditional, non-spatial, neutral demographic models, the engine provided by the `msprime` function is much more efficient, so we'll be using that.
+There are two simulation engines built into *slendr* implemented by functions `msprime()` and `slim()`. For traditional, non-spatial, neutral demographic models, the engine provided by the `msprime()` function is much more efficient, so we'll be using that.
 
 Here's how you can use it to simulate a tree sequence:
 
@@ -269,7 +277,7 @@ ts_table(ts, "sites")
 ```
 :::
 
-There are also two *slendr*-specific functions called `ts_samples` and `ts_nodes`. **You can run them simply as `ts_samples(ts)` and `ts_nodes(ts)`. What do the tables they produce represent?**
+There are also two *slendr*-specific functions called `ts_samples()` and `ts_nodes()`. **You can run them simply as `ts_samples(ts)` and `ts_nodes(ts)`. What do the tables they produce represent?**
 
 :::{.callout-note}
 ### Click to see the solution
@@ -291,11 +299,192 @@ ts_nodes(ts)
 ```
 :::
 
-## Bonus for Exercise 1
 
-### Write your own model!
 
-Program a _slendr_ model which captures the most important features of the model organism that you're study or that you're more interested in! You will have a chance to work with it in future exercises.
+### Part 5: Scheduling sampling events
+
+In the table produced by the `ts_samples()` function, you can see that the tree sequence
+we simulated record _everyone_. It's very unlikely, unless we're extremely lucky, that
+we'll ever have a sequence of every single individual in a population that we study. To
+get a little closer to the scale of the genomic data that we'll be working with, we can
+restrict our simulation to only record a subset of individuals.
+
+We can precisely define which individuals (from which populations, and at which times)
+should be recorded in a tree sequence using the _slendr_ function `schedule_sampling()`.
+For instance, if we have a `model` with some _slendr_ populations in variables `popX`
+`popY`, we can schedule the recording of 5 individuals from each at times 10000 (years
+ago) and 0 (present-day) by the following code:
+
+```{r}
+#| eval: false
+pop_schedule <- schedule_sampling(model, times = c(10000, 0), list(popX, 5), list(popY), 5)
+```
+
+This function simply returns a data frame. As such, we can create multiple of such schedules
+(of arbitrary complexity and granularity), and then bind them together with a single line
+of code, like this:
+
+```{r}
+#| eval: false
+
+# note that the `times =` argument can be a vector of times...
+ancient_times <- c(40000, 30000, 20000, 10000)
+eur_samples <- schedule_sampling(model, times = ancient_times, list(eur, 1))
+# ... but also just a single number
+afr_samples <- schedule_sampling(model, times = 0, list(afr, 1), list(eur, 42))
+nea_samples <- schedule_sampling(model, time = 60000, list(nea, 1))
+
+# multiple such sampling schedules can be bound together
+samples <- rbind(eur_samples, afr_samples, nea_samples)
+```
+
+**Using the function `schedule_sampling` (and with the help of `rbind`), program
+the sampling of the following sample sets at given times, saving it to variable called `schedule`:**
+
+ time | population(s) | # individuals
+------|:------|----
+70000 | nea   |   1
+40000 | nea   |   1
+    0 | chimp, afr, eur |   5
+
+**Additionally, schedule the sampling of one `eur` individual at these times:**
+
+```{r}
+times <- seq(40000, 2000, by = -2000)
+```
+
+In total, you should schedule the recording of 38 individuals.
+
+:::{.callout-note}
+### Click to see the solution
+```{r}
+# Here we scheduled the sampling of two Neanderthals at 70kya and 40kya
+nea_samples <- schedule_sampling(model, times = c(70000, 40000), list(nea, 1))
+nea_samples # (this function produces a plain old data frame!)
+
+# Here we schedule one Chimpanzee sample, 5 African samples, and 10 European samples
+present_samples <- schedule_sampling(model, times = 0, list(chimp, 1), list(afr, 5), list(eur, 10))
+
+# We also schedule the recording of one European sample between 50kya and 2kya,
+# every 2000 years
+times <- seq(40000, 2000, by = -2000)
+emh_samples <- schedule_sampling(model, times, list(eur, 1))
+
+# Because those functions produce nothing but a data frame, we can bind
+# individual sampling schedules together
+schedule <- rbind(nea_samples, present_samples, emh_samples)
+schedule
+```
+:::
+
+**Then, verify the correctness of your overall sampling `schedule` by visualizing
+it together with your `model` like this:**
+
+::: aside
+**Note:** As you've seen above, the visualization is often a bit wonky and convoluted with overlapping elements and it can be even worse with samples added, but try to experiment with arguments to `plot_model` described above to make the plot a bit more helpful for sanity checking.
+:::
+
+```{r}
+#| eval: false
+plot_model(model, samples = schedule)
+```
+
+:::{.callout-note}
+### Click to see the solution
+
+```{r}
+plot_model(model, sizes = FALSE, samples = schedule)
+```
+
+```{r}
+plot_model(model, sizes = FALSE, log = TRUE, samples = schedule)
+```
+:::
+
+
+
+
+
+### Part 6: Simulating a defined set of individuals 
+
+**Use your combined sampling schedule stored in the `schedule` variable to run a new tree-sequence simulation from your model, this time restricted to just those individuals scheduled for recording.** You can do this by providing the combined sampling schedule as the `samples =` argument of the function `msprime` you used above.
+
+:::{.callout-note}
+### Click to see the solution
+
+```{r}
+#| echo: false
+model <- read_model(here::here("data/introgression"))
+ts <- ts_read(here::here(file = "data/introgression.trees"), model = model)
+```
+
+```{r}
+#| eval: false
+# The command below will likely take a few minutes to run, so feel free to go
+# down from 100 Mb sequence_length to even 10Mb (it doesn't matter much)
+# tstart <- Sys.time()
+ts <-
+  msprime(model, sequence_length = 100e6, recombination_rate = 1e-8, samples = schedule, random_seed = 1269258439) %>%
+  ts_mutate(mutation_rate = 1e-8, random_seed = 1269258439)
+# tend <- Sys.time()
+# tend - tstart # Time difference of 2.141642 mins
+
+# If you're bothered by ho long this takes, feel free to call these two lines
+# to 100% reproduce my results without any expensive computation:
+model <- read_model(here::here("data/introgression"))
+ts <- ts_read(here::here(file = "data/introgression.trees"), model = model)
+
+# We can save a tree sequence object using a slendr function `ts_write` (this
+# can be useful if we want to save the results of a simulation for later use).
+dir.create("data", showWarnings = FALSE)
+ts_write(ts, "data/introgression.trees")
+```
+:::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Exercise 2
 
