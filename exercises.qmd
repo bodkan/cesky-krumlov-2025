@@ -115,7 +115,7 @@ If you find yourself [_totally lost_](https://scryfall.com/card/gtc/54/totally-l
 
 # Exercise 1
 
-**Reminder**: you can use the [handout version of the slides]() for reference.
+**Reminder**: you can use the [one-page version of the slides](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts) for reference (they contain everything you might need to do all the exercises). The solutions to the exercises are based on variations of examples from the [official _slendr_ documentation](https://www.slendr.net), so feel free to browse through the relevant tutorials (available under "Articles" on the website), in case you are interested in more details.
 
 ## Part 1: write this model in *slendr*
 
@@ -154,7 +154,7 @@ plot_model(model) # verify visually
 
 # Exercise 2
 
-**Reminder**: you can use the [handout version of the slides]() for reference.
+**Reminder**: you can use the [one-page version of the slides](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts) for reference (they contain everything you might need to do all the exercises). The solutions to the exercises are based on variations of examples from the [official _slendr_ documentation](https://www.slendr.net), so feel free to browse through the relevant tutorials (available under "Articles" on the website), in case you are interested in more details.
 
 ## Sampling aDNA samples through time
 
@@ -225,6 +225,8 @@ ts_samples(ts)
 ::: aside
 Use [these](https://bodkan.quarto.pub/ku-popgen2023-onepage/) one-page handouts for reference.
 :::
+
+**Reminder**: you can use the [one-page version of the slides](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts) for reference (they contain everything you might need to do all the exercises). The solutions to the exercises are based on variations of examples from the [official _slendr_ documentation](https://www.slendr.net), so feel free to browse through the relevant tutorials (available under "Articles" on the website), in case you are interested in more details.
 
 ## Exercise #4a: ancient samples
 
