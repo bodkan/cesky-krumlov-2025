@@ -107,15 +107,15 @@ Your goal for each exercise will be to write a complete script. I suggest you na
 
 Unless you have a strong preference for another editor or IDE, I strongly suggest you use RStudio (either on your machine or in the cloud, depending on where you did the setup steps above).
 
-Each exercise is compose of individual _parts_, which are designed to build one upon the other in the order they are specified.
+Each exercise is compose of individual *parts*, which are designed to build one upon the other in the order they are specified.
 
 All the exercises will involve "real coding"! If you've never really programmed entire scripts before, this could feel a little intimidating. Don't worry. If you're ever lost, just take a peek into the [`solutions/`](solutions/) directory for the respective solution script. Always try to work on a solution on your own, but never let this be a barrier to your progress. Feel free to copy-paste bits of my solutions into your own scripts.
 
-If you find yourself [_totally lost_](https://scryfall.com/card/gtc/54/totally-lost), don't hesitate to read my solution scripts from the get go, trying to understand what's going on in them, and executing them line by line in your RStudio session.
+If you find yourself [*totally lost*](https://scryfall.com/card/gtc/54/totally-lost), don't hesitate to read my solution scripts from the get go, trying to understand what's going on in them, and executing them line by line in your RStudio session.
 
 # Exercise 1
 
-**Reminder**: you can use the [one-page version of the slides](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts) for reference (they contain everything you might need to do all the exercises). The solutions to the exercises are based on variations of examples from the [official _slendr_ documentation](https://www.slendr.net), so feel free to browse through the relevant tutorials (available under "Articles" on the website), in case you are interested in more details.
+**Reminder**: you can use the [one-page version of the slides](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts) for reference (they contain everything you might need to do all the exercises). The solutions to the exercises are based on variations of examples from the [official *slendr* documentation](https://www.slendr.net), so feel free to browse through the relevant tutorials (available under "Articles" on the website), in case you are interested in more details.
 
 ## Part 1: write this model in *slendr*
 
@@ -150,11 +150,11 @@ plot_model(model) # verify visually
 
 ### Bonus
 
-- Write your own model!
+-   Write your own model!
 
 # Exercise 2
 
-**Reminder**: you can use the [one-page version of the slides](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts) for reference (they contain everything you might need to do all the exercises). The solutions to the exercises are based on variations of examples from the [official _slendr_ documentation](https://www.slendr.net), so feel free to browse through the relevant tutorials (available under "Articles" on the website), in case you are interested in more details.
+**Reminder**: you can use the [one-page version of the slides](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts) for reference (they contain everything you might need to do all the exercises). The solutions to the exercises are based on variations of examples from the [official *slendr* documentation](https://www.slendr.net), so feel free to browse through the relevant tutorials (available under "Articles" on the website), in case you are interested in more details.
 
 ## Sampling aDNA samples through time
 
@@ -226,7 +226,7 @@ ts_samples(ts)
 Use [these](https://bodkan.quarto.pub/ku-popgen2023-onepage/) one-page handouts for reference.
 :::
 
-**Reminder**: you can use the [one-page version of the slides](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts) for reference (they contain everything you might need to do all the exercises). The solutions to the exercises are based on variations of examples from the [official _slendr_ documentation](https://www.slendr.net), so feel free to browse through the relevant tutorials (available under "Articles" on the website), in case you are interested in more details.
+**Reminder**: you can use the [one-page version of the slides](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts) for reference (they contain everything you might need to do all the exercises). The solutions to the exercises are based on variations of examples from the [official *slendr* documentation](https://www.slendr.net), so feel free to browse through the relevant tutorials (available under "Articles" on the website), in case you are interested in more details.
 
 ## Exercise #4a: ancient samples
 
@@ -328,7 +328,6 @@ plot_model(model, proportions = TRUE, order = c("NEA", "EUR", "AFR", "CHIMP"), l
     -   Is one "much more negative" than the other as expected assuming introgression?
 
 -   You've learned about symmetries in $f_4$ depending on the arrangement of the "quartet". **How many unique** $f_4$ values involving a single quartet can you find and why? (When computing `ts_f4()` here, set `mode = "branch"`).
-
 
 # Exercise 3
 
