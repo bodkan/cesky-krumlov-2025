@@ -4,17 +4,19 @@
 
 ### Český Krumlov, January 2025
 
----
+------------------------------------------------------------------------
 
 Slides, exercise materials, and example source code for the practical activity session at the [**Workshop on population and speciation genomics**](http://evomics.org/workshops/workshop-on-population-and-speciation-genomics/2025-workshop-on-population-and-speciation-genomics-cesky-krumlov/) to be held in Český Krumlov in January 2025.
 
 **Contents of this git repository**:
 
--   [slides](https://bodkan.quarto.pub/cesky-krumlov-2025/) and [single-page handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-onepage/) with a crash course introduction on using the *slendr* toolkit for simulations in population genomics (you will be using those for reference as you are working on the exercises)
+-   [slides](https://bodkan.quarto.pub/cesky-krumlov-2025-slides/) and [single-page handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/) with a crash course introduction on using the *slendr* toolkit for simulations in population genomics that you can use for reference while working on the exercises
 
--   [exercise materials](exercises.md) (this is the content of the five exercises and the main focus of the session)
+-   [exercise materials](exercises.md)
 
 -   [solutions](https://github.com/bodkan/cesky-krumlov-2025/tree/main/solutions) to the exercises (one self-contained R script for each exercise)
+
+The slides, handouts and exercises are also available for download as self-contained HTML files, just in case Quarto Pub server is down: [slides.html](slides.html), [handouts.html](handouts.html), [exercises.html](exercises.html).
 
 ## Installation, setup, and other instructions
 
