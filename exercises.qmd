@@ -12,35 +12,38 @@ format:
     code-line-numbers: false
     fig-align: center
     self-contained: true
+    callout-appearance: minimal
+filters: 
+ - collapse-callout.lua
 ---
 
 # Reference materials
 
-Unless you're already a *slendr* expert, you will probably need some reference materials to do the exercises. Here are the options:
+Unless you're already an expert on the *slendr* toolkit, you will probably need some reference materials to do the exercises. Here are the options:
 
-1.  You can refer to the slides with the *slendr* crash course. The exercises will follow the progression of our walkthrough of the *slendr* functionality in the first part of this activity. You can find the material rendered as \[normal slides\]() or \[continuous handouts\]() (the latter being probably a bit more practical for reference.
-2.  Tutorials on the [*slendr* website](https://www.slendr.net).
+1.  You can refer to the slides with the *slendr* crash course. You can find the material rendered as [normal slides](https://bodkan.quarto.pub/cesky-krumlov-2025-slides/) or [one-page handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/) (the latter being probably a bit more practical for reference.
+2.  Relevant tutorials on the [*slendr* website](https://www.slendr.net) which you can find under the "Articles" link in the header.
 3.  [Manual pages](https://www.slendr.net/reference/index.html) of all available *slendr* functions. Note that you can get the help page of every *slendr* R `function` by typing `?function` in the R console. For instance, typing `?ts_tajima` gives you the help page of the *tskit*/*slendr* function implementing the tree-based computation of Tajima's D.
 
 # Installation setup
 
 The easiest way to set up everything on your computer is to do the following:
 
-1.  Clone the repository with the activity materials (source code with slides and exercises materials, example scripts, and solutions). In a shell terminal, in your home directory (or anywhere else, really) you can run:
+1.  Clone the repository with the activity materials (source code with slides and exercises materials, example scripts, and solutions). In a shell terminal on Linux or macOS, in your home directory (or anywhere else, really) you can run:
 
     ```         
     $ git clone https://github.com/bodkan/cesky-krumlov-2025 ~/slendr_activity
     ```
 
-2.  Install all the R package dependencies by going into the activity repository directory you just cloned and installing the necessary R packages. We're using the *renv* package to manage all the dependencies, so you don't have to track every package individually.
+2.  Install all the R package dependencies by going into the activity repository directory you just cloned and installing the necessary R packages by following these steps:
 
--   First go into the project directory:
+-   First go into the project directory you just cloned:
 
     ```         
     $ cd ~/slendr_activity
     ```
 
--   Open the R terminal in that directory. You should get a note that the renv package is being automatically setup, like this:
+-   Open the R terminal in that directory. You should get a note that the *renv* package is being automatically setup, like this:
 
     ```         
     $ R
@@ -101,23 +104,25 @@ In every previous installments of this workshop, this is all that was needed to 
 
 It's unclear whether we will manage to go through the entirety of the final exercise. However, to be able to do this, having SLiM at least version 4.2 (and it being available in your unix `$PATH!`) is required. If this isn't possible for your, don't worry. You'll be able to do most of that exercise even without SLiM, and I will demonstrate the whole exercise (including the SLiM bit) for you.
 
-# How will the exercises work?
+# How will this activity session work?
 
 Your goal for each exercise will be to write a complete script. I suggest you name the script for each exercise as `exercise1.R`, `exercise2.R`, etc., to keep things tidy.
 
-Unless you have a strong preference for another editor or IDE, I strongly suggest you use RStudio (either on your machine or in the cloud, depending on where you did the setup steps above).
+Unless you have a strong preference for another editor or IDE, I recommend you use RStudio (either on your machine or in the cloud, depending on where you did the setup steps above).
 
 Each exercise is compose of individual *parts*, which are designed to build one upon the other in the order they are specified.
 
-All the exercises will involve "real coding"! If you've never really programmed entire scripts before, this could feel a little intimidating. Don't worry. If you're ever lost, just take a peek into the [`solutions/`](solutions/) directory for the respective solution script. Always try to work on a solution on your own, but never let this be a barrier to your progress. Feel free to copy-paste bits of my solutions into your own scripts.
+All the exercises will involve "real coding"! If you've never really programmed entire scripts before, this could feel a little intimidating. Don't worry. If you're ever lost, just take a peek at the solution which is (by default hidden) under each exercise section. Always try to work on a solution on your own, but never let this be a barrier to your progress. Feel free to copy-paste bits of my solutions into your own scripts.
 
-If you find yourself [*totally lost*](https://scryfall.com/card/gtc/54/totally-lost), don't hesitate to read my solution scripts from the get go, trying to understand what's going on in them, and executing them line by line in your RStudio session.
+If you find yourself [*totally lost*](https://scryfall.com/card/gtc/54/totally-lost), don't hesitate to read my solutions from the get go, copy-pasting them into your own script in the RStudio, executing them line by line, and trying to understand what's going on.
 
-# Exercise 1
+# Start of the exercises
 
-**Reminder**: you can use the [one-page version of the slides](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts) for reference (they contain everything you might need to do all the exercises). The solutions to the exercises are based on variations of examples from the [official *slendr* documentation](https://www.slendr.net), so feel free to browse through the relevant tutorials (available under "Articles" on the website), in case you are interested in more details.
+## Exercise 1
 
-## Part 1: write this model in *slendr*
+### Part 1: Building a demographic model in *slendr*
+
+**Program the following toy model of human demographic history in _slendr_.**
 
 ![](images/intro_model1.png){width="50%"}
 
@@ -125,6 +130,7 @@ If you find yourself [*totally lost*](https://scryfall.com/card/gtc/54/totally-l
 
 ```{r}
 #| eval: false
+#| code-fold: false
 library(slendr)
 init_env()
 
@@ -136,21 +142,160 @@ model <- compile_model(
   gene_flow = <...>,
   generation_time = 30
 )
-
-plot_model(model) # verify visually
 ```
 
 ::: aside
-**Note:** You can also specify time in units of "years ago", just write them in a decreasing order (7Mya → 6Mya → ..., as shown above).
+**Note:** With *slendr* you can specify time in whatever format is more convenient or readable for your model. For instance here, because we're dealing with historical events which are commonly expressed in times given as"years ago", we can write them in a decreasing order – i.e. 7Mya → 6Mya → ..., as shown above – or, in terms of R code, 7e6 (or 7000000), 6e6 (6000000), etc..
 :::
+
+:::{.callout-note}
+### Click to see the solution
+
+```{r}
+#| collapse: true
+library(slendr)
+init_env()
+
+# Chimpanzee outgroup
+chimp <- population("CHIMP", time = 7e6, N = 5000)
+
+# Two populations of anatomically modern humans: Africans and Europeans
+afr <- population("AFR", parent = chimp, time = 6e6, N = 15000)
+eur <- population("EUR", parent = afr, time = 70e3, N = 3000)
+
+# Neanderthal population splitting at 600 ky ago from modern humans
+# (becomes extinct by 40 ky ago)
+nea <- population("NEA", parent = afr, time = 600e3, N = 1000, remove = 40e3)
+
+# Neanderthal introgression event (3% admixture between 55-50 kya)
+gf <- gene_flow(from = nea, to = eur, rate = 0.03, start = 55000, end = 50000)
+
+# Compile the entire model into a single slendr R object
+model <- compile_model(
+  populations = list(chimp, nea, afr, eur),
+  gene_flow = gf,
+  generation_time = 30
+)
+```
+:::
+
+### Part 2: Inspecting the model visually
+
+To visualize a *slendr* model, you can use the function `plot_model`. **Plot your compiled `model` to make sure you programmed it correctly!**
 
 ::: aside
 **Note:** Plotting of models can be sometimes a little wonky. When plotting your model, experiment with arguments `log = TRUE`, `proportions = TRUE`, `gene_flow = TRUE`. Check `?plot_model` for more information on these.
 :::
 
-### Bonus
+:::{.callout-note}
+### Click to see the solution
 
--   Write your own model!
+```{r}
+#| collapse: false
+plot_model(model)
+plot_model(model, sizes = FALSE)
+plot_model(model, sizes = FALSE, log = TRUE)
+plot_model(model, sizes = FALSE, log = TRUE, proportions = TRUE)
+```
+:::
+
+### Part 3: Simulating genomic data
+
+Once you have a compiled *slendr* model stored in an R variable (from now on, `model` will always mean a variable containing a compiled *slendr* model object, for simplicity), we can simulate data from it. By default, *slendr* models always produce a [tree sequence](https://tskit.dev/tutorials/what_is.html).
+
+There are two simulation engines built into *slendr* implemented by functions `msprime` and `slim`. For traditional, non-spatial, neutral demographic models, the engine provided by the `msprime` function is much more efficient, so we'll be using that.
+
+Here's how you can use it to simulate a tree sequence:
+
+```{r}
+#| eval: false
+#| code-fold: false
+ts <- msprime(<model object>, sequence_length = <length of sequence to simulate [as bp]>, recombination_rate = <uniform recombination rate [per bp per generation]>)
+```
+
+The function has also arguments `debug` and `run`.
+
+**Simulate a tree sequence from your compiled `model`, storing it to a variable `ts` as shown right above. Then experiment with setting `debug = TRUE` (this prints out *msprime*'s own debugging summary) and then `run = FALSE` (this prints out a raw command-line which can run a *slendr* simulation in the shell).**
+
+:::{.callout-note}
+### Click to see the solution
+
+```{r}
+#| collapse: true
+# This simulates a tskit tree sequence from a slendr model. Note that you didn't have
+# to write any msprime or tskit Python code!
+ts <- msprime(model, sequence_length = 1e6, recombination_rate = 1e-8)
+
+# Setting `debug = TRUE` instructs slendr's built-in msprime script to print
+# out msprime's own debugger information. This can be very useful for debugging,
+# in addition to the visualization of the model as shown above.
+ts <- msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, debug = TRUE)
+
+# For debugging of technical issues (with msprime, with slendr, or both), it is
+# very useful to have the `msprime` function dump the "raw" command-line to
+# run the simulation on the terminal using plain Python interpreter
+msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, run = FALSE)
+```
+:::
+
+### Part 4: Inspecting the tree-sequence object
+
+As we'll see later, *slendr* tries to provide an R-friendly interface to accessing a subset of *tskit*'s functionality for working with tree sequence and for computing various popgen statistics.
+
+For now, **type out the `ts` object in the terminal – what do you see?** You should get a summary of a tree-sequence object that you're familiar with from your *msprime* and *tskit* activity.
+
+:::{.callout-note}
+### Click to see the solution
+```{r}
+# Typing out the object with the result shows that it's a good old tskit
+# tree-sequence object
+ts
+```
+:::
+
+**Use the `ts_table` function to inspect the low-level table-based representation of a tree sequence.** For instance, you can get the table of nodes with `ts_table(ts, "nodes")`, edges with `ts_table(ts, "edges")`, and do the same thing for "individuals", "mutations", and "sites". Does your tree sequence contain any mutations? If not, why?
+
+:::{.callout-note}
+### Click to see the solution
+```{r}
+# slendr provides a helper function which allows access to all the low-level
+# components of every tree-sequence object
+ts_table(ts, "nodes")
+ts_table(ts, "edges")
+ts_table(ts, "individuals")
+# We didn't simulate any mutations, so we only have genealogies for now.
+ts_table(ts, "mutations")
+ts_table(ts, "sites")
+```
+:::
+
+There are also two *slendr*-specific functions called `ts_samples` and `ts_nodes`. **You can run them simply as `ts_samples(ts)` and `ts_nodes(ts)`. What do the tables they produce represent?**
+
+:::{.callout-note}
+### Click to see the solution
+
+```{r}
+# slendr provides a convenient function `ts_samples()` which allows us to
+# inspect the contents of a simulated tree sequence in a more human-readable,
+# simplified way. We can see that our tree sequence contains a massive number
+# of individuals. Too many, in fact (we recorded every single individual alive
+# at the end of our simulation -- something we're unlikely to be ever lucky
+# enough to have, regardless of which species we study)
+ts_samples(ts) %>% nrow()
+
+# This function returns a table similar to the one produced by `ts_table(ts, "nodes")`
+# above, except that it contains additional slendr metadata (names of individuals
+# belonging to each node, spatial coordinates of nodes for spatial models, etc.).
+# It's a bit more useful for analyzing tree-sequence data than the "low-level" functions.
+ts_nodes(ts)
+```
+:::
+
+## Bonus for Exercise 1
+
+### Write your own model!
+
+Program a _slendr_ model which captures the most important features of the model organism that you're study or that you're more interested in! You will have a chance to work with it in future exercises.
 
 # Exercise 2
 
@@ -164,7 +309,7 @@ Imagine we have `pop1`, `pop2`, ... compiled in a `model`.
 
 <br>
 
-To record *ancient* individuals in the tree sequence, we can use `schedule_sampling()` like this:
+To record *ancient* individuals in the tree sequence, we can use `schedule_sampling` like this:
 
 ```{r}
 #| eval: false
