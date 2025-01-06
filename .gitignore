@@ -7,3 +7,4 @@
 *.ind
 /.quarto/
 .DS_Store
+**/__pycache__/
