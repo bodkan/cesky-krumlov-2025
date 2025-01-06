@@ -3611,7 +3611,7 @@ Click to see the solution
 <span id="cb16-129"><a href="#cb16-129" aria-hidden="true" tabindex="-1"></a><span class="co"># very useful to have the `msprime` function dump the &quot;raw&quot; command-line to</span></span>
 <span id="cb16-130"><a href="#cb16-130" aria-hidden="true" tabindex="-1"></a><span class="co"># run the simulation on the terminal using plain Python interpreter</span></span>
 <span id="cb16-131"><a href="#cb16-131" aria-hidden="true" tabindex="-1"></a><span class="fu">msprime</span>(model, <span class="at">sequence_length =</span> <span class="fl">1e6</span>, <span class="at">recombination_rate =</span> <span class="fl">1e-8</span>, <span class="at">run =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb16-132"><a href="#cb16-132" aria-hidden="true" tabindex="-1"></a><span class="do">## /Users/mp/Library/r-miniconda-arm64/envs/Python-3.12_msprime-1.3.3_tskit-0.5.8_pyslim-1.0.4_tspop-0.0.2/bin/python /Users/mp/Projects/cesky-krumlov-2025/data/introgression/script.py --seed 1889543288 --model /Users/mp/Projects/cesky-krumlov-2025/data/introgression --sequence-length 1000000 --recombination-rate 1e-08    --path &lt;path to a .trees file&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-132"><a href="#cb16-132" aria-hidden="true" tabindex="-1"></a><span class="do">## /Users/mp/Library/r-miniconda-arm64/envs/Python-3.12_msprime-1.3.3_tskit-0.5.8_pyslim-1.0.4_tspop-0.0.2/bin/python /Users/mp/Projects/cesky-krumlov-2025/data/introgression/script.py --seed 1981545284 --model /Users/mp/Projects/cesky-krumlov-2025/data/introgression --sequence-length 1000000 --recombination-rate 1e-08    --path &lt;path to a .trees file&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -3641,7 +3641,7 @@ Click to see the solution
 <pre><code>╔═══════════════════════════╗
 ║TreeSequence               ║
 ╠═══════════════╤═══════════╣
-║Trees          │       9743║
+║Trees          │       9622║
 ╟───────────────┼───────────╢
 ║Sequence Length│    1000000║
 ╟───────────────┼───────────╢
@@ -3649,12 +3649,12 @@ Click to see the solution
 ╟───────────────┼───────────╢
 ║Sample Nodes   │      48000║
 ╟───────────────┼───────────╢
-║Total Size     │    8.9 MiB║
+║Total Size     │    8.8 MiB║
 ╚═══════════════╧═══════════╝
 ╔═══════════╤══════╤═════════╤════════════╗
 ║Table      │Rows  │Size     │Has Metadata║
 ╠═══════════╪══════╪═════════╪════════════╣
-║Edges      │134868│  4.1 MiB│          No║
+║Edges      │134327│  4.1 MiB│          No║
 ╟───────────┼──────┼─────────┼────────────╢
 ║Individuals│ 24000│656.3 KiB│          No║
 ╟───────────┼──────┼─────────┼────────────╢
@@ -3662,7 +3662,7 @@ Click to see the solution
 ╟───────────┼──────┼─────────┼────────────╢
 ║Mutations  │     0│ 16 Bytes│          No║
 ╟───────────┼──────┼─────────┼────────────╢
-║Nodes      │105075│  2.8 MiB│          No║
+║Nodes      │105012│  2.8 MiB│          No║
 ╟───────────┼──────┼─────────┼────────────╢
 ║Populations│     4│341 Bytes│         Yes║
 ╟───────────┼──────┼─────────┼────────────╢
@@ -3693,7 +3693,7 @@ Click to see the solution
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># components of every tree-sequence object</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_table</span>(ts, <span class="st">&quot;nodes&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 105,075 × 5
+<pre><code># A tibble: 105,012 × 5
    node_id    ind_id pop_id  time time_tskit
      &lt;int&gt; &lt;int[1d]&gt;  &lt;int&gt; &lt;dbl&gt;      &lt;dbl&gt;
  1       0         0      0     0          0
@@ -3706,24 +3706,24 @@ Click to see the solution
  8       7         3      0     0          0
  9       8         4      0     0          0
 10       9         4      0     0          0
-# ℹ 105,065 more rows</code></pre>
+# ℹ 105,002 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_table</span>(ts, <span class="st">&quot;edges&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 134,868 × 5
+<pre><code># A tibble: 134,327 × 5
       id child parent  left   right
    &lt;dbl&gt; &lt;int&gt;  &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt;
- 1     0  1260  48000     0 1000000
- 2     1  9754  48000     0 1000000
- 3     2 21404  48001     0 1000000
- 4     3 32273  48001     0 1000000
- 5     4 25841  48002     0 1000000
- 6     5 30307  48002     0 1000000
- 7     6 16070  48003     0 1000000
- 8     7 23185  48003     0 1000000
- 9     8  5482  48004     0 1000000
-10     9  6117  48004     0 1000000
-# ℹ 134,858 more rows</code></pre>
+ 1     0 13533  48000     0 1000000
+ 2     1 28252  48000     0 1000000
+ 3     2  1552  48001     0 1000000
+ 4     3  5221  48001     0 1000000
+ 5     4 16821  48002     0 1000000
+ 6     5 29276  48002     0 1000000
+ 7     6  1085  48003     0 1000000
+ 8     7  6543  48003     0 1000000
+ 9     8 13815  48004     0 1000000
+10     9 36702  48004     0 1000000
+# ℹ 134,317 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_table</span>(ts, <span class="st">&quot;individuals&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -3787,7 +3787,7 @@ Click to see the solution
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># It&#39;s a bit more useful for analyzing tree-sequence data than the &quot;low-level&quot; functions.</span></span>
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_nodes</span>(ts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 105,075 × 8
+<pre><code># A tibble: 105,012 × 8
    name  pop   ind_id node_id  time time_tskit sampled pop_id
    &lt;chr&gt; &lt;fct&gt;  &lt;dbl&gt;   &lt;int&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;lgl&gt;    &lt;int&gt;
  1 AFR_1 AFR     5000   10000     0          0 TRUE         1
@@ -3800,7 +3800,7 @@ Click to see the solution
  8 AFR_4 AFR     5003   10007     0          0 TRUE         1
  9 AFR_5 AFR     5004   10008     0          0 TRUE         1
 10 AFR_5 AFR     5004   10009     0          0 TRUE         1
-# ℹ 105,065 more rows</code></pre>
+# ℹ 105,002 more rows</code></pre>
 </div>
 </div>
 </div>
@@ -3816,14 +3816,14 @@ Click to see the solution
 </div>
 <p>This function simply returns a data frame. As such, we can create multiple of such schedules (of arbitrary complexity and granularity), and then bind them together with a single line of code, like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># note that the `times =` argument can be a vector of times...</span></span>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that the `times =` argument can be a vector of times...</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>ancient_times <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">40000</span>, <span class="dv">30000</span>, <span class="dv">20000</span>, <span class="dv">10000</span>)</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>eur_samples <span class="ot">&lt;-</span> <span class="fu">schedule_sampling</span>(model, <span class="at">times =</span> ancient_times, <span class="fu">list</span>(eur, <span class="dv">1</span>))</span>
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ... but also just a single number</span></span>
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>afr_samples <span class="ot">&lt;-</span> <span class="fu">schedule_sampling</span>(model, <span class="at">times =</span> <span class="dv">0</span>, <span class="fu">list</span>(afr, <span class="dv">1</span>), <span class="fu">list</span>(eur, <span class="dv">42</span>))</span>
 <span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>nea_samples <span class="ot">&lt;-</span> <span class="fu">schedule_sampling</span>(model, <span class="at">time =</span> <span class="dv">60000</span>, <span class="fu">list</span>(nea, <span class="dv">1</span>))</span>
 <span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co"># multiple such sampling schedules can be bound together</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co"># And that multiple such sampling schedules can be bound together like this:</span></span>
 <span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rbind</span>(eur_samples, afr_samples, nea_samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Using the function <code>schedule_sampling</code> (and with the help of <code>rbind</code>), program the sampling of the following sample sets at given times, saving it to variable called <code>schedule</code>:</strong></p>
@@ -3958,7 +3958,7 @@ Click to see the solution
 </section>
 <section id="part-6-simulating-a-defined-set-of-individuals" class="level3">
 <h3 class="anchored" data-anchor-id="part-6-simulating-a-defined-set-of-individuals">Part 6: Simulating a defined set of individuals</h3>
-<p><strong>Use your combined sampling schedule stored in the <code>schedule</code> variable to run a new tree-sequence simulation from your model, this time restricted to just those individuals scheduled for recording.</strong> You can do this by providing the combined sampling schedule as the <code>samples =</code> argument of the function <code>msprime</code> you used above.</p>
+<p><strong>Use your combined sampling schedule stored in the <code>schedule</code> variable to run a new tree-sequence simulation from your model (again using the <code>msprime()</code> function), this time restricted to just those individuals scheduled for recording.</strong> You can do this by providing the combined sampling schedule as the <code>samples =</code> argument of the function <code>msprime</code> you used above.</p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -3972,29 +3972,111 @@ Click to see the solution
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Arguments must be unnamed</code></pre>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The command below will likely take a few minutes to run, so feel free to go</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co"># down from 100 Mb sequence_length to even 10Mb (it doesn&#39;t matter much)</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co"># tstart &lt;- Sys.time()</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">msprime</span>(model, <span class="at">sequence_length =</span> <span class="fl">100e6</span>, <span class="at">recombination_rate =</span> <span class="fl">1e-8</span>, <span class="at">samples =</span> schedule, <span class="at">random_seed =</span> <span class="dv">1269258439</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ts_mutate</span>(<span class="at">mutation_rate =</span> <span class="fl">1e-8</span>, <span class="at">random_seed =</span> <span class="dv">1269258439</span>)</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="co"># tend &lt;- Sys.time()</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="co"># tend - tstart # Time difference of 2.141642 mins</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a><span class="co"># If you&#39;re bothered by ho long this takes, feel free to call these two lines</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a><span class="co"># to 100% reproduce my results without any expensive computation:</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">read_model</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;data/introgression&quot;</span>))</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span> <span class="fu">ts_read</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="at">file =</span> <span class="st">&quot;data/introgression.trees&quot;</span>), <span class="at">model =</span> model)</span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a><span class="co"># We can save a tree sequence object using a slendr function `ts_write` (this</span></span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a><span class="co"># can be useful if we want to save the results of a simulation for later use).</span></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_write</span>(ts, <span class="st">&quot;data/introgression.trees&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+</div>
+</div>
+<p><strong>Inspect the tree-sequence object saved in the <code>ts</code> variable again, taking note of the (now much smaller!) number of individuals. You can also do a similar thing via the table produced by the <code>ts_samples()</code> function.</strong></p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Click to see the solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The command below will likely take a few minutes to run, so feel free to go</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co"># down from 100 Mb sequence_length to even 10Mb (it doesn&#39;t matter much)</span></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co"># tstart &lt;- Sys.time()</span></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">msprime</span>(model, <span class="at">sequence_length =</span> <span class="fl">100e6</span>, <span class="at">recombination_rate =</span> <span class="fl">1e-8</span>, <span class="at">samples =</span> schedule, <span class="at">random_seed =</span> <span class="dv">1269258439</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ts_mutate</span>(<span class="at">mutation_rate =</span> <span class="fl">1e-8</span>, <span class="at">random_seed =</span> <span class="dv">1269258439</span>)</span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="co"># tend &lt;- Sys.time()</span></span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="co"># tend - tstart # Time difference of 2.141642 mins</span></span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="co"># If you&#39;re bothered by ho long this takes, feel free to call these two lines</span></span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="co"># to 100% reproduce my results without any expensive computation:</span></span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">read_model</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;data/introgression&quot;</span>))</span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span> <span class="fu">ts_read</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="at">file =</span> <span class="st">&quot;data/introgression.trees&quot;</span>), <span class="at">model =</span> model)</span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a><span class="co"># We can save a tree sequence object using a slendr function `ts_write` (this</span></span>
-<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a><span class="co"># can be useful if we want to save the results of a simulation for later use).</span></span>
-<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_write</span>(ts, <span class="st">&quot;data/introgression.trees&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the (tskit/Python-based) summary of the new tree sequence</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>ts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>╔═══════════════════════════╗
+║TreeSequence               ║
+╠═══════════════╤═══════════╣
+║Trees          │     295199║
+╟───────────────┼───────────╢
+║Sequence Length│  100000000║
+╟───────────────┼───────────╢
+║Time Units     │generations║
+╟───────────────┼───────────╢
+║Sample Nodes   │         76║
+╟───────────────┼───────────╢
+║Total Size     │   85.1 MiB║
+╚═══════════════╧═══════════╝
+╔═══════════╤═══════╤═════════╤════════════╗
+║Table      │Rows   │Size     │Has Metadata║
+╠═══════════╪═══════╪═════════╪════════════╣
+║Edges      │1051064│ 32.1 MiB│          No║
+╟───────────┼───────┼─────────┼────────────╢
+║Individuals│     38│  1.1 KiB│          No║
+╟───────────┼───────┼─────────┼────────────╢
+║Migrations │      0│  8 Bytes│          No║
+╟───────────┼───────┼─────────┼────────────╢
+║Mutations  │ 663287│ 23.4 MiB│          No║
+╟───────────┼───────┼─────────┼────────────╢
+║Nodes      │ 218703│  5.8 MiB│          No║
+╟───────────┼───────┼─────────┼────────────╢
+║Populations│      4│341 Bytes│         Yes║
+╟───────────┼───────┼─────────┼────────────╢
+║Provenances│      2│  5.7 KiB│          No║
+╟───────────┼───────┼─────────┼────────────╢
+║Sites      │ 660993│ 15.8 MiB│          No║
+╚═══════════╧═══════╧═════════╧════════════╝</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the table of all recorded samples in the tree sequence</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_samples</span>(ts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 38 × 3
+   name   time pop  
+   &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;
+ 1 NEA_1 70000 NEA  
+ 2 EUR_1 40000 EUR  
+ 3 NEA_2 40000 NEA  
+ 4 EUR_2 38000 EUR  
+ 5 EUR_3 36000 EUR  
+ 6 EUR_4 34000 EUR  
+ 7 EUR_5 32000 EUR  
+ 8 EUR_6 30000 EUR  
+ 9 EUR_7 28000 EUR  
+10 EUR_8 26000 EUR  
+# ℹ 28 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the count of individuals in different time points</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(dplyr))</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_samples</span>(ts) <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(pop, time <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> tally <span class="sc">%&gt;%</span> <span class="fu">select</span>(pop, n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+# Groups:   pop [4]
+  pop       n
+  &lt;chr&gt; &lt;int&gt;
+1 AFR       5
+2 CHIMP     1
+3 EUR      20
+4 EUR      10
+5 NEA       2</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -4012,42 +4094,42 @@ Click to see the solution
 <p><br></p>
 <p>To record <em>ancient</em> individuals in the tree sequence, we can use <code>schedule_sampling</code> like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">schedule_sampling</span>(</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  model,                <span class="co"># compiled slendr model object</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">times =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">500</span>),  <span class="co"># at these times (can be also a single number) ...</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(pop1, <span class="dv">42</span>),       <span class="co"># ... sample 42 individuals from pop1</span></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(pop2, <span class="dv">10</span>),       <span class="co"># ... sample 10 individuals from pop2</span></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(pop3, <span class="dv">1</span>)         <span class="co"># ... sample 1 individual from pop 3</span></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">schedule_sampling</span>(</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  model,                <span class="co"># compiled slendr model object</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">times =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">500</span>),  <span class="co"># at these times (can be also a single number) ...</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(pop1, <span class="dv">42</span>),       <span class="co"># ... sample 42 individuals from pop1</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(pop2, <span class="dv">10</span>),       <span class="co"># ... sample 10 individuals from pop2</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(pop3, <span class="dv">1</span>)         <span class="co"># ... sample 1 individual from pop 3</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="sampling-schedule-format" class="level2">
 <h2 class="anchored" data-anchor-id="sampling-schedule-format">Sampling schedule format</h2>
 <p>The output of <code>schedule_sampling()</code> is a plain data frame:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">schedule_sampling</span>(model, <span class="at">times =</span> <span class="fu">c</span>(<span class="dv">40000</span>, <span class="dv">30000</span>, <span class="dv">20000</span>, <span class="dv">10000</span>), <span class="fu">list</span>(eur, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">schedule_sampling</span>(model, <span class="at">times =</span> <span class="fu">c</span>(<span class="dv">40000</span>, <span class="dv">30000</span>, <span class="dv">20000</span>, <span class="dv">10000</span>), <span class="fu">list</span>(eur, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>. . .</p>
 <p>We can bind multiple sampling schedules together, giving us finer control about sampling:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>eur_samples <span class="ot">&lt;-</span> <span class="fu">schedule_sampling</span>(model, <span class="at">times =</span> <span class="fu">c</span>(<span class="dv">40000</span>, <span class="dv">30000</span>, <span class="dv">20000</span>, <span class="dv">10000</span>, <span class="dv">0</span>), <span class="fu">list</span>(eur, <span class="dv">1</span>))</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>afr_samples <span class="ot">&lt;-</span> <span class="fu">schedule_sampling</span>(model, <span class="at">times =</span> <span class="dv">0</span>, <span class="fu">list</span>(afr, <span class="dv">1</span>))</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rbind</span>(eur_samples, afr_samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>eur_samples <span class="ot">&lt;-</span> <span class="fu">schedule_sampling</span>(model, <span class="at">times =</span> <span class="fu">c</span>(<span class="dv">40000</span>, <span class="dv">30000</span>, <span class="dv">20000</span>, <span class="dv">10000</span>, <span class="dv">0</span>), <span class="fu">list</span>(eur, <span class="dv">1</span>))</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>afr_samples <span class="ot">&lt;-</span> <span class="fu">schedule_sampling</span>(model, <span class="at">times =</span> <span class="dv">0</span>, <span class="fu">list</span>(afr, <span class="dv">1</span>))</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rbind</span>(eur_samples, afr_samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="how-to-use-a-sampling-schedule" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-use-a-sampling-schedule">How to use a sampling schedule?</h2>
 <p>To sample individuals based on a given schedule, we use the <code>samples =</code> argument of the <code>msprime()</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">msprime</span>(model, <span class="at">samples =</span> samples, <span class="at">sequence_length =</span> <span class="fl">1e6</span>, <span class="at">recombination_rate =</span> <span class="fl">1e-8</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ts_mutate</span>(<span class="at">mutation_rate =</span> <span class="fl">1e-8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">msprime</span>(model, <span class="at">samples =</span> samples, <span class="at">sequence_length =</span> <span class="fl">1e6</span>, <span class="at">recombination_rate =</span> <span class="fl">1e-8</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ts_mutate</span>(<span class="at">mutation_rate =</span> <span class="fl">1e-8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>. . .</p>
 <p>We can verify that only specific individuals are recorded:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_samples</span>(ts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ts_samples</span>(ts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -4073,11 +4155,11 @@ Click to see the solution
 </ul>
 <p>Reminder: you can do this by:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="co"># rbind(...) together individual schedule_sampling() data frames</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span></span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">msprime</span>(model, <span class="at">samples =</span> samples, <span class="at">sequence_length =</span> <span class="fl">100e6</span>, <span class="at">recombination_rate =</span> <span class="fl">1e-8</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ts_mutate</span>(<span class="at">mutation_rate =</span> <span class="fl">1e-8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="co"># rbind(...) together individual schedule_sampling() data frames</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">&lt;-</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">msprime</span>(model, <span class="at">samples =</span> samples, <span class="at">sequence_length =</span> <span class="fl">100e6</span>, <span class="at">recombination_rate =</span> <span class="fl">1e-8</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ts_mutate</span>(<span class="at">mutation_rate =</span> <span class="fl">1e-8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="exercise-4b-f_4-ratio-statistic" class="level2">
@@ -4142,18 +4224,18 @@ Click to see the solution
 <h2 class="anchored" data-anchor-id="part-a-hint">Part <em>a</em>: Hint</h2>
 <p>You can start building <code>model2.R</code> from this “template”:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(slendr); <span class="fu">init_env</span>()</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>simulate_afs <span class="ot">&lt;-</span> <span class="cf">function</span>(Ne) {</span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  ... your one<span class="sc">-</span>population model code<span class="sc">:</span> <span class="fu">population</span>(), <span class="fu">compile_model</span>(), <span class="fu">msprime</span>() ...</span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> ... compute AFS using <span class="fu">ts_afs</span>() on <span class="dv">10</span> samples, save it to <span class="st">`</span><span class="at">result</span><span class="st">`</span> ...</span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>afs_1 <span class="ot">&lt;-</span> <span class="fu">simulate_afs</span>(<span class="at">Ne =</span> <span class="dv">1000</span>)</span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(afs_1, <span class="at">type =</span><span class="st">&quot;o&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(slendr); <span class="fu">init_env</span>()</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>simulate_afs <span class="ot">&lt;-</span> <span class="cf">function</span>(Ne) {</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  ... your one<span class="sc">-</span>population model code<span class="sc">:</span> <span class="fu">population</span>(), <span class="fu">compile_model</span>(), <span class="fu">msprime</span>() ...</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> ... compute AFS using <span class="fu">ts_afs</span>() on <span class="dv">10</span> samples, save it to <span class="st">`</span><span class="at">result</span><span class="st">`</span> ...</span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>afs_1 <span class="ot">&lt;-</span> <span class="fu">simulate_afs</span>(<span class="at">Ne =</span> <span class="dv">1000</span>)</span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(afs_1, <span class="at">type =</span><span class="st">&quot;o&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p><small> <strong>Note:</strong> We drop the first element (<code>afs[-1]</code>) technical reasons related to <em>tskit</em>. You don’t have to worry about that here, but you can read <a href="https://tskit.dev/tutorials/analysing_tree_sequences.html#sec-tutorial-afs-zeroth-entry">this</a> for more detail. </small></p>
@@ -4161,7 +4243,7 @@ Click to see the solution
 <div class="fragment">
 <p>When used in R, your function should work like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">simulate_afs</span>(<span class="at">Ne =</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">simulate_afs</span>(<span class="at">Ne =</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -4170,8 +4252,8 @@ Click to see the solution
 <p>Imagine you sequenced 10 samples from a population and computed this AFS vector in R (# singletons, doubletons, etc.):</p>
 <!-- dput(as.vector(observed_afs)) -->
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>afs_observed <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2520</span>, <span class="dv">1449</span>, <span class="dv">855</span>, <span class="dv">622</span>, <span class="dv">530</span>, <span class="dv">446</span>, <span class="dv">365</span>, <span class="dv">334</span>, <span class="dv">349</span>, <span class="dv">244</span>,</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>                  <span class="dv">264</span>, <span class="dv">218</span>,  <span class="dv">133</span>, <span class="dv">173</span>, <span class="dv">159</span>, <span class="dv">142</span>, <span class="dv">167</span>, <span class="dv">129</span>, <span class="dv">125</span>, <span class="dv">143</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>afs_observed <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2520</span>, <span class="dv">1449</span>, <span class="dv">855</span>, <span class="dv">622</span>, <span class="dv">530</span>, <span class="dv">446</span>, <span class="dv">365</span>, <span class="dv">334</span>, <span class="dv">349</span>, <span class="dv">244</span>,</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>                  <span class="dv">264</span>, <span class="dv">218</span>,  <span class="dv">133</span>, <span class="dv">173</span>, <span class="dv">159</span>, <span class="dv">142</span>, <span class="dv">167</span>, <span class="dv">129</span>, <span class="dv">125</span>, <span class="dv">143</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>. . .</p>
 <p>You know that the population had a constant <span class="math inline">\(N_e\)</span> somewhere between 1000 and 30000 for the past 100,000 generations, and had mutation and recombination rates of 1e-8 (i.e., parameters already implemented by the <code>simulate_afs()</code> function).</p>

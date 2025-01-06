@@ -327,14 +327,14 @@ of code, like this:
 ```{r}
 #| eval: false
 
-# note that the `times =` argument can be a vector of times...
+# Note that the `times =` argument can be a vector of times...
 ancient_times <- c(40000, 30000, 20000, 10000)
 eur_samples <- schedule_sampling(model, times = ancient_times, list(eur, 1))
 # ... but also just a single number
 afr_samples <- schedule_sampling(model, times = 0, list(afr, 1), list(eur, 42))
 nea_samples <- schedule_sampling(model, time = 60000, list(nea, 1))
 
-# multiple such sampling schedules can be bound together
+# And that multiple such sampling schedules can be bound together like this:
 samples <- rbind(eur_samples, afr_samples, nea_samples)
 ```
 
@@ -407,7 +407,7 @@ plot_model(model, sizes = FALSE, log = TRUE, samples = schedule)
 
 ### Part 6: Simulating a defined set of individuals 
 
-**Use your combined sampling schedule stored in the `schedule` variable to run a new tree-sequence simulation from your model, this time restricted to just those individuals scheduled for recording.** You can do this by providing the combined sampling schedule as the `samples =` argument of the function `msprime` you used above.
+**Use your combined sampling schedule stored in the `schedule` variable to run a new tree-sequence simulation from your model (again using the `msprime()` function), this time restricted to just those individuals scheduled for recording.** You can do this by providing the combined sampling schedule as the `samples =` argument of the function `msprime` you used above.
 
 :::{.callout-note}
 ### Click to see the solution
@@ -415,7 +415,7 @@ plot_model(model, sizes = FALSE, log = TRUE, samples = schedule)
 ```{r}
 #| echo: false
 model <- read_model(here::here("data/introgression"))
-ts <- ts_read(here::here(file = "data/introgression.trees"), model = model)
+ts <- ts_read(file = here::here("data/introgression.trees"), model = model)
 ```
 
 ```{r}
@@ -443,7 +443,25 @@ ts_write(ts, "data/introgression.trees")
 
 
 
+**Inspect the tree-sequence object saved in the `ts` variable again, taking note of the (now much smaller!) number of individuals. You can also do a similar thing via the table produced by the `ts_samples()` function.**
 
+:::{.callout-note}
+### Click to see the solution
+
+```{r}
+# Inspect the (tskit/Python-based) summary of the new tree sequence
+ts
+
+
+# Get the table of all recorded samples in the tree sequence
+ts_samples(ts)
+
+# Compute the count of individuals in different time points
+suppressPackageStartupMessages(library(dplyr))
+
+ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
+```
+:::
 
 
 
