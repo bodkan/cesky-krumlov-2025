@@ -1,5 +1,5 @@
 ---
-title: "Building intuition into popgen concepts and simulation-based inference"
+title: "Building intuition into popgen concepts and simulation-based inference: exercises"
 subtitle: "[Workshop on population and speciation genomics](http://evomics.org/workshops/workshop-on-population-and-speciation-genomics/2025-workshop-on-population-and-speciation-genomics-cesky-krumlov/)"
 author:
   - "Martin Petr"
