@@ -1,4 +1,4 @@
-all: slides onepage exercises
+all: slides handouts exercises
 
 slides:
 	sed -i '/### handouts/d' slides.qmd
@@ -7,7 +7,7 @@ slides:
 	git checkout slides.qmd
 	git add slides*; git commit -m "Update slides"; git push
 
-onepage:
+handouts:
 	sed -i '/### slides/d' slides.qmd
 	sed -i '/### handouts/ s/^  #//' slides.qmd
 	quarto publish quarto-pub --id 7f5d556f-ca21-4c53-b06c-693befbfa994 slides.qmd
