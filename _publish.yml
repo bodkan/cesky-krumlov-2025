@@ -2,3 +2,7 @@
   quarto-pub:
     - id: 21452ae4-076d-46a3-a620-c85e064edb1e
       url: https://bodkan.quarto.pub/cesky-krumlov-2025-exercises
+- source: slides.qmd
+  quarto-pub:
+    - id: 27532d2d-db64-47ed-a938-9a4102c43a6a
+      url: https://bodkan.quarto.pub/cesky-krumlov-2025-slides

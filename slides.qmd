@@ -7,12 +7,12 @@ author:
 date: "January 2025"
 date-format: "MMMM YYYY"
 format:
-#   revealjs:                     ### slides
-#     echo: true                  ### slides
-#     code-line-numbers: false    ### slides
-#     fig-align: center           ### slides
-#     slide-number: true          ### slides
-#     self-contained: true        ### slides
+  revealjs:                     ### slides
+    echo: true                  ### slides
+    code-line-numbers: false    ### slides
+    fig-align: center           ### slides
+    slide-number: true          ### slides
+    self-contained: true        ### slides
 #   html:                       ### handouts
 #     echo: true                ### handouts
 #     code-line-numbers: false  ### handouts
