@@ -95,7 +95,7 @@ ts_samples(ts) %>% nrow()
 
 
 
-# Part 5 -- scheduling sampling events ------------------------------------
+# Part 5: Scheduling sampling events --------------------------------------
 
 # We can precisely define which individuals (from which populations, and at
 # which times) should be recorded in a tree sequence using the slendr
@@ -126,7 +126,7 @@ plot_model(model, sizes = FALSE, log = TRUE, samples = schedule)
 
 
 
-# Part 6 -- simulating a defined set of individuals -----------------------
+# Part 6: Simulating a defined set of individuals -------------------------
 
 # Let's simulate a more realistic set of samples, using the schedule we've
 # defined above
