@@ -1,0 +1,5 @@
+pop	parent	N	tsplit_gen	tsplit_orig	tremove_gen	tremove_orig	pop_id	parent_id
+CHIMP	__pop_is_ancestor	5000	1	7000000	-1	-1	0	-1
+AFR	CHIMP	15000	33334	6000000	-1	-1	1	0
+NEA	AFR	1000	213334	600000	232001	40000	2	1
+EUR	AFR	3000	231001	70000	-1	-1	3	1
