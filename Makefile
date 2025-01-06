@@ -10,10 +10,10 @@ slides:
 handouts:
 	sed -i '/### slides/d' slides.qmd
 	sed -i '/### handouts/ s/^  #//' slides.qmd
-	quarto publish quarto-pub --id 7f5d556f-ca21-4c53-b06c-693befbfa994 slides.qmd
+	quarto publish quarto-pub --id cf112aa3-787f-4d8d-89b3-06b256aa0fbd slides.qmd
 	git checkout slides.qmd
 	git add slides*; git commit -m "Update handouts"; git push
 
 exercises:
-	quarto publish quarto-pub --id 7f5d556f-ca21-4c53-b06c-693befbfa994 slides.qmd
+	quarto publish quarto-pub --id e7689f70-4d88-4016-9e3e-8fa7165d0c7c slides.qmd
 	git add exercises*; git commit -m "Update exercises"; git push
