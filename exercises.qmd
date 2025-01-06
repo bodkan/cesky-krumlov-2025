@@ -7,8 +7,11 @@ author:
 date: "January 2025"
 date-format: "MMMM YYYY"
 format:
-  gfm:
-   html_preview: false
+  html:
+    echo: true
+    code-line-numbers: false
+    fig-align: center
+    self-contained: true
 ---
 
 # Reference materials
