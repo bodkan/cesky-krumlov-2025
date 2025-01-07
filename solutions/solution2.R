@@ -114,6 +114,9 @@ f4_alt
 # jackknife procedure in ADMIXTOOLS)
 f4_alt$f4 / f4_null$f4
 
+
+# Part 4: Detecting Neanderthal admixture in Europeans --------------------
+
 # Let's compute the f4 statistic for all Africans and Europeans to see the
 # f4 introgression patterns more clearly
 f4_afr <- lapply(sample_sets$AFR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = mode)) %>% bind_rows()
