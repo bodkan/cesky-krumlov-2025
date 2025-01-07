@@ -126,7 +126,42 @@ If you find yourself [*totally lost*](https://scryfall.com/card/gtc/54/totally-l
 
 For each exercise, you will get a brief explanation of the problem at hand and functions that could be useful to solve the exercise. **The concrete, specific task will be always written like this in bold.**
 
-## Exercise 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Exercise 1: Programming demographic models with _slendr_ 
+
+
 
 ### Part 1: Building a demographic model in *slendr*
 
@@ -448,7 +483,30 @@ ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
 ```
 :::
 
-# Exercise 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Exercise 2: Computing popgen statistics on tree sequences from _slendr_
 
 In this exercise, you will build on top of the results from Exercise 1. Specifically, we will learn how to compute popgen statistics on *slendr*-simulated tree sequences using *slendr*'s interface to the *tskit* Python module.
 
@@ -606,11 +664,11 @@ a look at the help page available as `?ts_f4` for more information. **When you'r
 computing the values, make sure to also set `mode = "branch"` (we will get to why
 a bit later).**
 
-**Hint:** If you haven't learned this in your $f$-statistics lecture, you want to compute (and compare) the values of these two statistics (`ts_f4()`):
+**Hint:** If you haven't learned this in your $f$-statistics lecture, you want to compute (and compare) the values of these two statistics using the _slendr_ function `ts_f4()`:
 
--   $f_4$(<some African>, <another African>; <Neanderthal>, <Chimp>)
+-   $f_4$(\<some African\>, \<another African\>; \<Neanderthal\>, \<Chimp\>)
 
--   $f_4$(<some African>, <a test European>; <Neanderthal>, <Chimp>)
+-   $f_4$(\<some African\>, \<a test European\>; \<Neanderthal\>, \<Chimp\>)
 
 Roughly speaking, we can understand this computation in terms of comparing the counts of so-called BABA and ABBA allele patterns between the quarted of samples specified in the statistics:
 
@@ -743,27 +801,251 @@ f4_results %>%
 
 
 
+
+
+
+
+
+:::{.callout-tip}
+## Bonus exercises
+
+
+
+### Bonus 1: Outgroup $f_3$ statistic
+
+**Use the function `ts_f3()` to compute the outgroup $f_3$ statistic between
+pairs of African-European, African-Neanderthal, and European-Neanderthal and
+a Chimpanzee outgroup.**
+
+**Hint:** The $f_3$ statistic is traditionally expressed as $f_3(A, B; C)$,
+where C represents the outgroup. Unfortunately, in _tskit_ the outgroup is
+named A, with B and C being the pair of samples from which we trace the length
+of branches towards the outgroup, so the statistic is interpreted as
+$f_3(B, C; A)$.
+
+**How do the outgroup f3 results compare to your expectation based on simple
+population relationships (and to the divergence computation above)?**
+
+**Do you see any impact of introgression on the $f_3 value when a Neanderthal
+is included in the computation?**
+
+::: callout-note
+### Click to see the solution
 ```{r}
+# f3(A, B; C) = E[ (A - C) * (B - C) ]
+# This means that in tskit, C is the outgroup (different from ADMIXTOOLS!)
+
+# We can compute f3 for individuals...
+ts_f3(ts, B = "AFR_1", C = "EUR_1", A = "CHIMP_1")
+
+# ... but also whole populations (or population samples)
+ts_f3(ts, B = sample_sets["AFR"], C = sample_sets["EUR"], A = "CHIMP_1")
+
+ts_f3(ts, B = sample_sets["AFR"], C = sample_sets["NEA"], A = "CHIMP_1")
+
+ts_f3(ts, B = sample_sets["EUR"], C = sample_sets["NEA"], A = "CHIMP_1")
+```
+:::
+
+
+
+
+### Bonus 2: Outgroup $f_3$ statistic as a linear combination of $f_2$ statistics
+
+You might have learned that any complex $f$-statistic can be expressed as a linear
+combination of multiple $f_2$ statistics (which represent simple branch length
+separating two lineages). **Verify that this is the case by looking up equation
+_(20b)_ in [this amazing paper](https://academic.oup.com/genetics/article/202/4/1485/5930214) and compute
+an $f_3$ statistic for any arbitrary trio of individuals of your choosing using
+this linear combination of $f_2$ statistics.**
+
+::: callout-note
+### Click to see the solution
+```{r}
+# standard f3
+ts_f3(ts, B = "AFR_1", C = "AFR_2", A = "CHIMP_1")
+
+# a "homemade" f3 statistic as a linear combination of f2 statistics
+# f3(A, B; C) = f2(A, C) + f2(B, C) - f2(A, B) / 2
+homemade_f3 <- (
+  ts_f2(ts, A = "AFR_1", B = "CHIMP_1")$f2 +
+  ts_f2(ts, A = "AFR_2", B = "CHIMP_1")$f2 -
+  ts_f2(ts, A = "AFR_1", B = "AFR_2")$f2
+) / 2
+homemade_f3
+```
+:::
+
+
+
+
+### Bonus 3: Trajectory of Neanderthal ancestry in Europe over time
+
+There used to be a lot of controversy about the question of whether or not did
+Neanderthal ancestry proportion in Europeans decline or not over the past 40
+thousand years (see figure 1 in [this paper](https://www.pnas.org/doi/full/10.1073/pnas.1814338116)
+figure 2 in [this paper](https://www.nature.com/articles/nature17993)).
+
+Your simulated tree sequence contains a time-series of European individuals
+over time. Use the _slendr_ function `ts_f4ratio()` to compute (and then
+plot) the proportion (commonly designated as `alpha`) of Neanderthal ancestry
+in Europe over time. Use $f_4$-ratio statistic of the following form:
+
+```{r}
+#| eval: false
+ts_f4ratio(ts, X = <vector of ind. names>, A = "NEA_1", B = "NEA_2", C = "AFR_1", O = "CHIMP_1")
+```
+
+::: callout-note
+### Click to see the solution
+
+```{r}
+# Extract table with names and times of sampled Europeans (ancient and present day)
+eur_inds <- ts_samples(ts) %>% filter(pop == "EUR")
+eur_inds
+
+# Compute f4-ration statistic (this will take ~30s) -- note that we can provide
+# a vector of names for the X sample set to the `ts_f4ratio()` function
+nea_ancestry <- ts_f4ratio(ts, X = eur_inds$name, A = "NEA_1", B = "NEA_2", C = "AFR_1", O = "CHIMP_1")
+
+# Add the age of each sample to the table of proportions
+nea_ancestry$time <- eur_inds$time
+nea_ancestry
+
+nea_ancestry %>%
+  ggplot(aes(time, alpha)) +
+  geom_point() +
+  geom_smooth(method = "lm", linetype = 2, color = "red", linewidth = 0.5) +
+  xlim(40000, 0) +
+  coord_cartesian(ylim = c(0, 0.1)) +
+  labs(x = "time [years ago]", y = "Neanderthal ancestry proportion") +
+  theme_bw() +
+  ggtitle("Neanderthal ancestry proportion in Europeans over time")
+
+# For good measure, let's test the significance of the decline using a linear model
+summary(lm(alpha ~ time, data = nea_ancestry))
+```
+:::
+
+
+
+
+### Bonus 4 -- how many unique f4 quartets are there? -----------------------
+
+In your lecture about $f$-statistics, you've probably learned about various symmetries in $f_4$ (but also other $f$-statistics) depending on the arrangement of the "quartet". As a trivial example, an $f_3(A; B, C)$ and $f_3(A; C, B)$ will give you exactly the same value, and the same thing applies even to more complex $f$-statistics like $f_4$.
+
+**Use simulations to compute how manu unique $f_4$ values involving a single quartet are there.**
+
+**Hint:** Draw some trees to figure out why could that be true. Also, when computing `ts_f4()`, set `mode = "branch"` to avoid the effect of statistical noise due to mutations.
+
+
+
+::: callout-note
+### Click to see the solution
+
+```{r}
+# # install a combinatorics R package
+# install.packages("combinat")
+
+library(combinat)
+
+# These are the four samples we can create quartet combinations from
+quartet <- c("AFR_1", "EUR_1", "NEA_1", "CHIMP_1")
+quartets <- permn(quartet)
+quartets
+
+# How many permutations there are in total?
+#   4! = 4 * 3 * 2 * 1 = 24
+factorial(4)
+
+# We should therefore have 24 different quartet combinations of samples
+length(quartets)
+
+# Loop across all quartets, computing the corresponding f4 statistic (we want
+# to do this using branch lengths, not mutations, as the mutation-based computation
+# would involve statistical noise)
+all_f4s <- lapply(quartets, function(q) ts_f4(ts, q[1], q[2], q[3], q[4], mode = "branch"))
+
+# Bind the list of f4 results into a single data frame and inspect the results
+all_f4s <- bind_rows(all_f4s) %>% arrange(abs(f4))
+print(all_f4s, n = Inf)
+
+# Narrow down the results to only unique f4 values
+distinct(all_f4s, f4, .keep_all = TRUE)
+distinct(all_f4s, abs(f4), .keep_all = TRUE)
+```
+
+
+:::
+<!-- End of Bonus exercises for Exercise 2 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+#| echo: false
 knitr::knit_exit()
 ```
 
--   You've learned about symmetries in $f_4$ depending on the arrangement of the "quartet". **How many unique** $f_4$ values involving a single quartet can you find and why? (When computing `ts_f4()` here, set `mode = "branch"`).
 
-# Exercise #4
 
--   outgroup [`ts_f3(A; B, C)`](https://www.slendr.net/reference/ts_f4ratio.html#ref-examples) using CHIMP as the outgroup (A!) for different pairs of "B" and "C" populations<br>
 
-    -   using Ben's explanation on Wednesday, try to compute this $f_3$ using combination of $f_2$ statistics (`ts_f2(A, B)`)
 
-# Exercise 3
 
-**Reminder**: you can use the [handout version of the slides]() for reference.
 
-<br><br><br><br>
 
-::: aside
-Use [these](https://bodkan.quarto.pub/ku-popgen2023-onepage/) one-page handouts for reference.
-:::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Exercise 3: Simulation-based inference of $N_e$ from AFS
+
+
+
+
+
+
 
 ## Part *a*: One-population AFS simulator
 
@@ -877,10 +1159,73 @@ See [`ex2_simple.R`](https://github.com/bodkan/ku-popgen2023/blob/main/solutions
 See [`ex2_grid.R`](https://github.com/bodkan/ku-popgen2023/blob/main/solutions/ex2_grid.R) for a more elaborate grid-search solution.
 :::
 
-# Exercise 4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Exercise 4: Playing around with PCA patterns
+
 
 **Reminder**: you can use the [handout version of the slides]() for reference.
 
-# Exercise 5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Exercise 5: Simulating dynamics of positive selection
 
 **Reminder**: you can use the [handout version of the slides]() for reference.
