@@ -27,12 +27,6 @@ model <- compile_model(
   generation_time = 30
 )
 
-
-
-
-
-# Part 1 -- read a previously saved .trees file ---------------------------
-
 # This can allow us to save a bit of computational time (and also enhances
 # reproducibility because anyone with the .trees file can follow the downstream
 # workflow)
@@ -47,7 +41,8 @@ ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
 
 
 
-# Part 2 -- computing nucleotide diversity
+
+# Part 1: Computing nucleotide diversity ----------------------------------
 
 # Let's first get a named list of individuals in each group we want to be
 # working with (slendr tree-sequence statistic functions generally operate
@@ -81,7 +76,7 @@ ggplot(pi_df, aes(pop, diversity, color = pop, group = pop)) +
 
 
 
-# Part 3 -- Computing pairwise divergence ---------------------------------
+# Part 2: Computing pairwise divergence -----------------------------------
 
 # We will again use the `sample_sets` list of individual names defined above
 sample_sets
@@ -94,7 +89,7 @@ arrange(div_df, divergence)
 
 
 
-# Part 4 -- Detecting Neanderthal admixture in Europeans ------------------
+# Part 3: Detecting Neanderthal admixture in Europeans --------------------
 
 #                                BABA - ABBA
 # f4(AFR, Test; NEA, CHIMP) ~   -------------
