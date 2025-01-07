@@ -472,13 +472,13 @@ model <- compile_model(
   generation_time = 30
 )
 
+ts <- ts_read(here::here("data/introgression.trees"), model = model)
+
 cowplot::plot_grid(
   plot_model(model, proportions = TRUE),
   plot_model(model, proportions = TRUE, log = TRUE),
   nrow = 1
 )
-
-ts <- ts_read(here::here("data/introgression.trees"), model = model)
 ```
 
 As a sanity check, let's make sure the tree sequence does contain a set of sample which matches our intended sampling schedule (particularly the time series of European individuals and the two Neanderthals):
