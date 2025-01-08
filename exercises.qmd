@@ -8,6 +8,7 @@ date: "January 2025"
 date-format: "MMMM YYYY"
 format:
   html:
+    toc: true
     echo: true
     code-line-numbers: false
     fig-align: center
@@ -23,6 +24,35 @@ filters:
 
 <!-- https://examples.quarto.pub/collapse-callout/ -->
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Reference materials
 
 Unless you're already an expert on the *slendr* toolkit, you will probably need some reference materials to do the exercises. Here are the options:
@@ -30,6 +60,36 @@ Unless you're already an expert on the *slendr* toolkit, you will probably need 
 1.  You can refer to the slides with the *slendr* crash course. You can find the material rendered as [normal slides](https://bodkan.quarto.pub/cesky-krumlov-2025-slides/) or [one-page handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/) (the latter being probably a bit more practical for reference.
 2.  Relevant tutorials on the [*slendr* website](https://www.slendr.net) which you can find under the "Articles" link in the header.
 3.  [Manual pages](https://www.slendr.net/reference/index.html) of all available *slendr* functions. Note that you can get the help page of every *slendr* R `function` by typing `?function` in the R console. For instance, typing `?ts_tajima` gives you the help page of the *tskit*/*slendr* function implementing the tree-based computation of Tajima's D.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Installation setup
 
@@ -110,21 +170,52 @@ In every previous installments of this workshop, this is all that was needed to 
 
 It's unclear whether we will manage to go through the entirety of the final exercise. However, to be able to do this, having SLiM at least version 4.2 (and it being available in your unix `$PATH!`) is required. If this isn't possible for your, don't worry. You'll be able to do most of that exercise even without SLiM, and I will demonstrate the whole exercise (including the SLiM bit) for you.
 
-# Organization of this activity session
 
-Your goal for each exercise will be to write a complete script. I suggest you name the script for each exercise as `exercise1.R`, `exercise2.R`, etc., to keep things tidy.
 
-Unless you have a strong preference for another editor or IDE, I recommend you use RStudio (either on your machine or in the cloud, depending on where you did the setup steps above).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Organization of the exercises
+
+For each exercise, you will get a brief explanation of the problem at hand and functions that could be useful to solve the exercise. **The concrete, specific task will be always written like this in bold.**
+
+Your goal for each exercise is to write a complete R script script. I suggest you name the script for each exercise as `exercise1.R`, `exercise2.R`, etc., just to keep things tidy.
+
+Unless you have a strong preference for another editor or IDE, I recommend you use RStudio (either on your machine or in the cloud, as provided by the workshop organizers, depending on where you did the setup steps above).
 
 Each exercise is compose of individual *parts*, which are designed to build one upon the other in the order they are specified.
+
+#### Note on the programming aspect of the exercises
 
 All the exercises will involve "real coding"! If you've never really programmed entire scripts before, this could feel a little intimidating. Don't worry. If you're ever lost, just take a peek at the solution which is (by default hidden) under each exercise section. Always try to work on a solution on your own, but never let this be a barrier to your progress. Feel free to copy-paste bits of my solutions into your own scripts.
 
 If you find yourself [*totally lost*](https://scryfall.com/card/gtc/54/totally-lost), don't hesitate to read my solutions from the get go, copy-pasting them into your own script in the RStudio, executing them line by line, and trying to understand what's going on.
 
-# Start of the exercises
-
-For each exercise, you will get a brief explanation of the problem at hand and functions that could be useful to solve the exercise. **The concrete, specific task will be always written like this in bold.**
 
 
 
@@ -155,13 +246,7 @@ For each exercise, you will get a brief explanation of the problem at hand and f
 
 
 
-
-
-
-
-## Exercise 1: Programming demographic models with _slendr_ 
-
-
+# Exercise 1: Programming demographic models with *slendr*
 
 ### Part 1: Building a demographic model in *slendr*
 
@@ -192,7 +277,7 @@ model <- compile_model(
 :::
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 #| collapse: true
@@ -233,7 +318,7 @@ To visualize a *slendr* model, you can use the function `plot_model()`. **Plot y
 :::
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 #| collapse: false
@@ -263,7 +348,7 @@ The function has also arguments `debug` and `run`.
 **Simulate a tree sequence from your compiled `model`, storing it to a variable `ts` as shown right above. Then experiment with setting `debug = TRUE` (this prints out *msprime*'s own debugging summary) and then `run = FALSE` (this prints out a raw command-line which can run a *slendr* simulation in the shell).**
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 #| collapse: true
@@ -290,7 +375,7 @@ As we'll see later, *slendr* tries to provide an R-friendly interface to accessi
 For now, **type out the `ts` object in the terminal – what do you see?** You should get a summary of a tree-sequence object that you're familiar with from your *msprime* and *tskit* activity.
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 # Typing out the object with the result shows that it's a good old tskit
@@ -302,7 +387,7 @@ ts
 **Use the `ts_table` function to inspect the low-level table-based representation of a tree sequence.** For instance, you can get the table of nodes with `ts_table(ts, "nodes")`, edges with `ts_table(ts, "edges")`, and do the same thing for "individuals", "mutations", and "sites". Does your tree sequence contain any mutations? If not, why?
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 # slendr provides a helper function which allows access to all the low-level
@@ -319,7 +404,7 @@ ts_table(ts, "sites")
 There are also two *slendr*-specific functions called `ts_samples()` and `ts_nodes()`. **You can run them simply as `ts_samples(ts)` and `ts_nodes(ts)`. What do the tables they produce represent?**
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 # slendr provides a convenient function `ts_samples()` which allows us to
@@ -382,7 +467,7 @@ times <- seq(40000, 2000, by = -2000)
 In total, you should schedule the recording of 38 individuals.
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 # Here we scheduled the sampling of two Neanderthals at 70kya and 40kya
@@ -416,7 +501,7 @@ plot_model(model, samples = schedule)
 ```
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 plot_model(model, sizes = FALSE, samples = schedule)
@@ -432,7 +517,7 @@ plot_model(model, sizes = FALSE, log = TRUE, samples = schedule)
 **Use your combined sampling schedule stored in the `schedule` variable to run a new tree-sequence simulation from your model (again using the `msprime()` function), this time restricted to just those individuals scheduled for recording.** You can do this by providing the combined sampling schedule as the `samples =` argument of the function `msprime` you used above.
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 #| echo: false
@@ -466,7 +551,7 @@ ts_write(ts, "data/introgression.trees")
 **Inspect the tree-sequence object saved in the `ts` variable again, taking note of the (now much smaller!) number of individuals. You can also do a similar thing via the table produced by the `ts_samples()` function.**
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 # Inspect the (tskit/Python-based) summary of the new tree sequence
@@ -483,6 +568,15 @@ ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
 ```
 :::
 
+:::::: callout-tip
+## Bonus exercises
+
+### Bonus 1: Program your own model
+
+Do you have a favourite model organism or you study another species? **Take some of the most important features of its demographic history and program them as a new *slendr* model.**\*
+:::
+
+<!-- End of Bonus exercises for Exercise 1 -->
 
 
 
@@ -506,7 +600,15 @@ ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
 
 
 
-# Exercise 2: Computing popgen statistics on tree sequences from _slendr_
+
+
+
+
+
+
+
+
+# Exercise 2: Computing popgen statistics on tree sequences from *slendr*
 
 In this exercise, you will build on top of the results from Exercise 1. Specifically, we will learn how to compute popgen statistics on *slendr*-simulated tree sequences using *slendr*'s interface to the *tskit* Python module.
 
@@ -657,14 +759,9 @@ Let's now pretend its about 2008 and we've sequenced the first Neanderthal genom
 
 Earlier you've learned about $f$-statistics of various kinds. You have also heard that an $f_4$ statistic (or its equivalent $D$ statistic) can be used as a test of "treeness". Simply speaking, for some "quartet" of individuals or population samples, they can be used as a hypothesis test of whether the history of those samples is compatible with there **not** having been an introgression.
 
-**Compute the $f_4$ test of Neanderthal introgression in EUR individuals using
-the _slendr_ function `ts_f4()`.** When you're running it, you will have to provide
-individuals to compute the statistic on using a slightly different format. Take
-a look at the help page available as `?ts_f4` for more information. **When you're
-computing the values, make sure to also set `mode = "branch"` (we will get to why
-a bit later).**
+**Compute the** $f_4$ test of Neanderthal introgression in EUR individuals using the *slendr* function `ts_f4()`. When you're running it, you will have to provide individuals to compute the statistic on using a slightly different format. Take a look at the help page available as `?ts_f4` for more information. **When you're computing the values, make sure to also set `mode = "branch"` (we will get to why a bit later).**
 
-**Hint:** If you haven't learned this in your $f$-statistics lecture, you want to compute (and compare) the values of these two statistics using the _slendr_ function `ts_f4()`:
+**Hint:** If you haven't learned this in your $f$-statistics lecture, you want to compute (and compare) the values of these two statistics using the *slendr* function `ts_f4()`:
 
 -   $f_4$(\<some African\>, \<another African\>; \<Neanderthal\>, \<Chimp\>)
 
@@ -678,15 +775,9 @@ $$
 
 The first is not expected to give values "too different" from 0 because we don't expect two African individuals to differ "significantly" in terms of how much alleles they share with a Neanderthal. The other should -- if there was a Neanderthal introgression into Europeans some time in their history -- be "significantly negative".
 
-**Is the second of those two statistics "much more negative" than the first, as
-expected assuming introgression from Neanderthals into Europeans?**
+**Is the second of those two statistics "much more negative" than the first, as expected assuming introgression from Neanderthals into Europeans?**
 
-**Why am I putting "significantly" and "much more negative" in quotes? What are
-we missing here for this being a true hypothesis test as you might be accustomed
-to from computing $f$-statistics using a tool such as ADMIXTOOLS?** (We will get
-to this again in the following part of this exercise.)
-
-
+**Why am I putting "significantly" and "much more negative" in quotes? What are we missing here for this being a true hypothesis test as you might be accustomed to from computing** $f$-statistics using a tool such as ADMIXTOOLS? (We will get to this again in the following part of this exercise.)
 
 ::: callout-note
 ### Click to see the solution
@@ -714,39 +805,17 @@ f4_alt$f4 / f4_null$f4
 ```
 :::
 
-
-
 ## Part 5: Detecting Neanderthal admixture in Europeans v2.0
 
-The fact that we don't get something equivalent to a p-value in these kinds of
-simulations is generally not a problem, because we're often interested in
-establishing a trend of a statistic under various conditions, and understanding
-when and how it behaves in a certain way. If statistical noise is a problem,
-we can easily work around it by computing a statistic on multiple simulation
-replicates or even increasing the sample sizes. I used this approach quite
-successfully on a related problem in [this paper](https://www.pnas.org/doi/10.1073/pnas.1814338116#fig02).
+The fact that we don't get something equivalent to a p-value in these kinds of simulations is generally not a problem, because we're often interested in establishing a trend of a statistic under various conditions, and understanding when and how it behaves in a certain way. If statistical noise is a problem, we can easily work around it by computing a statistic on multiple simulation replicates or even increasing the sample sizes. I used this approach quite successfully on a related problem in [this paper](https://www.pnas.org/doi/10.1073/pnas.1814338116#fig02).
 
-On top of that, p-value of something like an $f$-statistic (whether it's
-significantly different from zero) is also strongly affected by quality of the
-data, sequencing errors, coverage, etc. (which can certainly be done using
-simulations!). However, these are an orthogonal issue which has little to do
-with the underlying evolutionary model in question anyway -- and that's what
-we're after in our exercises.
+On top of that, p-value of something like an $f$-statistic (whether it's significantly different from zero) is also strongly affected by quality of the data, sequencing errors, coverage, etc. (which can certainly be done using simulations!). However, these are an orthogonal issue which has little to do with the underlying evolutionary model in question anyway -- and that's what we're after in our exercises.
 
-In short, how much is "significantly different from zero compared to some
-baseline expectation" can be easily drowned in noise in a simple single-individual
-comparisons as we did above. Let's increase the sample size a bit to see if
-a statistical pattern becomes more apparent.
+In short, how much is "significantly different from zero compared to some baseline expectation" can be easily drowned in noise in a simple single-individual comparisons as we did above. Let's increase the sample size a bit to see if a statistical pattern becomes more apparent.
 
-**Compute the first $f_4$ statistic of the baseline expectation between a pair of
-Africans and the second $f_4$ statistic comparing an African and a European, but
-this time on _all recorded Africans_ and _all recorded Europeans_, respectively.
-Plot the _distributions_ of those two sets of statistics.** This should remove
-lots of the uncertainty and make a statistical trend stand out much more clearly.
+**Compute the first** $f_4$ statistic of the baseline expectation between a pair of Africans and the second $f_4$ statistic comparing an African and a European, but this time on *all recorded Africans* and *all recorded Europeans*, respectively. Plot the *distributions* of those two sets of statistics. This should remove lots of the uncertainty and make a statistical trend stand out much more clearly.
 
-**Hint:** Whenever you need to compute something for many things in sequence,
-looping is very useful. One way to do compute, say, an $f_4$ statistic over 
-many individuals is use this kind of pattern using R's looping function `lapply()`:
+**Hint:** Whenever you need to compute something for many things in sequence, looping is very useful. One way to do compute, say, an $f_4$ statistic over many individuals is use this kind of pattern using R's looping function `lapply()`:
 
 ```{r}
 #| eval: false
@@ -761,7 +830,6 @@ list_f4 <- lapply(
 # single table for easier interpretation and visualization
 df_f4 <- do.call(rbind, list_f4)
 ```
-
 
 ::: callout-note
 ### Click to see the solution
@@ -798,39 +866,22 @@ f4_results %>%
 ```
 :::
 
-
-
-
-
-
-
-
-
-:::{.callout-tip}
+::: callout-tip
 ## Bonus exercises
-
-
 
 ### Bonus 1: Outgroup $f_3$ statistic
 
-**Use the function `ts_f3()` to compute the outgroup $f_3$ statistic between
-pairs of African-European, African-Neanderthal, and European-Neanderthal and
-a Chimpanzee outgroup.**
+**Use the function `ts_f3()` to compute the outgroup** $f_3$ statistic between pairs of African-European, African-Neanderthal, and European-Neanderthal and a Chimpanzee outgroup.
 
-**Hint:** The $f_3$ statistic is traditionally expressed as $f_3(A, B; C)$,
-where C represents the outgroup. Unfortunately, in _tskit_ the outgroup is
-named A, with B and C being the pair of samples from which we trace the length
-of branches towards the outgroup, so the statistic is interpreted as
-$f_3(B, C; A)$.
+**Hint:** The $f_3$ statistic is traditionally expressed as $f_3(A, B; C)$, where C represents the outgroup. Unfortunately, in *tskit* the outgroup is named A, with B and C being the pair of samples from which we trace the length of branches towards the outgroup, so the statistic is interpreted as $f_3(B, C; A)$.
 
-**How do the outgroup f3 results compare to your expectation based on simple
-population relationships (and to the divergence computation above)?**
+**How do the outgroup f3 results compare to your expectation based on simple population relationships (and to the divergence computation above)?**
 
-**Do you see any impact of introgression on the $f_3 value when a Neanderthal
-is included in the computation?**
+**Do you see any impact of introgression on the \$f_3 value when a Neanderthal is included in the computation?**
 
 ::: callout-note
 ### Click to see the solution
+
 ```{r}
 # f3(A, B; C) = E[ (A - C) * (B - C) ]
 # This means that in tskit, C is the outgroup (different from ADMIXTOOLS!)
@@ -847,20 +898,13 @@ ts_f3(ts, B = sample_sets["EUR"], C = sample_sets["NEA"], A = "CHIMP_1")
 ```
 :::
 
-
-
-
 ### Bonus 2: Outgroup $f_3$ statistic as a linear combination of $f_2$ statistics
 
-You might have learned that any complex $f$-statistic can be expressed as a linear
-combination of multiple $f_2$ statistics (which represent simple branch length
-separating two lineages). **Verify that this is the case by looking up equation
-_(20b)_ in [this amazing paper](https://academic.oup.com/genetics/article/202/4/1485/5930214) and compute
-an $f_3$ statistic for any arbitrary trio of individuals of your choosing using
-this linear combination of $f_2$ statistics.**
+You might have learned that any complex $f$-statistic can be expressed as a linear combination of multiple $f_2$ statistics (which represent simple branch length separating two lineages). **Verify that this is the case by looking up equation *(20b)* in [this amazing paper](https://academic.oup.com/genetics/article/202/4/1485/5930214) and compute an** $f_3$ statistic for any arbitrary trio of individuals of your choosing using this linear combination of $f_2$ statistics.
 
 ::: callout-note
 ### Click to see the solution
+
 ```{r}
 # standard f3
 ts_f3(ts, B = "AFR_1", C = "AFR_2", A = "CHIMP_1")
@@ -876,20 +920,11 @@ homemade_f3
 ```
 :::
 
-
-
-
 ### Bonus 3: Trajectory of Neanderthal ancestry in Europe over time
 
-There used to be a lot of controversy about the question of whether or not did
-Neanderthal ancestry proportion in Europeans decline or not over the past 40
-thousand years (see figure 1 in [this paper](https://www.pnas.org/doi/full/10.1073/pnas.1814338116)
-figure 2 in [this paper](https://www.nature.com/articles/nature17993)).
+There used to be a lot of controversy about the question of whether or not did Neanderthal ancestry proportion in Europeans decline or not over the past 40 thousand years (see figure 1 in [this paper](https://www.pnas.org/doi/full/10.1073/pnas.1814338116) figure 2 in [this paper](https://www.nature.com/articles/nature17993)).
 
-Your simulated tree sequence contains a time-series of European individuals
-over time. Use the _slendr_ function `ts_f4ratio()` to compute (and then
-plot) the proportion (commonly designated as `alpha`) of Neanderthal ancestry
-in Europe over time. Use $f_4$-ratio statistic of the following form:
+Your simulated tree sequence contains a time-series of European individuals over time. Use the *slendr* function `ts_f4ratio()` to compute (and then plot) the proportion (commonly designated as `alpha`) of Neanderthal ancestry in Europe over time. Use $f_4$-ratio statistic of the following form:
 
 ```{r}
 #| eval: false
@@ -927,18 +962,13 @@ summary(lm(alpha ~ time, data = nea_ancestry))
 ```
 :::
 
-
-
-
-### Bonus 4 -- how many unique f4 quartets are there? -----------------------
+### Bonus 4 -- how many unique f4 quartets are there?
 
 In your lecture about $f$-statistics, you've probably learned about various symmetries in $f_4$ (but also other $f$-statistics) depending on the arrangement of the "quartet". As a trivial example, an $f_3(A; B, C)$ and $f_3(A; C, B)$ will give you exactly the same value, and the same thing applies even to more complex $f$-statistics like $f_4$.
 
-**Use simulations to compute how manu unique $f_4$ values involving a single quartet are there.**
+**Use simulations to compute how manu unique** $f_4$ values involving a single quartet are there.
 
 **Hint:** Draw some trees to figure out why could that be true. Also, when computing `ts_f4()`, set `mode = "branch"` to avoid the effect of statistical noise due to mutations.
-
-
 
 ::: callout-note
 ### Click to see the solution
@@ -974,40 +1004,9 @@ print(all_f4s, n = Inf)
 distinct(all_f4s, f4, .keep_all = TRUE)
 distinct(all_f4s, abs(f4), .keep_all = TRUE)
 ```
-
-
 :::
+::::::
 <!-- End of Bonus exercises for Exercise 2 -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-```{r}
-#| echo: false
-knitr::knit_exit()
-```
-
-
 
 
 
@@ -1041,53 +1040,69 @@ knitr::knit_exit()
 
 # Exercise 3: Simulation-based inference of $N_e$ from AFS
 
+What we did so far is learning how *slendr* models provide an easy way to encode
+demographic models in R and simulate (even very large!) tree sequences from them.
+This allows us to very quickly verify our intuition about some popgen problem
+(things like _"Hmmm, I wonder what would an $f_4$ statistic look like if my model
+includes this particular gene-flow event?_), in just a few lines of R. We have
+been able to even answer some questions like this directly in a meeting, pretty
+much on the spot! This makes _slendr_ a very powerful "popgen calculator".
 
+Now let's take things one step forward. Imagine you gathered some empirical
+data, like an allele frequency spectrum (AFS). That data was, in the real world,
+produced by some (hidden) biological process (demographic history) that we
+generally don't know anything about a priori For instance, the population we study
+had some $N_e$, which we don't know -- the only thing we have is the observed AFS.
 
+Simulations can be a great tool to estimate the most likely value of an unknown
+parameter. Staying with this $N_e$ and AFS example, can simulate a large number
+of AFS vectors (each resulting from a different assumed $N_e$ value) and then pick
+just those $N_e$ values (or just one $N_e$ value) which produced a simulated AFS
+closest to the observed AFS. **This is exactly what you'll be doing just now 
+in Exercise 3.**
 
+## Part 1: A self-contained *slendr* function of $N_e \rightarrow \textrm{AFS}$
 
+**In a new script `exercise3.R` write a custom R function called `simulate_afs()`,
+which will take `Ne` as its only parameter. Use this function to compute AFS
+vectors for a couple of `Ne` values of your choosing, but staying between
+`Ne = 1000` and `Ne = 30000` Plot those AFS vectors and observe how (and why?)
+do they differ based on `Ne` parameter you used in each respective simulation.**
 
+**Hint:** The function should create a one-population *forward-time* model
+(our population starting at `time = 1`, with the model `simulation_length` 100000
+and `generation_time` 1), simulate 10Mb tree sequence (recombination and mutation
+rates of 1e-8), compute AFS for 10 samples and return it the AFS vector as its result.
 
-## Part *a*: One-population AFS simulator
+**Hint:**
 
-In a new script `model2.R` write a function called `simulate_afs()`, which will take `Ne` as its only parameter.
-
-It should create a one-population *forward-time* model (`simulation_length` 100000, `generation_time` 1), simulate 10Mb tree sequence (recombination and mutation rates of 1e-8), compute AFS for 10 samples and return it.
-
-. . .
-
-<hr>
-
-**Use this function to compute AFS vectors for various `Ne` values. Plot those AFS and observe how (and why?) do they differ based on `Ne` you simulated.**
-
-## Part *a*: Hint
-
-You can start building `model2.R` from this "template":
+If you've never programmed before, the concept of a "custom function" might
+be very alien to you. If you need help, feel free to start building your
+`exercise3.R` solution based on this "template" (just fill in missing relevant
+bits of _slendr_ code that you should be already familiar with):
 
 ```{r}
 #| eval: false
-library(slendr); init_env()
+library(slendr)
+init_env()
 
 simulate_afs <- function(Ne) {
-  ... your one-population model code: population(), compile_model(), msprime() ...
-  
-  result <- ... compute AFS using ts_afs() on 10 samples, save it to `result` ...
+  <... population model code: population(), compile_model(), ts <- msprime(), etc ...>
+  <... get names of a subset of 10 samples from a tree sequence ...>
+  <... compute AFS with ts_afs() on 10 samples ...>
 
-  return(result)
+  return(result) # `result` is a variable with your 10-sample AFS, return it
 }
 
-afs_1 <- simulate_afs(Ne = 1000)
-plot(afs_1, type ="o")
+afs_1 <- simulate_afs(Ne = 1000) # simulate AFS from a Ne = 1000 model...
+plot(afs_1, type ="o")           # ... and plot it
 ```
 
-::: fragment
-<small> **Note:** We drop the first element (`afs[-1]`) technical reasons related to *tskit*. You don't have to worry about that here, but you can read [this](https://tskit.dev/tutorials/analysing_tree_sequences.html#sec-tutorial-afs-zeroth-entry) for more detail. </small>
-:::
+**Note:** Remember that you should drop the first element of the AFS vector produced by `ts_afs()` (for instance with something like `result[-1]` if `result` contains the output of `ts_afs()`) technical reasons related to *tskit*. You don't have to worry about that here, but you can read [this](https://tskit.dev/tutorials/analysing_tree_sequences.html#sec-tutorial-afs-zeroth-entry) for more detail.
 
-::: fragment
 When used in R, your function should work like this:
 
 ```{r}
-#| eval: false
 #| echo: false
 simulate_afs <- function(Ne) {
   n <- 20 # 1 is for the fixed sites included by tskit
@@ -1097,12 +1112,54 @@ simulate_afs <- function(Ne) {
 ```
 
 ```{r}
-#| eval: false
 simulate_afs(Ne = 1000)
+```
+
+
+
+::: callout-note
+#### Click to see the solution
+```{r}
+# An R function can be understood as a block of a computer program which executes
+# a block of code inside the {...} brackets given a certain value of a parameter
+# (here 'Ne' just after the word 'function')
+simulate_afs <- function(Ne) {
+  # create a slendr model with a single population of size Ne = N
+  pop <- population("pop", N = Ne, time = 1)
+  model <- compile_model(pop, generation_time = 1, simulation_length = 100000)
+
+  # simulate a tree sequence
+  ts <-
+    msprime(model, sequence_length = 10e6, recombination_rate = 1e-8) %>%
+    ts_mutate(mutation_rate = 1e-8)
+
+  # get a random sample of names of 10 individuals
+  samples <- ts_names(ts) %>% sample(10)
+
+  # compute the AFS vector (dropping the 0-th element added by tskit)
+  afs <- ts_afs(ts, sample_sets = list(samples))[-1]
+
+  afs
+}
+
+# Let's use our custom function to simulate AFS vector for Ne = 1k, 10k, and 30k
+afs_1k <- simulate_afs(1000)
+afs_10k <- simulate_afs(10000)
+afs_30k <- simulate_afs(30000)
+
+# Plot the three simulated AFS using base R plotting functionality
+plot(afs_30k, type = "o", main = "AFS, Ne = 30000", col = "cyan",)
+lines(afs_10k, type = "o", main = "AFS, Ne = 10000", col = "purple")
+lines(afs_1k, type = "o", main = "AFS, Ne = 1000", col = "blue")
+legend("topright", legend = c("Ne = 1k", "Ne = 10k", "Ne = 30k"),
+       fill = c("blue", "purple", "cyan"))
 ```
 :::
 
-## Part *b*: Estimating Ne using AFS
+
+
+
+## Part 2: Estimating unknown $N_e$ from empirical AFS
 
 ```{r}
 #| eval: false
@@ -1122,7 +1179,8 @@ samples <- ts_names(ts) %>% sample(10)
 afs_observed <- ts_afs(ts, list(samples))
 ```
 
-Imagine you sequenced 10 samples from a population and computed this AFS vector in R (# singletons, doubletons, etc.):
+Imagine you sequenced 10 samples from a population and computed the following
+AFS vector (which contains, sequentially, the number of singletons, doubletons, etc.):
 
 <!-- dput(as.vector(observed_afs)) -->
 
@@ -1131,32 +1189,221 @@ afs_observed <- c(2520, 1449, 855, 622, 530, 446, 365, 334, 349, 244,
                   264, 218,  133, 173, 159, 142, 167, 129, 125, 143)
 ```
 
-. . .
+You know (maybe from some fossil evidence) that the population probably had
+a constant $N_e$ somewhere between 1000 and 30000 for the past 100,000 generations,
+and had mutation and recombination rates of 1e-8 (i.e., parameters already
+implemented by your `simulate_afs()` function).
 
-You know that the population had a constant $N_e$ somewhere between 1000 and 30000 for the past 100,000 generations, and had mutation and recombination rates of 1e-8 (i.e., parameters already implemented by the `simulate_afs()` function).
+**Use _slendr_ simulations to guess the true (and hidden!) $N_e$ given the observed
+AFS by running simulations for a range of $N_e$ values and comparing each run to
+the `afs_observed` vector above.**
 
-. . .
+**Hints:**
 
-<hr>
+Depending on your level of comfort with R (and programming in general), you can
+choose one of the following approaches:
 
-**Guess the true** $N_e$ given the observed AFS by running single-population simulations for a range of $N_e$ values and comparing each run to `afs_observed`.
+- **Option 1** [easy]: Plot AFS vectors for various $N_e$ values, then eyeball
+which looks closest to the observed AFS based on the figures alone.
 
-## Part *b*: Hints
+- **Option 2** [hard]: Simulate AFS vectors in steps of possible `Ne` (maybe
+`lapply()`?), and find the $N_e$ which gives the closest AFS to the observed AFS based on [Mean squared error](https://en.wikipedia.org/wiki/Mean_squared_error).
 
-Using your custom `simulate_afs()` function, find the value of `Ne` that will give the closest AFS to the observed AFS:
 
--   *option #1* \[*easy*\]: Plot AFS vectors for various $N_e$ values, then eyeball which looks closest to the observed AFS
 
--   *option #2* \[*hard*\]: Simulate AFS vectors in steps of possible `Ne` (maybe `lapply()`?), find the [closest](https://en.wikipedia.org/wiki/Mean_squared_error) AFS
+::: callout-note
+#### Click to see the solution to "Option 1"
+```{r}
+# This is our starting observed AFS which we want to compare simulated AFS vectors to
+afs_observed <- c(2520, 1449, 855, 622, 530, 446, 365, 334, 349, 244,
+                  264, 218,  133, 173, 159, 142, 167, 129, 125, 143)
 
-# Exercise #2: solution
+# We know that the Ne is between 1000 and 30000, so let's simulate
+# a bunch of AFS vectors for different Ne values
+afs_Ne1k <- simulate_afs(Ne = 1000)
+afs_Ne5k <- simulate_afs(Ne = 5000)
+afs_Ne6k <- simulate_afs(Ne = 6000)
+afs_Ne10k <- simulate_afs(Ne = 10000)
+afs_Ne20k <- simulate_afs(Ne = 20000)
+afs_Ne30k <- simulate_afs(Ne = 30000)
 
-<br><br><br><br>
+# Plot all simulated AFS vectors, highlighting the observed AFS in black
+plot(afs_observed, type = "b", col = "black", lwd = 3,
+     xlab = "allele count bin", ylab = "count", ylim = c(0, 13000))
+lines(afs_Ne1k, lwd = 2, col = "blue")
+lines(afs_Ne5k, lwd = 2, col = "green")
+lines(afs_Ne6k, lwd = 2, col = "pink")
+lines(afs_Ne10k, lwd = 2, col = "purple")
+lines(afs_Ne20k, lwd = 2, col = "orange")
+lines(afs_Ne30k, lwd = 2, col = "cyan")
+legend("topright",
+       legend = c("observed AFS", "Ne = 1000", "Ne = 5000",
+                  "Ne = 6000", "Ne = 10000", "Ne = 20000", "Ne = 30000"),
+       fill = c("black", "blue", "green", "pink", "purple", "orange", "cyan"))
 
-::: aside
-See [`ex2_simple.R`](https://github.com/bodkan/ku-popgen2023/blob/main/solutions/ex2_simple.R) for a simple "eyeballing" solution.<br>
 
-See [`ex2_grid.R`](https://github.com/bodkan/ku-popgen2023/blob/main/solutions/ex2_grid.R) for a more elaborate grid-search solution.
+# !!!!! SPOILER ALERT BEFORE REVEALING THE CORRECT ANSWER !!!!!
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# true Ne was 6543!
+```
+:::
+
+
+
+::: callout-note
+#### Click to see the solution to "Option 1"
+
+```{r}
+# This is our starting observed AFS which we want to compare simulated AFS vectors to
+afs_observed <- c(2520, 1449, 855, 622, 530, 446, 365, 334, 349, 244,
+                  264, 218,  133, 173, 159, 142, 167, 129, 125, 143)
+
+# Generate regularly spaced values of potential Ne values (our parameter grid)
+Ne_grid <- seq(from = 1000, to = 30000, by = 500)
+Ne_grid
+
+library(parallel)
+
+# Compute AFS (in parallel, to make things faster) across the entire grid of possible Ne values
+afs_grid <- mclapply(Ne_grid, simulate_afs, mc.cores = detectCores())
+names(afs_grid) <- Ne_grid
+
+# Show the first five simulated AFS vectors, for brevity
+afs_grid[1:5]
+
+
+
+# Plot the observed AFS...
+plot(afs_observed, type = "b", col = "black", lwd = 3, xlab = "allele count bin", ylab = "count")
+# ... and overlay the simulated AFS vectors on top of it
+for (i in seq_along(Ne_grid)) {
+  lines(afs_grid[[i]], lwd = 0.5)
+}
+legend("topright", legend = c("observed AFS", "simulated AFS"), fill = c("black", "gray"))
+
+
+
+
+# Compute mean-squared error of the AFS produced by each Ne value across the grid
+errors <- sapply(afs_grid, function(sim_afs) {
+  sum((sim_afs - afs_observed)^2) / length(sim_afs)
+})
+
+plot(Ne_grid, errors, ylab = "error")
+abline(v = Ne_grid[which.min(errors)], col = "red")
+legend("topright", legend = paste("minimum error Ne =", Ne_grid[which.min(errors)]), fill = "red")
+
+
+
+
+# Plot the AFS again, but this time highlight the most likely spectrum
+# (i.e. the one which gave the lowest RMSE value)
+plot(afs_observed, type = "b", col = "black", lwd = 3, xlab = "allele count bin", ylab = "count")
+for (i in seq_along(Ne_grid)) {
+  color <- if (i == which.min(errors)) "red" else "gray"
+  width <- if (i == which.min(errors)) 2 else 0.75
+  lines(afs_grid[[i]], lwd = width, col = color)
+}
+legend("topright", legend = c("observed AFS", paste("best fitting Ne =", Ne_grid[which.min(errors)])),
+       fill = c("black", "red"))
+
+
+# !!!!! SPOILER ALERT BEFORE REVEALING THE CORRECT ANSWER !!!!!
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# true Ne was 6543!
+```
 :::
 
 
@@ -1187,11 +1434,8 @@ See [`ex2_grid.R`](https://github.com/bodkan/ku-popgen2023/blob/main/solutions/e
 
 
 
-# Exercise 4: Playing around with PCA patterns
 
-
-**Reminder**: you can use the [handout version of the slides]() for reference.
-
+# Exercise 4: Simulating dynamics of positive selection
 
 
 
@@ -1223,9 +1467,4 @@ See [`ex2_grid.R`](https://github.com/bodkan/ku-popgen2023/blob/main/solutions/e
 
 
 
-
-
-
-# Exercise 5: Simulating dynamics of positive selection
-
-**Reminder**: you can use the [handout version of the slides]() for reference.
+# Exercise 5: Playing around with PCA patterns

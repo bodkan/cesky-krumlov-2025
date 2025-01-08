@@ -7,7 +7,8 @@ init_env()
 
 
 
-# Part 1 -- a custom function Ne -> AFS vector ----------------------------
+
+# Part 1: A self-contained slendr function of Ne -> AFS -------------------
 
 simulate_afs <- function(Ne) {
   # create a slendr model with a single population of size Ne = N
@@ -44,7 +45,8 @@ legend("topright", legend = c("Ne = 1k", "Ne = 10k", "Ne = 30k"),
 
 
 
-# Part 2 -- estimating Ne from empirical data -----------------------------
+
+# Part 2: Estimating Ne from empirical AFS --------------------------------
 
 afs_observed <- c(2520, 1449, 855, 622, 530, 446, 365, 334, 349, 244,
                   264, 218,  133, 173, 159, 142, 167, 129, 125, 143)
