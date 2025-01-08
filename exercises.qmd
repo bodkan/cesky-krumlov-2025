@@ -1759,7 +1759,7 @@ There are two modifications to our previous simulation workflows:
 the `msprime()` _slendr_ engine to `slim()`. The latter can still interpret the
 same demographic model we programmed in R, just like the `msprime()` engine can,
 but will run the model using SLiM (and thus leveraging the new SLiM extension code
-that we have customized using `substituta_values()` above). We simply do this by
+that we have customized using `substitute_values()` above). We simply do this by
 switching from this:
 
 ```{r}
@@ -1773,6 +1773,10 @@ to this:
 #| eval: false
 ts <- slim(model, sequence_length = 10e6, recombination_rate = 1e-8, samples = schedule)
 ```
+
+As you can see, you don't have to modify anything in your model code, just
+switching from `msprime` to `slim` in the line of code which produces the
+simulation result.
 
 2. The customized model will not only produce a tree sequence, but will
 also generate a table of allele frequencies in each population (SLiM experts
