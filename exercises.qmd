@@ -1460,6 +1460,7 @@ To speed things up, create a new `exercise4.R` script and copy the following
 code as a starting point for this exercise:
 
 ```{r}
+#| collapse: true
 library(slendr)
 init_env()
 
@@ -1531,15 +1532,13 @@ plot_model(model, proportions = TRUE, samples = schedule)
 Although the point of this exercise is to simulate selection, let's first
 simulate a normal neutral model using slendr's `msprime()` engine as a sanity
 check. **Simulate 10 Mb of sequence with a recombination rate `1e-8` and a
-sampling `schedule` defined above. Use the function `ts_mutate()` to overlay
-mutations on the tree sequence, with a mutation rate `1e-8`.**
+sampling `schedule` defined above.**
 
 ::: callout-note
 #### Click to see the solution
 
 ```{r}
-ts <- msprime(model, sequence_length = 10e6, recombination_rate = 1e-8, samples = schedule) %>%
-  ts_mutate(mutation_rate = 1e-8)
+ts <- msprime(model, sequence_length = 10e6, recombination_rate = 1e-8, samples = schedule)
 ```
 :::
 
@@ -1578,7 +1577,7 @@ samples
 # Compute genome-wide Tajima's D for each population -- note that we don't
 # expect to see any significant differences because no population experienced
 # natural selection (yet)
-ts_tajima(ts, sample_sets = samples)
+ts_tajima(ts, sample_sets = samples, mode = "branch")
 ```
 :::
 
@@ -1614,7 +1613,7 @@ windows <- round(seq(0, ts$sequence_length, length.out = 100))
 windows
 
 # Compute genome-wide Tajima's D for each population in individual windows
-tajima_wins <- ts_tajima(ts, sample_sets = samples, windows = windows)
+tajima_wins <- ts_tajima(ts, sample_sets = samples, windows = windows, mode = "branch")
 tajima_wins
 
 # You can see that the format of the result is slightly strange, with the
@@ -1746,6 +1745,7 @@ model <- compile_model(
   extension = extension   # <======== this is missing in the neutral example!
 )
 ```
+:::
 
 
 
@@ -1897,7 +1897,7 @@ samples
 
 # Overall Tajima's D across the 10Mb sequence still doesn't reveal any significant
 # deviations even in case of selection (again, not entirely unsurprising)
-ts_tajima(ts, sample_sets = samples)
+ts_tajima(ts, sample_sets = samples, mode = "branch")
 ```
 
 
@@ -1906,7 +1906,7 @@ ts_tajima(ts, sample_sets = samples)
 windows <- as.integer(seq(0, ts$sequence_length, length.out = 100))
 
 # compute genome-wide Tajima's D for each population in individual windows
-tajima_wins <- ts_tajima(ts, sample_sets = samples, windows = windows)
+tajima_wins <- ts_tajima(ts, sample_sets = samples, windows = windows, mode = "branch")
 tajima_df <- process_tajima(tajima_wins)
 
 plot_tajima(tajima_df)
