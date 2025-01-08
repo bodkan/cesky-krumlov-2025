@@ -148,6 +148,9 @@ model <- compile_model(
 path <- slim(model, sequence_length = 10e6, recombination_rate = 1e-8, samples = schedule, path = TRUE, random_seed = 59879916)
 # tend <- Sys.time()
 # tend - tstart # Time difference of 38.82014 secs
+# dir.create(here::here("data/selection"), showWarnings = FALSE)
+# file.copy(file.path(path, "slim.trees"), here::here("data/selection"))
+# file.copy(file.path(path, "trajectory.tsv"), here::here("data/selection"))
 
 # We can verify that the path not only contains a tree-sequence file but also
 # the table of allele frequencies.
@@ -187,7 +190,7 @@ ts_tajima(ts, sample_sets = samples)
 windows <- as.integer(seq(0, ts$sequence_length, length.out = 100))
 
 # compute genome-wide Tajima's D for each population in individual windows
-tajima_wins <- ts_tajima(ts, sample_sets = samples, windows = windows)
+tajima_wins <- ts_tajima(ts, sample_sets = samples, windows = windows, mode = "branch")
 tajima_df <- process_tajima(tajima_wins)
 tajima_df
 
