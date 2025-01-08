@@ -1536,7 +1536,7 @@ sampling `schedule` defined above. Use the function `ts_mutate()` to overlay
 mutations on the tree sequence, with a mutation rate `1e-8`.**
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 ts <- msprime(model, sequence_length = 10e6, recombination_rate = 1e-8, samples = schedule) %>%
@@ -1549,7 +1549,7 @@ the function `ts_samples()`, making use we have all the individuals scheduled
 for tree-sequence recording.**
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 ts_samples(ts)
@@ -1570,7 +1570,7 @@ tree sequence, then use this to compute Tajima's D using the _slendr_ function
 for some general guidance.**
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 samples <- ts_names(ts, split = "pop")
@@ -1586,7 +1586,7 @@ ts_tajima(ts, sample_sets = samples)
 
 
 
-## Part 3: Computing Tajima's D in windows
+## Part 2: Computing Tajima's D in windows
 
 Let's take this one step forward. Even if there is a locus under positive selection
 somewhere along our chromosome, it might be quite unlikely that we would find a
@@ -1607,7 +1607,7 @@ and inspect its contents in the R console.***
 to create the coordinates of window boundaries very easily.
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 # Pre-compute genomic windows for window-based computation of Tajima's D
@@ -1631,7 +1631,7 @@ of my helper functions `plot_tajima(tajima_df)`.**
 
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 # The helper function `process_tajima()` reformats the results into a normal
@@ -1664,7 +1664,7 @@ plot_tajima(tajima_df)
 
 
 
-## Part 4: Adding positive selection to the base demographic model
+## Part 3: Adding positive selection to the base demographic model
 
 Although primarily designed for neutral demographic models, _slendr_ allows
 optional simulation of natural selection by providing a "SLiM extension code
@@ -1714,7 +1714,7 @@ at that file in your terminal -- you should see each of the three `{{placeholder
 parameters replaced with a concrete given value.**
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 Let's take a look at the first 15 lines of the extension file before and
 after calling `substitute_values()`. We'll do this in R for simplicity, but
@@ -1738,7 +1738,7 @@ now include the new functionality for simulating natural selection:
 etc., by following the instructions above.**
 
 ::: callout-note
-### Click to see the solution
+#### Click to see the solution
 
 ```{r}
 model <- compile_model(
@@ -1750,15 +1750,47 @@ model <- compile_model(
 
 
 
+## Part 4: Running a selection simulation using `slim()`
+
 Now we can finally run our selection simulation!
 
-Our selection-customized model will not only produce a tree sequence, but will
+There are two modifications to our previous simulation workflows:
+
+1. Because we need to run a non-neutral simulation, we have to switch from using
+the `msprime()` _slendr_ engine to `slim()`. The latter can still interpret the
+same demographic model we programmed in R, just like the `msprime()` engine can,
+but will run the model using SLiM (and thus leveraging the new SLiM extension code
+that we have customized using `substituta_values()` above). We simply do this by
+switching from this:
+
+```{r}
+#| eval: false
+ts <- msprime(model, sequence_length = 10e6, recombination_rate = 1e-8, samples = schedule)
+```
+
+to this:
+
+```{r}
+#| eval: false
+ts <- slim(model, sequence_length = 10e6, recombination_rate = 1e-8, samples = schedule)
+```
+
+2. The customized model will not only produce a tree sequence, but will
 also generate a table of allele frequencies in each population (SLiM experts
 might have noticed the revelant SLiM code when they were inspecting
 [`slim_extension.txt`](https://github.com/bodkan/cesky-krumlov-2025/blob/main/slim_extension.txt)). We need to be able to load both of these files after
 the simulation and thus need a path to a location we can find those files.
-We can do this by specifying `path = TRUE`.
+We can do this by specifying calling the `slim()` function as `path <- slim(..., path = TRUE)` (so with the extra `path =` argument). This will return a path
+to where the `slim()` engine saved all output files.
 
+**Run a simulation from the modified model of selection with the `slim()` engine
+as instructed in 1. and 2. above, then use the `list.files(path)` function in R
+to take a look in the directory. Which files were produced by the simulation?**
+
+::: callout-note
+#### Click to see the solution (you have a working SLiM installation)
+
+```{r}
 # tstart <- Sys.time()
 path <- slim(model, sequence_length = 10e6, recombination_rate = 1e-8, samples = schedule, path = TRUE, random_seed = 59879916)
 # tend <- Sys.time()
@@ -1767,9 +1799,38 @@ path <- slim(model, sequence_length = 10e6, recombination_rate = 1e-8, samples =
 # We can verify that the path not only contains a tree-sequence file but also
 # the table of allele frequencies.
 list.files(path)
+```
+:::
 
-# Allele frequency trajectories -------------------------------------------
+::: callout-note
+#### Click to see the solution (you don't have a working SLiM installation)
 
+```{r}
+# If you don't have SLiM set up, just use the simulated results from my own
+# run of the same simulation
+path <- here::here("data/selection")
+
+# We can verify that the path not only contains a tree-sequence file but also
+# the table of allele frequencies.
+list.files(path)
+```
+:::
+
+## Part 5: Investigating allele frequency trajectories
+
+**Use another helper function `read_trajectory(path)` which I provided for this
+exercise to read the simulated frequency trajectories of the positively
+selected mutation in all of our populations into a variable `traj_df`. Then
+run a second helper function `plot_trajectory(traj_df)` to inspect the trajectories
+visually. The allele was programmed to occur in EURopeans 15 thousand years ago,
+and was configured to have been under very strong selection of $s = 0.15$.
+Do the trajectories make sense given the demographic model of European prehistory
+plotted above?**
+
+::: callout-note
+#### Click to see the solution
+
+```{r}
 traj_df <- read_trajectory(path)
 traj_df
 
@@ -1782,34 +1843,173 @@ plot_grid(
   plot_trajectory(traj_df),
   nrow = 1, rel_widths = c(0.7, 1)
 )
+```
 
-# Tajima's D --------------------------------------------------------------
+## Part 6: Tajima's D (genome-wide and window-based) from the selection model
 
-# We need an additional call to `ts_recapitate()` to ensure that the tree
-# sequence is fully coalesced (and thus contains older polymorphisms)
-ts <- ts_read(file.path(path, "slim.trees"), model) %>%
-  ts_recapitate(Ne = 5000, recombination_rate = 1e-8) %>%
-  ts_mutate(mutation_rate = 1e-8)
+Our simulation run saved results in the location stored in the `path` variable.
 
+```{r}
+list.files(path)
+```
+
+From this `path`, we've already successfuly investigated the frequency trajectories.
+
+Now let's compute Tajima's D on the tree sequence simulated from our selection
+model. Hopefully we should see an interesting pattern in our selection scan?
+For instance, we don't know yet _where_ in the genome is the putative locus
+under selection!
+
+To read a tree sequence simulated with `slim()` in the customized setup, we need
+to do a bit of work. To simplify things a bit, here's the R code which makes it
+possible to do. Just copy it in your `exercise4.R` script as it is:
+
+```{r}
+ts <-
+  file.path(path, "slim.trees") %>%  # 1. compose full path to the slim.trees file
+  ts_read(model) %>%                 # 2. read the tree sequence file into R
+  ts_recapitate(Ne = 5000, recombination_rate = 1e-8) # 3. perform recapitation
+```
+
+Very briefly, because our tree sequence was generated by SLiM, it's very likely
+that not all genealogies along the simulated genome will be fully coalesced
+(i.e., not all tree will have a single root). To explain why this is the case
+is out of the scope of this session, but read [here](https://tskit.dev/pyslim/docs/latest/tutorial.html) if you're interested
+in learning more. For the time being, it suffices to say that we can plug the
+(uncoalesced) tree sequence into the `ts_recapitate()` function, which then
+takes a SLiM tree sequence and simulates all necessary "ancestral history" that
+was missing on the uncoalesced trees, thus ensuring that the entire tree
+sequence is fully coalesced and can be correctly computed on.
+
+**Now that you have a `ts` tree sequence object resulting from a new selection
+simulation run, repeat the analyses of genome-wide and window-based Tajima's D
+from _Part 1_ and _Part 2_ of this exercise, again using the provided helper
+functions `process_tajima()` and `plot_tajima()`. Can you identify which locus
+has been the likely focal point of the positive selection? Which population
+shows evidence of selection? Which doesn't and why (look again at the 
+visualization of the demographic model above)?**
+
+::: callout-note
+#### Click to see the solution
+
+```{r}
 samples <- ts_names(ts, split = "pop")
 samples
 
 # Overall Tajima's D across the 10Mb sequence still doesn't reveal any significant
 # deviations even in case of selection (again, not entirely unsurprising)
 ts_tajima(ts, sample_sets = samples)
+```
 
+
+```{r}
 # So let's look at the window-based computation again...
 windows <- as.integer(seq(0, ts$sequence_length, length.out = 100))
 
 # compute genome-wide Tajima's D for each population in individual windows
 tajima_wins <- ts_tajima(ts, sample_sets = samples, windows = windows)
 tajima_df <- process_tajima(tajima_wins)
-tajima_df
 
 plot_tajima(tajima_df)
+```
+
+You should see a clear dip in Tajima's D around the midpoint of the DNA sequence,
+but only in Europeans. The beneficial allele appeared in the European population,
+and although the plot of the allele frequency trajectories shows that the selection
+dynamics has been _dramatically_ affected by gene-flow events (generally causing
+a repeated "dilution" of the selection signal in Europeans), there has never been
+gene-flow (at least in our model) _from_ Europeans to other populations, so the
+beneficial allele never had a chance to "make it" into those populations.
+
+:::
 
 
 
-# We can finally run our selection simulation
+
+
+
+
+
+
+
+:::::: callout-tip
+## Bonus exercises
+
+#### Bonus 1: Program your own model
+
+Vary the uniform recombination rate and observe what happens with Tajima's D
+in windows along the genome.
+
+::: callout-note
+#### Click to see the solution
+
+Solution: just modify the value of the `recombination_rate =` argument provided
+to the `slim()` function above.
+:::
+
+
+
+
+
+#### Bonus 2: Simulate origin of the allele in EHG
+
+
+Simulate the origin of the beneficial allele in the EHG population -- what
+do the trajectories look like now? How does that change the Tajima's D
+distribution along the genome in our European populations?
+
+::: callout-note
+#### Click to see the solution
+
+Use this extension in the `slim()` call, and repeat the rest of the
+selection-based workflow in this exercise.
+
+```{r}
+#| eval: false
+extension <- substitute_values(
+  template = "slim_extension.txt",
+  origin_pop = "EHG",
+  s = 0.1,
+  onset_time = 12000
+)
+model <- compile_model(
+  populations = list(afr, ooa, ehg, eur, ana, yam),
+  gene_flow = gf, generation_time = 30,
+  extension = extension
+)
+```
+
+:::
+<!-- End of Bonus exercises for Exercise 4 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Exercise 5: Playing around with PCA patterns
