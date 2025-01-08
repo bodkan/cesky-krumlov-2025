@@ -557,7 +557,6 @@ ts_write(ts, "data/introgression.trees")
 # Inspect the (tskit/Python-based) summary of the new tree sequence
 ts
 
-
 # Get the table of all recorded samples in the tree sequence
 ts_samples(ts)
 
