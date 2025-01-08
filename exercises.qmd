@@ -1439,6 +1439,214 @@ legend("topright", legend = c("observed AFS", paste("best fitting Ne =", Ne_grid
 
 # Exercise 4: Simulating dynamics of positive selection
 
+My primary motivation for designing _slendr_ was to make demographic modelling
+in R as trivially easy and fast as possible, focusing exclusively on neutral
+models. However, after _slendr_ became popular, people have been asking me
+about the possibility of simulating natural selection. After all, a large
+part of _slendr_'s functionality deals with population genetic models across
+geographical landscapes, which requires SLiM. Even though these models are
+neutral, SLiM is _the_ most famous and popular tool for simulating various
+aspects of natural selection.
+
+Recently I caved in and added support for modifying
+_slendr_ demographic models with bits of SLiM code which allows simulating
+pretty much any arbitrary selection scenario you might be interested in. 
+This exercise is a quick demonstration of how this work and how you might
+simulate selection using _slendr_. We will do this using another toy
+model of ancient human history, which we will use as a basis for simulating
+the frequency trajectory of an allele under positive selection, and implementing
+a simpleselection scan summary statistic using Tajima's D.
+
+To speed things up, create a new `exercise4.R` script and copy the following
+code as a starting point for this exercise:
+
+```{r}
+library(slendr)
+init_env()
+
+# This line sources a script in which I provide a few useful helper functions
+# which you can use in this exercise
+source(here::here("utils.R"))
+
+# African ancestral population
+afr <- population("AFR", time = 65000, N = 5000)
+
+# First migrants out of Africa
+ooa <- population("OOA", parent = afr, time = 60000, N = 5000, remove = 27000)
+
+# Eastern hunter-gatherers
+ehg <- population("EHG", parent = ooa, time = 28000, N = 5000, remove = 6000)
+
+# European population
+eur <- population("EUR", parent = ehg, time = 25000, N = 5000)
+
+# Anatolian farmers
+ana <- population("ANA", time = 28000, N = 5000, parent = ooa, remove = 4000)
+
+# Yamnaya steppe population
+yam <- population("YAM", time = 8000, N = 5000, parent = ehg, remove = 2500)
+
+# Define gene-flow events
+gf <- list(
+  gene_flow(from = ana, to = yam, rate = 0.75, start = 7500, end = 6000),
+  gene_flow(from = ana, to = eur, rate = 0.5, start = 6000, end = 5000),
+  gene_flow(from = yam, to = eur, rate = 0.6, start = 4000, end = 3500)
+)
+
+# Compile all populations into a single slendr model object
+model <- compile_model(
+  populations = list(afr, ooa, ehg, eur, ana, yam),
+  gene_flow = gf, generation_time = 30
+)
+
+# Schedule the sampling from four European populations roughly before their
+# disappearance (or before the end of the simulation)
+schedule <- rbind(
+  schedule_sampling(model, times = 0, list(eur, 50)),
+  schedule_sampling(model, times = 6000, list(ehg, 50)),
+  schedule_sampling(model, times = 4000, list(ana, 50)),
+  schedule_sampling(model, times = 2500, list(yam, 50))
+)
+```
+
+When you visualize the model, you might recognize it as a very simplified model
+of demographic history of Europe over the past 50 thousand years or so.
+As you can see, we are recording 50 individuals from four populations -- for
+EURopeans we sample 50 individuals at "present-day", for the remaining populations
+we're recording 50 individuals just before their disappearance. Also note that
+there's quite a bit of gene-flow! This was an important thing we've learned about
+human history in the past 10 years or so -- everyone is mixed with pretty much
+everyone, there isn't (and never was) anything as a "pure population".
+
+```{r}
+#| fig-width: 6
+#| fig-height: 6
+plot_model(model, proportions = TRUE, samples = schedule)
+```
+
+
+
+
+### Part 1: Simulating a tree sequence and computing Tajima's D 
+
+Although the point of this exercise is to simulate selection, let's first
+simulate a normal neutral model using slendr's `msprime()` engine as a sanity
+check. **Simulate 10 Mb of sequence with a recombination rate `1e-8` and a
+sampling `schedule` defined above. Use the function `ts_mutate()` to overlay
+mutations on the tree sequence, with a mutation rate `1e-8`.**
+
+::: callout-note
+### Click to see the solution
+
+```{r}
+ts <- msprime(model, sequence_length = 10e6, recombination_rate = 1e-8, samples = schedule) %>%
+  ts_mutate(mutation_rate = 1e-8)
+```
+:::
+
+**Inspect the table of all individuals recorded in our tree sequence using
+the function `ts_samples()`, making use we have all the individuals scheduled
+for tree-sequence recording.**
+
+::: callout-note
+### Click to see the solution
+
+```{r}
+ts_samples(ts)
+
+library(dplyr)
+ts_samples(ts) %>% group_by(pop, time) %>% tally
+```
+:::
+
+
+As you've learned, _tskit_ functions in _slendr_ generally operate on vectors
+(or lists) of individual names, like those produced by `ts_names()` above.
+**Get a vector of names of individuals in every population recorded in the
+tree sequence, then use this to compute Tajima's D using the _slendr_ function
+`ts_tajima()`.**
+
+**Do you see any striking differences in the Tajima's D values across populations? Check [this](https://en.wikipedia.org/wiki/Tajima%27s_D#Interpreting_Tajima's_D)
+for some general guidance.**
+
+::: callout-note
+### Click to see the solution
+
+```{r}
+samples <- ts_names(ts, split = "pop")
+samples
+
+# Compute genome-wide Tajima's D for each population -- note that we don't
+# expect to see any significant differences because no population experienced
+# natural selection (yet)
+ts_tajima(ts, sample_sets = samples)
+```
+:::
+
+
+
+
+## Part 3: Computing Tajima's D in windows
+
+Let's take this one step forward. Even if there is a locus under positive selection
+somewhere along our chromosome, it might be quite unlikely that we would find a
+Tajima's D value significant enough for the entire chromosome. Fortunately,
+thanks to the flexibility of the _tskit_ module, the _slendr_ function 
+`ts_tajima()` has an argument `windows =`, which allows us to specify the
+coordinates of windows into which a sequence should be broken into, with Tajima's
+D computed separately for each window. Perhaps this will allow us to see the
+impact of positive selection?
+
+**Define a variable `windows` which will contain a vector of coordinates of
+100 windows, starting at position `0`, and ending at position `10e6` (i.e. end
+of our chromosome). Then provide this variable as the `windows =` argument of
+`ts_tajima()`. Save the result of `ts_tajima()` into the variable `tajima_wins`,
+and inspect its contents in the R console.***
+
+**Hint:** You can use the R function `seq()` and its argument `length.out = 100`,
+to create the coordinates of window boundaries very easily.
+
+::: callout-note
+### Click to see the solution
+
+```{r}
+# Pre-compute genomic windows for window-based computation of Tajima's D
+windows <- round(seq(0, ts$sequence_length, length.out = 100))
+windows
+
+# Compute genome-wide Tajima's D for each population in individual windows
+tajima_wins <- ts_tajima(ts, sample_sets = samples, windows = windows)
+tajima_wins
+
+# You can see that the format of the result is slightly strange, with the
+# `D` column containing a vector of numbers (this is done for conciseness)
+tajima_wins[1, ]$D
+```
+:::
+
+The default output format of `ts_tajima()` is not super user-friendly. **Process
+the result using a helper function `process_tajima(tajima_wins)` that I provided
+for you (perhaps save it as `tajima_df`), and visualize it using another
+of my helper functions `plot_tajima(tajima_df)`.**
+
+
+::: callout-note
+### Click to see the solution
+
+```{r}
+# The helper function `process_tajima()` reformats the results into a normal
+# data frame, this time with a new column `window` which indicates the index
+# of the window that each `D` value was computed in
+tajima_df <- process_tajima(tajima_wins)
+tajima_df
+
+# Now let's visualize the window-based Tajima's D along the simulated genome
+# using another helper function `plot_tajima()` (hint: we still don't expect
+# anything interesting here because we ran a purely neutral simulation, so this
+# is more like a control)
+plot_tajima(tajima_df)
+```
+:::
 
 
 
@@ -1456,17 +1664,152 @@ legend("topright", legend = c("observed AFS", paste("best fitting Ne =", Ne_grid
 
 
 
+## Part 4: Adding positive selection to the base demographic model
+
+Although primarily designed for neutral demographic models, _slendr_ allows
+optional simulation of natural selection by providing a "SLiM extension code
+snippet" with customization SLiM code as an optional argument `extension =`
+of `compile_model()` (a function you're closely familiar with at this point).
+
+Unfortunately we don't have any space to explain SLiM here (and I have no idea,
+at the time of writing, whether or not you will have worked with SLiM earlier
+in this workshop). Suffice to say that SLiM is another very popular population
+genetic simulator software which allows simulation of selection, and which
+requires you to write custom code in a different programming language called
+Eidos.
+
+
+**Take a look at the file `slim_extension.txt` provided in your working
+directory (it's also part of the GitHub repository [here](https://github.com/bodkan/cesky-krumlov-2025/blob/main/slim_extension.txt)).
+If you worked with SLiM before, glance through the script casually and see
+if it makes any sense to you. If you have not worked with SLiM before,
+look for the strange `{{elements}}` in curly brackets in the first ten lines
+of the script.** Those are the parameters of the selection model we will be
+customizing are standard neutral demographic model from in the next step.
+
+The SLiM extension script has three parameters:
+
+- `origin_pop` -- in which population should a beneficial allele appear,
+- `s` -- what should be the selection coefficient of the beneficial allele, and
+- `onset_time` -- at which time should the allele appear in the `origin_pop`.
+
+However, at the start, the SLiM extension snippet doesn't contain any concrete
+values of those parameters, but only their `{{origin_pop}}`, `{{s}}`, and
+`{{onset_time}}` placeholders.
+
+**Use the _slendr_ function `substitute_values()` to substitute concrete values
+for those parameters like this:**
+
+```{r}
+extension <- substitute_values(template = here::here("slim_extension.txt"),
+  origin_pop = "EUR",
+  s = 0.15,
+  onset_time = 12000
+)
+extension
+```
+
+You can see that `substitute_values()` returned a path to a file. **Take a look
+at that file in your terminal -- you should see each of the three `{{placeholder}}`
+parameters replaced with a concrete given value.**
+
+::: callout-note
+### Click to see the solution
+
+Let's take a look at the first 15 lines of the extension file before and
+after calling `substitute_values()`. We'll do this in R for simplicity, but
+you can use `less` in plain unix terminal.
+
+```{R}
+# Before -- see the {{placeholder}} parameters in their original form
+cat(paste(readLines("slim_extension.txt")[1:15], collapse = "\n"))
+
+# After -- see the {{placeholder}} parameters with concrete values!
+cat(paste(readLines(extension)[1:15], collapse = "\n"))
+```
+:::
+
+How do we use the SLiM extension for our simulation? It's very simple -- we
+just have to provide the `extension` variable as an additional argument of
+good old `compile_model()`. This will compile a new _slendr_ model which will
+now include the new functionality for simulating natural selection:
+
+**Compile a new `model` of the history of populations `afr`, `ooa`, `ehg`, 
+etc., by following the instructions above.**
+
+::: callout-note
+### Click to see the solution
+
+```{r}
+model <- compile_model(
+  populations = list(afr, ooa, ehg, eur, ana, yam),
+  gene_flow = gf, generation_time = 30,
+  extension = extension   # <======== this is missing in the neutral example!
+)
+```
 
 
 
+Now we can finally run our selection simulation!
+
+Our selection-customized model will not only produce a tree sequence, but will
+also generate a table of allele frequencies in each population (SLiM experts
+might have noticed the revelant SLiM code when they were inspecting
+[`slim_extension.txt`](https://github.com/bodkan/cesky-krumlov-2025/blob/main/slim_extension.txt)). We need to be able to load both of these files after
+the simulation and thus need a path to a location we can find those files.
+We can do this by specifying `path = TRUE`.
+
+# tstart <- Sys.time()
+path <- slim(model, sequence_length = 10e6, recombination_rate = 1e-8, samples = schedule, path = TRUE, random_seed = 59879916)
+# tend <- Sys.time()
+# tend - tstart # Time difference of 38.82014 secs
+
+# We can verify that the path not only contains a tree-sequence file but also
+# the table of allele frequencies.
+list.files(path)
+
+# Allele frequency trajectories -------------------------------------------
+
+traj_df <- read_trajectory(path)
+traj_df
+
+plot_trajectory(traj_df)
+
+# Comparing the trajectories side-by-side with the demographic model reveals
+# some obvious patterns of both selection and demographic history.
+plot_grid(
+  plot_model(model),
+  plot_trajectory(traj_df),
+  nrow = 1, rel_widths = c(0.7, 1)
+)
+
+# Tajima's D --------------------------------------------------------------
+
+# We need an additional call to `ts_recapitate()` to ensure that the tree
+# sequence is fully coalesced (and thus contains older polymorphisms)
+ts <- ts_read(file.path(path, "slim.trees"), model) %>%
+  ts_recapitate(Ne = 5000, recombination_rate = 1e-8) %>%
+  ts_mutate(mutation_rate = 1e-8)
+
+samples <- ts_names(ts, split = "pop")
+samples
+
+# Overall Tajima's D across the 10Mb sequence still doesn't reveal any significant
+# deviations even in case of selection (again, not entirely unsurprising)
+ts_tajima(ts, sample_sets = samples)
+
+# So let's look at the window-based computation again...
+windows <- as.integer(seq(0, ts$sequence_length, length.out = 100))
+
+# compute genome-wide Tajima's D for each population in individual windows
+tajima_wins <- ts_tajima(ts, sample_sets = samples, windows = windows)
+tajima_df <- process_tajima(tajima_wins)
+tajima_df
+
+plot_tajima(tajima_df)
 
 
 
-
-
-
-
-
-
+# We can finally run our selection simulation
 
 # Exercise 5: Playing around with PCA patterns
