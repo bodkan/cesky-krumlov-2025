@@ -8,6 +8,7 @@ date: "January 2025"
 date-format: "MMMM YYYY"
 format:
   html:
+    toc-title: Contents
     toc: true
     echo: true
     code-line-numbers: false
