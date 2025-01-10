@@ -16,7 +16,7 @@ plot_pca <- function(prefix, ts, pc = c(1, 2), color_by = c("time", "pop"), retu
   if (length(pc) != 2)
     stop("The 'pc' argument of 'plot_pca' must be an integer vector of length two", call. = FALSE)
 
-  samples <- ts_samples(ts) %>% mutate(pop = factor(pop, levels = c("popZ", "popX", "popY")))
+  samples <- ts_samples(ts) %>% mutate(pop = factor(pop, levels = c("popA", "popB", "popC")))
 
   return <- match.arg(return)
   color_by <- match.arg(color_by)
@@ -64,9 +64,10 @@ plot_pca <- function(prefix, ts, pc = c(1, 2), color_by = c("time", "pop"), retu
     labs(x = sprintf("%s [%.1f %%]", pc_cols[1], variance_explained[pc[1]]),
          y = sprintf("%s [%.1f %%]", pc_cols[2], variance_explained[pc[2]])) +
     theme_bw() +
-    gg_theme
+    gg_theme +
+    ggtitle(paste0("EIGENSTRAT: ", prefix))
 
-  p_model <- plot_model(attr(ts, "model"), proportions = TRUE, samples = schedule)
+  p_model <- plot_model(attr(ts, "model"), proportions = TRUE)
 
   plot <- plot_grid(p_model, plot)
 
