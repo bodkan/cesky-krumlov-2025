@@ -211,6 +211,14 @@ Unless you have a strong preference for another editor or IDE, I recommend you u
 
 Each exercise is compose of individual *parts*, which are designed to build one upon the other in the order they are specified.
 
+#### Don't worry about the amount of exercises you're "supposed to do"
+
+How far we manage to crunch through all of the exercises will depend on
+everybody's level of confidence in programming, data science _and_ population
+genetics. The contents of the activities as a whole are designed so that no matter
+the point that we run out of time, you will take home enough knowledge of
+_slendr_ to be able to immediately apply it to your own projects.
+
 #### Note on the programming aspect of the exercises
 
 All the exercises will involve "real coding"! If you've never really programmed entire scripts before, this could feel a little intimidating. Don't worry. If you're ever lost, just take a peek at the solution which is (by default hidden) under each exercise section. Always try to work on a solution on your own, but never let this be a barrier to your progress. Feel free to copy-paste bits of my solutions into your own scripts.
@@ -2017,3 +2025,315 @@ model <- compile_model(
 
 
 # Exercise 5: Playing around with PCA patterns
+
+In earlier lectures you've learned about the
+[Principal Component Analysis](https://en.wikipedia.org/wiki/Principal_component_analysis),
+a dimensional-reduction technique that's a central piece of many (if not most)
+papers studying population history of many (hundreds) of individuals genotyped
+across many (millions) SNPs.
+
+Although incredibly popular, PCA has recently been a topic of controversy, with
+a [highly combative](https://www.nature.com/articles/s41598-022-14395-4) paper
+criticizing the application of PCA in all of population genetics, almost to a
+point of claiming that none of the results can be published. As an example,
+take a look at [Figure 5](https://www.nature.com/articles/s41598-022-14395-4#Fig5)
+in the paper, demonstrating that an Indian population can be arbitrarily placed
+in proximity to Europeans, East Asians, and Africans, simply by wiggling the
+sample sizes of all groups before they applying PCA on their genotype data.
+
+This activity session is not a place to debate the merit of PCA (or any other
+popgen method for that matter). What we can do (as we've done in previous
+exercises) is to show how _slendr_ can be used in a very easy way to evaluate
+patterns, expected behavior, and overall dynamics of many popgen metrics in
+a controlled settings -- and in this way, verify our intuition and check the
+robustness of a method in question -- using PCA as another example. We'll be
+specifically looking at patterns which arise in PCA depending on the exact
+spatio-temporal sampling from a demographic model.
+
+
+
+## Part 1: Create a model
+
+**Start a new script named `exercise5.R` with the following setup of another
+toy demographic model:**
+
+```{r}
+library(slendr)
+init_env()
+
+source(here::here("utils.R"))
+
+popA <- population("popA", time = 3000, N = 5000)
+popB <- population("popB", time = 1500, N = 5000, parent = popA)
+popC <- population("popC", time = 1500, N = 5000, parent = popA)
+
+model <- compile_model(list(popA, popB, popC), generation_time = 1)
+
+schedule <- schedule_sampling(model, times = seq(3000, 0, by = -200),
+                              list(popA, 10), list(popB, 10), list(popC, 10))
+
+plot_model(model, proportions = TRUE, samples = schedule)
+```
+
+As you can see, this model describes the demographic history of three populations:
+one ancestral population "popA" starting at 3000 generations ago, which splits
+into two populations "popB" and "popC" the same time at 1500 generations ago.
+We den instruct _slendr_ to record 10 individuals from each of the three populations
+starting from 3000 generations ago all the way to 0 generations ago (i.e.
+the "present"), every 200 generations (remeber the `seq()` R function!).
+
+## Part 2: Simulate a (mutated!) tree sequence
+
+To be able to run PCA using the [_smartsnp_ R package](https://christianhuber.github.io/smartsnp/)
+(below), we will need to simulate data in the
+[EIGENSTRAT](https://bodkan.net/admixr/articles/01-tutorial.html#a-note-about-eigenstrat-format)
+file format. And to do _that_, we need our tree sequence with mutations.
+
+Recall that all of our previous exercises managed to do away with mutations
+completely, owing to the amazing nature of the succint tree sequence data structure
+invented by the people behind the _tskit_ project. However, all traditional
+popgen software and tools still rely on genotype data, which is why we now
+have to simulate mutations as well. Luckily, this is very easy -- instead
+of the traditional
+
+```{r}
+#| eval: false
+ts <- msprime(model, sequence_length = ..., recombination_rate = ..., samples = ...)
+```
+
+we will run this:
+
+```{r}
+#| eval: false
+# First run a normal msprime simulation creating a tree-sequence object, then
+# directly pipe it into a function which adds (neutral!) mutations to it
+ts <- msprime(model, sequence_length = ..., recombination_rate = ..., samples = ...) %>%
+  ts_mutate(mutation_rate = ...)
+```
+
+which is effectively the same thing as running this:
+
+```{r}
+#| eval: false
+# First run a normal msprime simulation creating a tree-sequence object...
+ts_nomuts <- msprime(model, sequence_length = ..., recombination_rate = ..., samples = ...)
+# ... then add (neutral!) mutations to it
+ts <- ts_mutate(ts_nomuts, mutation_rate = ...)
+```
+
+With that out of the way, **simulate a tree sequence which is 50 Mb long, with
+a recombination rate 1e-8, and overlay mutations on it at a rate 1e-8.
+Check that it has mutations either by typing out `ts` in the console and looking
+for a "Mutations" section of the summary, or by using the function `ts_table(ts, "mutations")`.
+Then count how many individuals you have recorded for each population using the
+table produced by `ts_samples()`.**
+
+::: callout-note
+### Click to see the solution
+```{r}
+# First run a normal msprime simulation creating a tree-sequence object, then
+# directly pipe it into a function which adds (neutral!) mutations to it
+ts <- msprime(model, samples = schedule, sequence_length = 50e6, recombination_rate = 1e-8, random_seed = 1702182272) %>%
+  ts_mutate(mutation_rate = 1e-8)
+
+# We can see in the summary that now there are mutations present
+
+ts
+# Get the table of individuals (and process it a bit for tidier plotting later)
+samples <- ts_samples(ts) %>% mutate(pop = factor(pop, levels = c("popA", "popB", "popC")))
+
+# Count how many individuals do we have for each population
+samples %>% group_by(pop) %>% count()
+```
+:::
+
+
+## Part 3: Tree-sequence simplification and EIGENSTRAT conversion
+
+One of our goals in this exercise was to investigate how does the shape of
+a PCA look like based on the sampling of individuals across populations and
+also across time -- all of that from the _same_ demographic history. In order
+to do that, we need to be able to select only a defined subset of individuals
+from a given tree sequence. Which brings us to the last tree-sequence processing
+function in _slendr_ callsed `ts_simplify()`. Implemented on top of the
+`simplify()` method in _tskit_, it has a very simple interface:
+
+```{r}
+#| eval: false
+ts_small <- ts_simplify(ts_big, simplify_to = c(<subset of individuals as a vector>))
+```
+
+This function call creates a _new tree sequence_, which is smaller and only
+contains a those individuals whose names were specified in `simplify_to =`
+(again, we're talking about the "symbolic names" of individuals, such as
+"NEA_1", "AFR_42", etc., not integer numbers of _tskit_ nodes).
+
+Whenever you want to create smaller subsets of a large tree sequence, it is
+often helpful to work with the table of all individuals in the original tree
+sequence, because it contains every individual's `name`, `pop` assignment and
+the `time` in which it lived, so let's save it for further use now:
+
+```{r}
+samples <- ts_samples(ts)
+
+nrow(samples)
+```
+
+For instance, we can get only individuals from "popB" and "popC" sampled at
+the present using this code:
+
+```{r}
+subset <- filter(samples, pop %in% c("popB", "popC"), time == 0)
+
+nrow(subset)
+```
+
+You know that the table of samples contains the `name` of each individual,
+which you can access as `subset$name`. **Use the `ts_simplify()` function to
+create a new tree sequence called `ts_BC0` which contains only this subset
+of individuals. Check that it really does contain only the defined subset
+of individuals using `ts_samples(ts_BC0)`.**
+
+::: callout-note
+### Click to see the solution
+
+```{r}
+ts_BC0 <- ts_simplify(ts, simplify_to = subset$name)
+
+ts_samples(ts_BC0)
+```
+:::
+
+
+## Part 4: Converting a tree sequence into EIGENSTRAT
+
+The function to use for converting a tree-sequence object we have in R (in our
+exercises the thing we usually had in the `ts` variable) to disk in form of
+genotypes in the EIGENSTRAT format is called `ts_eigenstrat()`. The standard
+way to call it (but see `?ts_eigenstrat` for more options) is like this:
+
+```{r}
+#| eval: false
+ts_eigenstrat(ts, prefix = "path/to/a/desired/EIGENSTRAT/prefix")
+```
+
+Which creates three files `.ind`, `.snp`, and `.geno` as `path/to/a/desired/EIGENSTRAT/prefix.ind`,
+`path/to/a/desired/EIGENSTRAT/prefix.snp`, and `path/to/a/desired/EIGENSTRAT/prefix.geno`,
+just as you would expect for any EIGENSTRAT file.
+
+**Take your simplified tree sequence `ts_BC0` from above, and convert it to
+EIGENSTRAT format under the prefix `data/BC0`.**
+
+::: callout-note
+### Click to see the solution
+```{r}
+# Let's repeat the entire process just so that it's all perfectly clear
+samples <- ts_samples(ts)
+
+subset <- filter(samples, pop %in% c("popB", "popC"), time == 0)
+
+ts_BC0 <- ts_simplify(ts, simplify_to = subset$name)
+
+ts_eigenstrat(ts_BC0, "data/BC0")
+```
+:::
+
+**Check that the EIGENSTRAT files really appeared at the path that you specified
+(in the terminal).**
+
+## Part 5: Inspect the EIGENSTRAT data produced by _slendr_
+
+Years ago I developed a small R package to help me with $f$-statistics based
+projects using the ADMIXTOOLS software (which operates on data in the
+EIGENSTRAT file format), called [admixr](https://bodkan.net/admixr/)
+
+**Use the following code to examine one of the EIGENSTRAT data sets you've
+just created. Just look at the results and see if they make sense in terms
+of what you've learned about this in earlier lectures.**
+
+```{r}
+#| eval: false
+library(admixr)
+
+eigen <- eigenstrat("<prefix of a trio of EIGENSTRAT .ind/.snp/.geno files")
+
+# Print out a summary of the EIGENSTRAT data
+eigen
+
+# Read the .ind file as a table into R
+read_ind(eigen)
+# Read the .snp file as a table into R
+read_snp(eigen)
+# Read the .geno file as a table into R
+read_geno(eigen)
+```
+
+::: callout-note
+### Click to see the solution
+
+```{r}
+#| eval: false
+library(admixr)
+
+eigen <- eigenstrat("data/BC0")
+
+# Print out a summary of the EIGENSTRAT data
+eigen
+
+# Read the .ind file as a table into R
+read_ind(eigen)
+# Read the .snp file as a table into R
+read_snp(eigen)
+# Read the .geno file as a table into R
+read_geno(eigen)
+```
+:::
+
+
+## Part 6: Principal Component Analysis on the simulated data
+
+Now, at long last, we have everything we need to be able to run ABC on the
+data generated by our _slendr_ model. To avoid making this exercise even longer,
+I provided a helper function for you called `plot_pca()`. But this function
+isn't doing anything magical -- it uses the [_smartsnp_ R package](https://christianhuber.github.io/smartsnp/)
+to compute the principal components and visualize the results using _ggplot2_.
+This is something many of you could do given enough time but we want to focus
+on simulations and PCA, not pure R coding. If you're interested, take a look
+at my implementation of `plot_pca()` [here](https://github.com/bodkan/cesky-krumlov-2025/blob/main/utils.R#L15).
+
+Here's how you can use this function (remeber that you need to put
+`source(here::here("utils.R"))` into your script!):
+
+1. Plot PCA while coloring each individual by their population assignment:
+
+```{r}
+#| eval: false
+plot_pca("path/to/prefix", <tree sequence used to create EIGENSTRAT>, color_by = "pop")
+```
+
+2. Plot PCA while coloring each individual by their time of sampling:
+
+```{r}
+#| eval: false
+plot_pca("path/to/prefix", <tree sequence used to create EIGENSTRAT>, color_by = "time")
+```
+
+3. By default, the function plots PC 1 vs PC 2, but you can customize things by
+providing an optional argument `pc =` like this:
+
+```{r}
+#| eval: false
+plot_pca("path/to/prefix", <tree sequence used to create EIGENSTRAT>, color_by = "pop", pc = c(2, 3))
+```
+
+**Plot the PCA from your subset of present-day individuals from "popB" and "popC",
+now converted to `"data/BC0"` EIGENSTRAT prefix from the `ts_BC0` tree sequence.
+Color each individual by their population label, and visualize PC 1 vs PC 2.**
+
+::: callout-note
+### Click to see the solution
+
+```{r}
+plot_pca("data/BC0", ts_BC0, color_by = "pop")
+```
+:::
