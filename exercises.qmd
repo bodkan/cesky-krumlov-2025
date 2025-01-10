@@ -2136,10 +2136,14 @@ recorded for each population using the table produced by `ts_samples()`.**
 ```{r}
 # First run a normal msprime simulation creating a tree-sequence object, then
 # directly pipe it into a function which adds (neutral!) mutations to it
-ts <- msprime(model, samples = schedule, sequence_length = 50e6, recombination_rate = 1e-8, random_seed = 1702182272) %>%
-  ts_mutate(mutation_rate = 1e-8)
+ts_nomuts <- msprime(model, samples = schedule, sequence_length = 50e6, recombination_rate = 1e-8, random_seed = 1702182272)
 
-# We can see in the summary that now there are mutations present
+# Notice we have no mutations on the tree sequence, just as before...
+ts_nomuts
+
+ts <- ts_mutate(ts_nomuts, mutation_rate = 1e-8)
+
+# ... but we have them now!
 ts
 
 # Get the table of individuals (and process it a bit for tidier plotting later)
