@@ -2331,13 +2331,7 @@ plot_pca("data/ABC_all", ts, color_by = "time", pc = c(5, 6))
 
 
 
-# Conclusion
 
-That's all folks! I hope that this session of practical exercises has convinced
-you that _slendr_ is a very useful tool to get from an idea about a model or
-a statistic to a concrete tangible result in just a few lines of R code, and
-that it presents a way to build intuition and test hypotheses very quickly,
-without having to leave the convenience of the R environment.
 
 
 
@@ -2401,76 +2395,15 @@ without having to leave the convenience of the R environment.
 
 
 
+::: callout-tip
+## Bonus exercises
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-```{r}
-#| echo: false
-knitr::knit_exit()
-```
-
-## Part 6: Tree-sequence simplification and EIGENSTRAT conversion
+### Bonus 1: Tree-sequence simplification and EIGENSTRAT conversion
 
 One of our goals in this exercise was to investigate how does the shape of
 a PCA look like based on the sampling of individuals across populations and
@@ -2526,9 +2459,72 @@ ts_samples(ts_BC0)
 ```
 :::
 
+When you have a smaller tree sequence like this, you can convert it to an
+EIGENSTRAT file format using `ts_eigenstrat()` just like we did above.
 
-## Part 7: PCA visualization on subsets of individuals
 
-**TODO**: Try to replicate some of the Elhaik results with EUR/ASIAN/AFR/Indian patterns.
-Would this work with the current simple model? If not, expand it a little, but still
-maintain the simplicity of the Parts 1-5.
+### Part 2: PCA visualization on subsets of individuals
+
+**TODO**: Try to replicate some features of
+[the results](https://www.nature.com/articles/s41598-022-14395-4#Fig5)
+discovered for EUR/ASIAN/AFR/Indian populations.
+
+
+
+
+
+
+
+
+<!-- End of Bonus exercises for Exercise 5 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Conclusion
+
+That's all folks! I hope that this session of practical exercises has convinced
+you that _slendr_ is a very useful tool to get from an idea about a model or
+a statistic to a concrete tangible result in just a few lines of R code, and
+that it presents a way to build intuition and test hypotheses very quickly,
+without having to leave the convenience of the R environment.
+
+
+
+
+
+
+
+
+
+
+
