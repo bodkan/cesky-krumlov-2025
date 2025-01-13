@@ -56,12 +56,35 @@ filters:
 
 # Reference materials
 
-Unless you're already an expert on the *slendr* toolkit, you will probably need some reference materials to do the exercises. Here are the options:
+As you're working on the following exercises, some reference materials might come
+in handy. In general, pretty much all of the exercises are based around my
+popgen simulation R package [_slendr_](https://slendr.net). Whenever you need
+help, I recommed consulting the following reference materials:
 
-1.  You can refer to the slides with the *slendr* crash course. You can find the material rendered as [normal slides](https://bodkan.quarto.pub/cesky-krumlov-2025-slides/) or [one-page handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/) (the latter being probably a bit more practical for reference.
-2.  Relevant tutorials on the [*slendr* website](https://www.slendr.net) which you can find under the "Articles" link in the header.
-3.  [Manual pages](https://www.slendr.net/reference/index.html) of all available *slendr* functions. Note that you can get the help page of every *slendr* R `function` by typing `?function` in the R console. For instance, typing `?ts_tajima` gives you the help page of the *tskit*/*slendr* function implementing the tree-based computation of Tajima's D.
+1.  First and foremost, you should refer to the slides with the _slendr_ "crash
+course" which we startedour activity session with. Ideally, they should cover pretty
+much every bit of _slendr_ functionality you will need. You can find the material
+rendered as [normal slides](https://bodkan.quarto.pub/cesky-krumlov-2025-slides/)
+or [one-page handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/)
+(the latter being probably a bit more practical for reference rather than
+searching for help through individual slides). If these Quarto Pub links
+are not working, it could be because their servers are overloaded. In this case,
+you can simply download `slides.html` or `handouts.html` from the
+[GitHub repository](https://github.com/bodkan/cesky-krumlov-2025/) for this activity.
 
+2.  Relevant tutorials on the [_slendr_ website](https://www.slendr.net) which
+you can find under the "Articles" link in the header of the webpage. In general,
+the website contains much more detailed information which is available in the
+[handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/) in a much more
+condensed form.
+
+3.  [Manual pages](https://www.slendr.net/reference/index.html) of all available
+_slendr_ functions. Note that you can get the help page of every _slendr_ R
+`function()` by typing `?function` in the R console. For instance, typing
+`?ts_tajima` gives you the help page of the _tskit_/_slendr_ function implementing
+the tree-based computation of Tajima's D. Whenever I discuss an optional parameter
+of some function (or whenever you want to modify a function's behavior), this
+is where you can find more information about it.
 
 
 
@@ -94,23 +117,35 @@ Unless you're already an expert on the *slendr* toolkit, you will probably need 
 
 # Installation setup
 
-The easiest way to set up everything on your computer is to do the following:
+The easiest way to set up everything on your computer is to download all of
+the exercise materials (slides, code, data, everything) to your working machine
+by following these steps:
 
-1.  Clone the repository with the activity materials (source code with slides and exercises materials, example scripts, and solutions). In a shell terminal on Linux or macOS, in your home directory (or anywhere else, really) you can run:
+1. **Clone the repository with the activity materials**. In a shell terminal on
+Linux or macOS, in your home directory (or anywhere else, really) you can run:
 
     ```         
     $ git clone https://github.com/bodkan/cesky-krumlov-2025 ~/slendr_activity
     ```
 
-2.  Install all the R package dependencies by going into the activity repository directory you just cloned and installing the necessary R packages by following these steps:
+(For Windows users only: You should be able to do all of this on Windows too, but
+that would require you having some kind of Linux environment (terminal, R, etc.)
+already set up. Unfortunately I don't know much about that so my recommendation
+is that, if you do use Windows, just do the exercises on the cloud instance
+provided by the course organizers.)
 
--   First go into the project directory you just cloned:
+2. **Install all R package dependencies** by going into the activity repository
+directory you just cloned and installing the necessary R packages by following
+these steps:
+
+- First **go into the project directory you just cloned**:
 
     ```         
     $ cd ~/slendr_activity
     ```
 
--   Open the R terminal in that directory. You should get a note that the *renv* package is being automatically setup, like this:
+- **Open the R terminal in that directory. You should get a note that the _renv_
+package is being automatically setup, like this:
 
     ```         
     $ R
@@ -126,13 +161,14 @@ The easiest way to set up everything on your computer is to do the following:
     - Use `renv::status()` for more details.
     ```
 
--   Install the R package dependencies (still in the R console!):
+- **Install R package dependencies** (still in the R console!):
 
     ```         
     > renv::restore(prompt = FALSE)
     ```
 
--   Set up the Python environment used by the *slendr* R package for simulation and tree-sequence analysis (still in the R console!):
+-   **Set up the Python environment** used by the _slendr_ R package for simulation
+and tree-sequence analysis (still in the R console!):
 
     ```         
     > slendr::setup_env(agree = TRUE)
@@ -149,17 +185,20 @@ The easiest way to set up everything on your computer is to do the following:
     =======================================================================
     ```
 
-4.  Open RStudio and navigate to your project directory via `File -> Open Project...`.
+4. **Open the repository directory in RStudio** (on your laptop if you cloned
+the repository there, or in your browser if you're using the provided cloud
+instance) and navigate to your project directory via `File -> Open Project...`
+in the RStudio menu.
 
 **If the `setup_env()` installation procedure fails, try the following:**
 
-1.  Delete the failed installation attempt:
+1. Delete the failed installation attempt:
 
 ```         
 slendr::clear_env(force = TRUE, all = TRUE)
 ```
 
-2.  Try installing it again, this time using `pip` as a Python installation method (the default is `conda` which unfortunately fails fairly often):
+2. Try installing it again, this time using `pip` as a Python installation method (the default is `conda` which unfortunately fails fairly often):
 
 ```         
 slendr::setup_env(agree = TRUE, pip = TRUE)
@@ -169,7 +208,11 @@ In every previous installments of this workshop, this is all that was needed to 
 
 **Installing SLiM**
 
-It's unclear whether we will manage to go through the entirety of the final exercise. However, to be able to do this, having SLiM at least version 4.2 (and it being available in your unix `$PATH!`) is required. If this isn't possible for your, don't worry. You'll be able to do most of that exercise even without SLiM, and I will demonstrate the whole exercise (including the SLiM bit) for you.
+It's unclear whether we will manage to go through the entirety of the selection
+-based exercise. However, to be able to do this, having SLiM at least version 4.2
+(and it being available in your unix `$PATH!`) is required. If this isn't possible
+for your, don't worry. You'll be able to do most of that exercise even without
+SLiM by using cached results of the SLiM simulation that I provided.
 
 
 
@@ -203,38 +246,53 @@ It's unclear whether we will manage to go through the entirety of the final exer
 
 # Organization of the exercises
 
-For each exercise, you will get a brief explanation of the problem at hand and functions that could be useful to solve the exercise. **The concrete, specific task will be always written like this in bold.**
+For each exercise, you will get a brief explanation of the problem at hand and
+some information about functions that could be useful to solve the exercise.
+**The concrete, specific task will be always written like this in bold.** As you
+work on each part of each exercises, look for these bold lines.
 
-Your goal for each exercise is to write a complete R script script. I suggest you name the script for each exercise as `exercise1.R`, `exercise2.R`, etc., just to keep things tidy.
+Your goal for each exercise is to write a complete R script script. I suggest
+you name the script for each exercise as `exercise1.R`, `exercise2.R`, etc.,
+just to keep things tidy and easy to troubleshoot if needed.
 
-Unless you have a strong preference for another editor or IDE, I recommend you use RStudio (either on your machine or in the cloud, as provided by the workshop organizers, depending on where you did the setup steps above).
+Unless you have a strong preference for another editor or IDE, I recommend you
+use RStudio (either on your machine or in the cloud, as provided by the
+workshop organizers, depending on where you did the setup steps above). If you
+like Emacs, vim, VSCode, or anything else, really, feel free to use that as
+long as you are able to plot and inspect figures.
 
-Each exercise is compose of individual *parts*, which are designed to build one upon the other in the order they are specified.
+Each exercise is compose of individual _parts_, which are designed to build
+one upon the other in the order they are specified.
 
-#### Don't worry about the amount of exercises you're "supposed to do"
+#### Don't worry about the number of exercises you're _"supposed to do"_
 
-How far we manage to crunch through all of the exercises will depend on
-everybody's level of confidence in programming, data science _and_ population
-genetics. The contents of the activities as a whole are designed so that no matter
-the point that we run out of time, you will take home enough knowledge of
+How far we manage to crunch through in this session will largely depend on
+everybody's level of confidence in programming _and_ population genetics.
+The contents of the activities as a whole are designed so that no matter
+the point we run out of time, you will take home enough knowledge of
 _slendr_ to be able to immediately apply it to your own projects.
+
+**After each exercise I will pause a little bit, go through the intended
+solutions and answer questions.** If you're way ahead, there are bonus exercises
+(which I will not be going through with everyone) -- those should provide at
+least some entertainment for you while the rest of us are catching up. If you're
+_really_ far ahead, just continue to following exercises without waiting for the
+rest of us.
 
 #### Note on the programming aspect of the exercises
 
-All the exercises will involve "real coding"! If you've never really programmed entire scripts before, this could feel a little intimidating. Don't worry. If you're ever lost, just take a peek at the solution which is (by default hidden) under each exercise section. Always try to work on a solution on your own, but never let this be a barrier to your progress. Feel free to copy-paste bits of my solutions into your own scripts.
+All the exercises will involve "real coding"! If you've never really programmed
+entire scripts before, this could feel a little intimidating. Don't worry.
+If you're ever lost, just take a peek at the solutions which are (by default
+hidden) under each exercise section. Always try to work on a solution on your
+own, but never let this be a barrier to your progress. Feel free to copy-paste
+bits of my solutions into your own scripts.
 
-If you find yourself [*totally lost*](https://scryfall.com/card/gtc/54/totally-lost), don't hesitate to read my solutions from the get go, copy-pasting them into your own script in the RStudio, executing them line by line, and trying to understand what's going on.
-
-
-
-
-
-
-
-
-
-
-
+If you find yourself [_totally lost_](https://scryfall.com/card/gtc/54/totally-lost),
+don't hesitate to read my solutions from the get go, copy-pasting them into your
+own script in the RStudio, executing them line by line, and trying to understand
+what's going on. **It's the understanding that we're after here. Whether or not
+you can implement everything yourself from scratch does not actually matter at all.**
 
 
 
@@ -255,11 +313,25 @@ If you find yourself [*totally lost*](https://scryfall.com/card/gtc/54/totally-l
 
 
 
-# Exercise 1: Programming demographic models with *slendr*
 
-### Part 1: Building a demographic model in *slendr*
 
-Use functions such as `population()`, `gene_flow()`, and `compile_model()` to **program the following toy model of human demographic history in *slendr*.**
+
+
+
+
+
+
+
+
+
+# Exercise 1: Programming demographic models with _slendr_
+
+### Part 1: Building a demographic model in _slendr_
+
+**Use functions such as `population()`, `gene_flow()`, and `compile_model()`,
+which we discussed in the ["crash course"](https://bodkan.quarto.pub) at the
+start of this session, to program the following toy model of human demographic
+history in _slendr_.**
 
 ![](images/intro_model1.png){width="50%"}
 
@@ -282,7 +354,7 @@ model <- compile_model(
 ```
 
 ::: aside
-**Note:** With *slendr* you can specify time in whatever format is more convenient or readable for your model. For instance here, because we're dealing with historical events which are commonly expressed in times given as"years ago", we can write them in a decreasing order – i.e. 7Mya → 6Mya → ..., as shown above – or, in terms of R code, 7e6 (or 7000000), 6e6 (6000000), etc..
+**Note:** With _slendr_ you can specify time in whatever format is more convenient or readable for your model. For instance here, because we're dealing with historical events which are commonly expressed in times given as"years ago", we can write them in a decreasing order – i.e. 7Mya → 6Mya → ..., as shown above – or, in terms of R code, 7e6 (or 7000000), 6e6 (6000000), etc..
 :::
 
 ::: callout-note
@@ -320,10 +392,13 @@ model <- compile_model(
 
 ### Part 2: Inspecting the model visually
 
-To visualize a *slendr* model, you can use the function `plot_model()`. **Plot your compiled `model` to make sure you programmed it correctly!**
+To visualize a _slendr_ model, you can use the function `plot_model()`.
+**Plot your compiled `model` to make sure you programmed it correctly!**
 
 ::: aside
-**Note:** Plotting of models can be sometimes a little wonky. When plotting your model, experiment with arguments `log = TRUE`, `proportions = TRUE`, `gene_flow = TRUE`. Check `?plot_model` for more information on these.
+**Note:** Plotting of models can be sometimes a little wonky. When plotting your
+model, experiment with arguments `log = TRUE`, `proportions = TRUE`,
+`gene_flow = TRUE`. Check `?plot_model` for more information on these.
 :::
 
 ::: callout-note
@@ -340,21 +415,46 @@ plot_model(model, sizes = FALSE, log = TRUE, proportions = TRUE)
 
 ### Part 3: Simulating genomic data
 
-Once you have a compiled *slendr* model stored in an R variable (from now on, `model` will always mean a variable containing a compiled *slendr* model object, for simplicity), we can simulate data from it. By default, *slendr* models always produce a [tree sequence](https://tskit.dev/tutorials/what_is.html).
+Once you have a compiled _slendr_ model stored in an R variable (from now on,
+`model` will always mean a variable containing a compiled _slendr_ model object,
+for simplicity), we can simulate data from it. By default, _slendr_ models
+always produce a [tree sequence](https://tskit.dev/tutorials/what_is.html).
 
-There are two simulation engines built into *slendr* implemented by functions `msprime()` and `slim()`. For traditional, non-spatial, neutral demographic models, the engine provided by the `msprime()` function is much more efficient, so we'll be using that.
+There are two simulation engines built into _slendr_ implemented by functions
+`msprime()` and `slim()`. For traditional, non-spatial, neutral demographic
+models, the engine provided by the `msprime()` function is much more efficient,
+so we'll be using that. However, from a popgen theoretical perspective, both
+will give you the same results for any given compiled _slendr_ model (up to
+some level of stochastic noise, of course).
 
-Here's how you can use it to simulate a tree sequence:
+Here's how you can use the function to simulate a tree sequence:
 
 ```{r}
 #| eval: false
 #| code-fold: false
-ts <- msprime(<model object>, sequence_length = <length of sequence to simulate [as bp]>, recombination_rate = <uniform recombination rate [per bp per generation]>)
+ts <- msprime(
+  <model object>,
+  sequence_length = <length of sequence to simulate [as bp]>,
+  recombination_rate = <uniform recombination rate [per bp per generation]>
+)
 ```
 
-The function has also arguments `debug` and `run`.
+You will be seeing this kind of pattern over and over again in this exercise, so
+it's a good idea to keep it in mind.
 
-**Simulate a tree sequence from your compiled `model`, storing it to a variable `ts` as shown right above. Then experiment with setting `debug = TRUE` (this prints out *msprime*'s own debugging summary) and then `run = FALSE` (this prints out a raw command-line which can run a *slendr* simulation in the shell).**
+::: aside
+**Note:** Yes, this means you don't have to write any _msprime_ (or SLiM) code
+to simulate data from a _slendr_ model!
+:::
+
+**Hint:** The function has also arguments `debug` and `run` which can be extremely
+useful for debugging.
+
+**Simulate a tree sequence from your compiled `model` using the `msprime()`
+engine, storing it to a variable `ts` as shown right above. Then experiment with
+setting `debug = TRUE` (this prints out _msprime_'s own debugging summary) and
+then `run = FALSE` (this prints out a raw command-line which can run a _slendr_
+simulation in the shell).**
 
 ::: callout-note
 #### Click to see the solution
@@ -379,9 +479,13 @@ msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, run = FALSE)
 
 ### Part 4: Inspecting the tree-sequence object
 
-As we'll see later, *slendr* tries to provide an R-friendly interface to accessing a subset of *tskit*'s functionality for working with tree sequence and for computing various popgen statistics.
+As we'll see later, _slendr_ tries to provide an R-friendly interface to
+accessing a subset of _tskit_'s functionality for working with tree sequence and
+for computing various popgen statistics.
 
-For now, **type out the `ts` object in the terminal – what do you see?** You should get a summary of a tree-sequence object that you're familiar with from your *msprime* and *tskit* activity.
+For now, **type out the `ts` object in the terminal – what do you see?** You
+should get a summary of a tree-sequence object that you're familiar with from
+your _msprime_ and _tskit_ activity earlier in the day.
 
 ::: callout-note
 #### Click to see the solution
@@ -393,7 +497,7 @@ ts
 ```
 :::
 
-**Use the `ts_table` function to inspect the low-level table-based representation of a tree sequence.** For instance, you can get the table of nodes with `ts_table(ts, "nodes")`, edges with `ts_table(ts, "edges")`, and do the same thing for "individuals", "mutations", and "sites". Does your tree sequence contain any mutations? If not, why?
+**Use the `ts_table` function to inspect the low-level table-based representation of a tree sequence.** For instance, you can get the table of nodes with `ts_table(ts, "nodes")`, edges with `ts_table(ts, "edges")`, and do the same thing for "individuals", "mutations", and "sites". **Does your tree sequence contain any mutations? If not, why, and how can we even do any popgen with data without any mutations?**
 
 ::: callout-note
 #### Click to see the solution
@@ -410,7 +514,7 @@ ts_table(ts, "sites")
 ```
 :::
 
-There are also two *slendr*-specific functions called `ts_samples()` and `ts_nodes()`. **You can run them simply as `ts_samples(ts)` and `ts_nodes(ts)`. What do the tables they produce represent?**
+There are also two _slendr_-specific functions called `ts_samples()` and `ts_nodes()`. **You can run them simply as `ts_samples(ts)` and `ts_nodes(ts)`. What do the tables they produce represent?**
 
 ::: callout-note
 #### Click to see the solution
@@ -419,9 +523,10 @@ There are also two *slendr*-specific functions called `ts_samples()` and `ts_nod
 # slendr provides a convenient function `ts_samples()` which allows us to
 # inspect the contents of a simulated tree sequence in a more human-readable,
 # simplified way. We can see that our tree sequence contains a massive number
-# of individuals. Too many, in fact (we recorded every single individual alive
-# at the end of our simulation -- something we're unlikely to be ever lucky
-# enough to have, regardless of which species we study)
+# of individuals. Too many, in fact -- we recorded every single individual alive
+# at the end of our simulation, which is something we're unlikely to be ever lucky
+# enough to have, regardless of which species we study.
+ts_samples(ts)
 ts_samples(ts) %>% nrow()
 
 # This function returns a table similar to the one produced by `ts_table(ts, "nodes")`
@@ -434,13 +539,18 @@ ts_nodes(ts)
 
 ### Part 5: Scheduling sampling events
 
-In the table produced by the `ts_samples()` function, you can see that the tree sequence we simulated record *everyone*. It's very unlikely, unless we're extremely lucky, that we'll ever have a sequence of every single individual in a population that we study. To get a little closer to the scale of the genomic data that we'll be working with, we can restrict our simulation to only record a subset of individuals.
+In the table produced by the `ts_samples()` function, you saw that the tree
+sequence we simulated recorded _everyone_. It's very unlikely, unless we're
+extremely lucky, that we'll ever have a sequence of every single individual
+in a population that we study. To get a little closer to the scale of the
+genomic data that we usually work with on a day-to-day basis, we can restrict
+our simulation to only record a subset of individuals.
 
-We can precisely define which individuals (from which populations, and at which times) should be recorded in a tree sequence using the *slendr* function `schedule_sampling()`. For instance, if we have a `model` with some *slendr* populations in variables `popX` `popY`, we can schedule the recording of 5 individuals from each at times 10000 (years ago) and 0 (present-day) by the following code:
+We can precisely define which individuals (from which populations, and at which times) should be recorded in a tree sequence using the _slendr_ function `schedule_sampling()`. For instance, if we have a `model` with some _slendr_ populations in variables `eur` `afr`, we can schedule the recording of 5 individuals from each at times 10000 (years ago) and 0 (present-day) by the following code:
 
 ```{r}
 #| eval: false
-pop_schedule <- schedule_sampling(model, times = c(10000, 0), list(popX, 5), list(popY), 5)
+pop_schedule <- schedule_sampling(model, times = c(10000, 0), list(eur, 5), list(afr, 5))
 ```
 
 This function simply returns a data frame. As such, we can create multiple of such schedules (of arbitrary complexity and granularity), and then bind them together with a single line of code, like this:
@@ -457,6 +567,7 @@ nea_samples <- schedule_sampling(model, time = 60000, list(nea, 1))
 
 # And that multiple such sampling schedules can be bound together like this:
 samples <- rbind(eur_samples, afr_samples, nea_samples)
+samples
 ```
 
 **Using the function `schedule_sampling` (and with the help of `rbind`), program the sampling of the following sample sets at given times, saving it to variable called `schedule`:**
@@ -470,10 +581,15 @@ samples <- rbind(eur_samples, afr_samples, nea_samples)
 **Additionally, schedule the sampling of one `eur` individual at these times:**
 
 ```{r}
-times <- seq(40000, 2000, by = -2000)
+t <- seq(40000, 2000, by = -2000)
 ```
 
-In total, you should schedule the recording of 38 individuals.
+::: aside
+**Note:** You can provide a vector variable (such as `t` in this example) as the
+`times =` argument of `schedule_sampling()`.
+:::
+
+**In total, you should schedule the recording of 38 individuals.**
 
 ::: callout-note
 #### Click to see the solution
@@ -498,7 +614,8 @@ schedule
 ```
 :::
 
-**Then, verify the correctness of your overall sampling `schedule` by visualizing it together with your `model` like this:**
+**Then, verify the correctness of your overall sampling `schedule` by visualizing
+it together with your `model` like this:**
 
 ::: aside
 **Note:** As you've seen above, the visualization is often a bit wonky and convoluted with overlapping elements and it can be even worse with samples added, but try to experiment with arguments to `plot_model` described above to make the plot a bit more helpful for sanity checking.
@@ -523,7 +640,16 @@ plot_model(model, sizes = FALSE, log = TRUE, samples = schedule)
 
 ### Part 6: Simulating a defined set of individuals
 
-**Use your combined sampling schedule stored in the `schedule` variable to run a new tree-sequence simulation from your model (again using the `msprime()` function), this time restricted to just those individuals scheduled for recording.** You can do this by providing the combined sampling schedule as the `samples =` argument of the function `msprime` you used above.
+You have now both a compiled _slendr_ `model` and a well-defined sampling `schedule`.
+
+**Use your combined sampling schedule stored in the `schedule` variable to run a
+new tree-sequence simulation from your model (again using the `msprime()` function),
+this time restricted to just those individuals scheduled for recording. You can
+do this by providing the combined sampling schedule as the `samples =` argument
+of the function `msprime` you used above.** Don't worry about overwriting the
+previous contents of `ts <- msprime(...)` in your script, just replace your old
+`msprime()` call with the new one which uses the `schedule` for your customized
+sampling.
 
 ::: callout-note
 #### Click to see the solution
@@ -537,13 +663,12 @@ ts <- ts_read(file = here::here("data/introgression.trees"), model = model)
 ```{r}
 #| eval: false
 # The command below will likely take a few minutes to run, so feel free to go
-# down from 100 Mb sequence_length to even 10Mb (it doesn't matter much)
-# tstart <- Sys.time()
+# down from 100 Mb sequence_length to even 10Mb (it doesn't matter much).
+# (The `random_seed =` argument is there for reproducibility purposes.)
 ts <-
   msprime(model, sequence_length = 100e6, recombination_rate = 1e-8, samples = schedule, random_seed = 1269258439) %>%
   ts_mutate(mutation_rate = 1e-8, random_seed = 1269258439)
-# tend <- Sys.time()
-# tend - tstart # Time difference of 2.141642 mins
+# Time difference of 2.141642 mins
 
 # If you're bothered by ho long this takes, feel free to call these two lines
 # to 100% reproduce my results without any expensive computation:
@@ -557,7 +682,15 @@ ts_write(ts, "data/introgression.trees")
 ```
 :::
 
-**Inspect the tree-sequence object saved in the `ts` variable again, taking note of the (now much smaller!) number of individuals. You can also do a similar thing via the table produced by the `ts_samples()` function.**
+**Inspect the tree-sequence object saved in the `ts` variable agains. You can
+also do a similar thing via the table produced by the `ts_samples()` function.
+You should see a much smaller number of individuals being recorded.**
+
+::: aside
+**Note:** When you think about it, it's actually quite astonishing how fast
+_msprime_ and _tskit_ are when dealing with such a huge amount of sequence
+data from tens of thousands of individuals on a simple laptop!
+:::
 
 ::: callout-note
 #### Click to see the solution
@@ -581,7 +714,7 @@ ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
 
 ### Bonus 1: Program your own model
 
-Do you have a favourite model organism or you study another species? **Take some of the most important features of its demographic history and program them as a new *slendr* model.**\*
+Do you have a favourite model organism or you study another species? **Take some of the most important features of its demographic history and program them as a new _slendr_ model.** If you'd like, you will be able to work with it even in later exercises.
 :::
 
 <!-- End of Bonus exercises for Exercise 1 -->
@@ -611,16 +744,18 @@ Do you have a favourite model organism or you study another species? **Take some
 
 
 
+# Exercise 2: Computing popgen statistics on tree sequences from _slendr_
 
+In this exercise, you will build on top of the results from Exercise 1.
+Specifically, we will learn how to compute popgen statistics on _slendr_-simulated
+tree sequences using
+[_slendr_'s interface](https://www.slendr.net/reference/index.html#tree-sequence-statistics)
+to the _tskit_ Python module.
 
-
-
-
-# Exercise 2: Computing popgen statistics on tree sequences from *slendr*
-
-In this exercise, you will build on top of the results from Exercise 1. Specifically, we will learn how to compute popgen statistics on *slendr*-simulated tree sequences using *slendr*'s interface to the *tskit* Python module.
-
-First, create a new R script `exercise2.R` and paste in the following code. This is one of the possible solutions to the Exercise 1, and it's easier if we all use it to be on the same page from now on, starting from the same model and the same simulated tree sequence:
+First, create a new R script `exercise2.R` and paste in the following code. This
+is one of the possible solutions to the Exercise 1, and it's easier if we all
+use it to be on the same page from now on, starting from the same model and
+the same simulated tree sequence:
 
 ```{r}
 #| collapse: true
@@ -640,6 +775,9 @@ model <- compile_model(
   generation_time = 30
 )
 
+# We will read a cached version of a tree sequence to make sure we're all on
+# the same page. That said, if you managed to do Exercise 1 on your own, feel
+# free to stick with your own simulated tree sequence!
 ts <- ts_read(here::here("data/introgression.trees"), model = model)
 
 cowplot::plot_grid(
@@ -649,7 +787,9 @@ cowplot::plot_grid(
 )
 ```
 
-As a sanity check, let's make sure the tree sequence does contain a set of sample which matches our intended sampling schedule (particularly the time series of European individuals and the two Neanderthals):
+As a sanity check, make sure the tree sequence does contain a set of sample
+which matches our intended sampling schedule (particularly the time series
+of European individuals and the two Neanderthals):
 
 ```{r}
 library(dplyr)
@@ -660,15 +800,29 @@ ts_samples(ts) %>% filter(pop == "NEA") %>% pull(time)
 ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
 ```
 
-Everything looks good! Having made sure that the `ts` object contains the individuals we want, let's move to the exercise.
+Everything looks good! Having made sure that the `ts` object contains the
+individuals we want, let's move to the exercise.
 
 ## Part 1: Computing nucleotide diversity
 
-The model plotted above makes a fairly clear prediction on what would be the nucleotide diversity expected in the simulated populations. **Compute the nucleotide diversity in all populations using the *slendr* function [`ts_diversity()`](https://www.slendr.net/reference/ts_diversity.html#ref-examples). Do you get results you would expect from the model?**
+The model plotted above makes a fairly clear prediction on what would be the
+nucleotide diversity expected in the simulated populations.
+**Compute the nucleotide diversity in all populations using the _slendr_ function
+[`ts_diversity()`](https://www.slendr.net/reference/ts_diversity.html#ref-examples).
+Do you get results you would expect from the model?**
 
-**Hint:** Nearly every *slendr* statistic function interfacing with *tskit* accepts a `ts` tree-sequence object as its first argument, and with further arguments being either a vector of individual names representing a group of samples to compute a statistic on, or a (named) list of such vectors (each element of that list for a group of samples) -- these lists are intended to be equivalent to the `sample_sets =` argument of many *tskit* Python methods, except that they allow symbolic names of individuals, rather then integer indices of nodes in a tree sequence.
+**Hint:** Nearly every _slendr_ statistic function interfacing with _tskit_
+accepts a `ts` tree-sequence object as its first argument, with further arguments
+being either a vector of individual names representing a group of samples to
+compute a statistic on, or a (named) list of such vectors (each element of that
+list for a group of samples) -- these lists are intended to be equivalent to
+the `sample_sets =` argument of many _tskit_ Python methods (which you've learned
+about in your activity on _tskit_), except that they allow symbolic names
+of individuals, rather then integer indices of nodes in a tree sequence.
 
-Although you can get all the above information by processing the table produced by the `ts_samples()` function, *slendr* provides a useful helper `ts_names()` which only returns the names of individuals.
+Although you can get all the above information by processing the table produced
+by the `ts_samples()` function, _slendr_ provides a useful helper `ts_names()`
+which only returns the names of individuals.
 
 When you call it directly, you get a plain vector of individual names:
 
@@ -676,13 +830,19 @@ When you call it directly, you get a plain vector of individual names:
 ts_names(ts)
 ```
 
-This is not super helpful, unless we want to compute some statistic for *everyone* in the tree sequence, regardless of their population assignment. Perhaps a bit more useful is to call the function like this, because it will produce a result which can be immediately used as the `sample_sets =` argument mentioned in the **Hint** above:
+This is not super helpful, unless we want to compute some statistic for _everyone_
+in the tree sequence, regardless of their population assignment. Perhaps a bit
+more useful is to call the function like this, because it will produce a result
+which can be immediately used as the `sample_sets =` argument mentioned in the
+**Hint** above:
 
 ```{r}
 ts_names(ts, split = "pop")
 ```
 
-As you can see, this gave us a normal R list, with each element containing a vector of individual names in a population. Note that we can use standard R list indexing to get subsets of individuals:
+As you can see, this gave us a normal R list, with each element containing
+a vector of individual names in a population. Note that we can use standard R
+list indexing to get subsets of individuals:
 
 ```{r}
 names <- ts_names(ts, split = "pop")
@@ -694,11 +854,17 @@ names[c("EUR", "NEA")]
 
 etc.
 
-Many of the following exercises will use these kinds of tricks to instruct various *slendr* / *tskit* functions to compute statistics on subsets of all individuals sub-sampled in this way.
+Many of the following exercises will use these kinds of tricks to instruct
+various _slendr_ / _tskit_ functions to compute statistics on subsets of
+all individuals sub-sampled in this way.
 
-**After you computed the nucleotide diversity per-population, compute it for each individual separately using the same function `ts_diversity()`, which gives you the heterozygosity for each individual.**
+**After you computed the nucleotide diversity per-population, compute it for
+each individual separately using the same function `ts_diversity()`, which
+gives you the heterozygosity for each individual.**
 
-**Hint:** You can do this by giving a vector of names as `sample_sets =` (so not an R list of vectors). Feel free to take a look at the solution if you find this distinction confusing.
+**Hint:** You can do this by giving a vector of names as `sample_sets =` (so
+not an R list of vectors). Feel free to take a look at the solution if you
+find this distinction confusing.
 
 ::: callout-note
 ### Click to see the solution
@@ -748,7 +914,9 @@ ggplot(pi_df, aes(pop, diversity, color = pop, group = pop)) +
 
 **Use the function [`ts_divergence()`](https://www.slendr.net/reference/ts_divergence.html#ref-examples) to compute genetic divergence between all pairs of populations.** Do you get results compatible with our demographic model?
 
-**Hint:** Again, you can use the same concept of `sample_sets =` we discussed in the previous part.
+**Hint:** Again, you can use the same concept of `sample_sets =` we discussed in the previous part. In this case, the function computes _pairwise_ divergence between
+each element of the list given as `sample_sets =` (i.e., for each vector of
+individual names).
 
 ::: callout-note
 ### Click to see the solution
@@ -763,29 +931,56 @@ arrange(div_df, divergence)
 
 ## Part 3: Detecting Neanderthal admixture in Europeans
 
-Let's now pretend its about 2008 and we've sequenced the first Neanderthal genome (and also have the genomes of a couple of people from Africa and Europe). We want to answer the most burning question of all evolutionary anthropology: *"Do some people living today carry Neanderthal ancestry?"*
+Let's now pretend its about 2008, we've sequenced the first Neanderthal genome,
+and we are working on a project that will
+[change human evolution research forever](https://www.science.org/doi/10.1126/science.1188021).
+We also have the genomes of a couple of people from Africa and Europe, which we
+want to use to answer the most burning question of all evolutionary
+anthropology: _"Do some people living today carry Neanderthal ancestry?"_
 
-Earlier you've learned about $f$-statistics of various kinds. You have also heard that an $f_4$ statistic (or its equivalent $D$ statistic) can be used as a test of "treeness". Simply speaking, for some "quartet" of individuals or population samples, they can be used as a hypothesis test of whether the history of those samples is compatible with there **not** having been an introgression.
+Earlier you've learned about $f$-statistics of various kinds. You have also
+heard that an $f_4$ statistic (or its equivalent $D$ statistic) can be used
+as a test of "treeness". Simply speaking, for some "quartet" of individuals
+or population samples, they can be used as a hypothesis test of whether the
+history of those samples is compatible with there not having been an introgression.
 
-**Compute the** $f_4$ test of Neanderthal introgression in EUR individuals using the *slendr* function `ts_f4()`. When you're running it, you will have to provide individuals to compute the statistic on using a slightly different format. Take a look at the help page available as `?ts_f4` for more information. **When you're computing the values, make sure to also set `mode = "branch"` (we will get to why a bit later).**
+**Compute the $f_4$ test of Neanderthal introgression in EUR individuals using
+the _slendr_ function `ts_f4()`.** When you're running it, you will have to
+provide individuals to compute the statistic on using a slightly different
+format. Take a look at the help page available as `?ts_f4` for more information.
+**When you're computing the $f_4$, make sure to set `mode = "branch"` argument
+of the `ts_f4()` function (we will get to why a bit later).**
 
-**Hint:** If you haven't learned this in your $f$-statistics lecture, you want to compute (and compare) the values of these two statistics using the *slendr* function `ts_f4()`:
+**Hint:** If you haven't learned this in your $f$-statistics lecture, you want
+to compute (and compare) the values of these two statistics using the _slendr_
+function `ts_f4()`:
 
 -   $f_4$(\<some African\>, \<another African\>; \<Neanderthal\>, \<Chimp\>)
 
 -   $f_4$(\<some African\>, \<a test European\>; \<Neanderthal\>, \<Chimp\>)
 
-Roughly speaking, we can understand this computation in terms of comparing the counts of so-called BABA and ABBA allele patterns between the quarted of samples specified in the statistics:
+Roughly speaking, we can understand this computation in terms of comparing the
+counts of so-called BABA and ABBA allele patterns between the quarted of samples
+specified in the statistics:
 
 $$
 f_4(AFR, X; NEA, CHIMP) = \frac{\#BABA - \#ABBA}{\#SNPs}
 $$
 
-The first is not expected to give values "too different" from 0 because we don't expect two African individuals to differ "significantly" in terms of how much alleles they share with a Neanderthal. The other should -- if there was a Neanderthal introgression into Europeans some time in their history -- be "significantly negative".
+The first is not expected to give values "too different" from 0 because we
+don't expect two African individuals to differ "significantly" in terms of how
+much alleles they share with a Neanderthal. The other should -- if there was
+a Neanderthal introgression into Europeans some time in their history -- be
+"significantly negative".
 
-**Is the second of those two statistics "much more negative" than the first, as expected assuming introgression from Neanderthals into Europeans?**
+**Is the second of those two statistics "much more negative" than the first,
+as expected assuming introgression from Neanderthals into Europeans?**
 
-**Why am I putting "significantly" and "much more negative" in quotes? What are we missing here for this being a true hypothesis test as you might be accustomed to from computing** $f$-statistics using a tool such as ADMIXTOOLS? (We will get to this again in the following part of this exercise.)
+**In the text right above, why am I putting "significantly" and "much more
+negative" in quotes? What are we missing here for this being a true hypothesis
+test as you might be accustomed to from computing** $f$-statistics using
+a tool such as ADMIXTOOLS? (We will get to this again in the following part
+of this exercise.)
 
 ::: callout-note
 ### Click to see the solution
@@ -815,20 +1010,41 @@ f4_alt$f4 / f4_null$f4
 
 ## Part 5: Detecting Neanderthal admixture in Europeans v2.0
 
-The fact that we don't get something equivalent to a p-value in these kinds of simulations is generally not a problem, because we're often interested in establishing a trend of a statistic under various conditions, and understanding when and how it behaves in a certain way. If statistical noise is a problem, we can easily work around it by computing a statistic on multiple simulation replicates or even increasing the sample sizes. I used this approach quite successfully on a related problem in [this paper](https://www.pnas.org/doi/10.1073/pnas.1814338116#fig02).
+The fact that we don't get something equivalent to a p-value in these kinds of
+simulations is generally not a problem, because we're often interested in
+establishing a trend of a statistic under various conditions, and understanding
+when and how it behaves in a certain way. If statistical noise is a problem, we
+can easily work around it by computing a statistic on multiple simulation
+replicates or even increasing the sample sizes. I used this approach quite
+successfully on a related problem in [this paper](https://www.pnas.org/doi/10.1073/pnas.1814338116#fig02).
 
-On top of that, p-value of something like an $f$-statistic (whether it's significantly different from zero) is also strongly affected by quality of the data, sequencing errors, coverage, etc. (which can certainly be done using simulations!). However, these are an orthogonal issue which has little to do with the underlying evolutionary model in question anyway -- and that's what we're after in our exercises.
+On top of that, p-value of something like an $f$-statistic (whether it's
+significantly different from zero) is also strongly affected by quality of
+the data, sequencing errors, coverage, etc. (which can certainly be done
+using simulations!). However, these are an orthogonal issue which has little
+to do with the underlying evolutionary model in question anyway -- and it's
+the investigation of expected patterns of behavior of popgen statistics
+what we're after in our exercises.
 
-In short, how much is "significantly different from zero compared to some baseline expectation" can be easily drowned in noise in a simple single-individual comparisons as we did above. Let's increase the sample size a bit to see if a statistical pattern becomes more apparent.
+In short, how much is "significantly different from zero compared to some
+baseline expectation" can be easily drowned in noise in a simple
+single-individual comparisons as we did above. Let's increase the sample
+size a bit to see if a statistical pattern becomes more apparent.
 
-**Compute the first** $f_4$ statistic of the baseline expectation between a pair of Africans and the second $f_4$ statistic comparing an African and a European, but this time on *all recorded Africans* and *all recorded Europeans*, respectively. Plot the *distributions* of those two sets of statistics. This should remove lots of the uncertainty and make a statistical trend stand out much more clearly.
+**Compute the first $f_4$ statistic of the baseline expectation between
+a pair of Africans and the second $f_4$ statistic comparing an African and
+a European, but this time on _all recorded Africans_ and _all recorded
+Europeans_, respectively. Plot the *distributions* of those two sets of
+statistics. This should remove lots of the uncertainty and make a statistical
+trend stand out much more clearly.**
 
 **Hint:** Whenever you need to compute something for many things in sequence, looping is very useful. One way to do compute, say, an $f_4$ statistic over many individuals is use this kind of pattern using R's looping function `lapply()`:
 
 ```{r}
 #| eval: false
 
-# Loop over vector of individual names and apply a given ts_f4() expression on each
+# Loop over vector of individual names (variable x) and apply a given ts_f4()
+# expression on each individual (note the ts_f4(..., X = x, ...) in the code)
 list_f4 <- lapply(
   c("ind_1", "ind_2", ...),
   function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "branch")
@@ -866,26 +1082,39 @@ f4_results %>%
   geom_hline(yintercept = 0, linetype = 2) +
   ggtitle("f4(AFR, EUR; NEA, CHIMP)") +
   theme_bw()
-
-# Why the difference between the "branch" and "site" modes?
-# See this tutorial (and particularly directly the linked section):
-# https://tskit.dev/tutorials/no_mutations.html#genealogy-based-measures-are-less-noisy
-
 ```
 :::
 
 ::: callout-tip
 ## Bonus exercises
 
-### Bonus 1: Outgroup $f_3$ statistic
+### Bonus 1: `mode = "branch"` vs `mode = "site"`
+
+**Repeat the previous part of the exercise by setting `mode = "site"` in the 
+`ts_f4()` function calls** (this is actually the default behavior of all
+_slendr_ tree-sequence based _tskit_ functions). This will switch the _tskit_
+computation to using mutation counts along each branch of the tree sequence,
+rather than using branch length themselves. **Why might the branch-based computation
+be a bit better if what we're after is investigating the expected values of statistics
+under some model?**
+
+
+::: callout-note
+### Click to see the solution
+
+See [this tutorial](https://tskit.dev/tutorials/no_mutations.html#genealogy-based-measures-are-less-noisy) (and particularly the directly linked section) for explanation.
+:::
+
+
+### Bonus 2: Outgroup $f_3$ statistic
 
 **Use the function `ts_f3()` to compute the outgroup** $f_3$ statistic between pairs of African-European, African-Neanderthal, and European-Neanderthal and a Chimpanzee outgroup.
 
-**Hint:** The $f_3$ statistic is traditionally expressed as $f_3(A, B; C)$, where C represents the outgroup. Unfortunately, in *tskit* the outgroup is named A, with B and C being the pair of samples from which we trace the length of branches towards the outgroup, so the statistic is interpreted as $f_3(B, C; A)$.
+**Hint:** The $f_3$ statistic is traditionally expressed as $f_3(A, B; C)$, where C represents the outgroup. Unfortunately, in _tskit_ the outgroup is named A, with B and C being the pair of samples from which we trace the length of branches towards the outgroup, so the statistic is interpreted as $f_3(B, C; A)$.
 
 **How do the outgroup f3 results compare to your expectation based on simple population relationships (and to the divergence computation above)?**
 
-**Do you see any impact of introgression on the \$f_3 value when a Neanderthal is included in the computation?**
+**Do you see any impact of introgression on the $f_3$ value when a Neanderthal is included in the computation?**
 
 ::: callout-note
 ### Click to see the solution
@@ -906,7 +1135,7 @@ ts_f3(ts, B = sample_sets["EUR"], C = sample_sets["NEA"], A = "CHIMP_1")
 ```
 :::
 
-### Bonus 2: Outgroup $f_3$ statistic as a linear combination of $f_2$ statistics
+### Bonus 3: Outgroup $f_3$ statistic as a linear combination of $f_2$ statistics
 
 You might have learned that any complex $f$-statistic can be expressed as a linear combination of multiple $f_2$ statistics (which represent simple branch length separating two lineages). **Verify that this is the case by looking up equation *(20b)* in [this amazing paper](https://academic.oup.com/genetics/article/202/4/1485/5930214) and compute an** $f_3$ statistic for any arbitrary trio of individuals of your choosing using this linear combination of $f_2$ statistics.
 
@@ -928,11 +1157,11 @@ homemade_f3
 ```
 :::
 
-### Bonus 3: Trajectory of Neanderthal ancestry in Europe over time
+### Bonus 4: Trajectory of Neanderthal ancestry in Europe over time
 
 There used to be a lot of controversy about the question of whether or not did Neanderthal ancestry proportion in Europeans decline or not over the past 40 thousand years (see figure 1 in [this paper](https://www.pnas.org/doi/full/10.1073/pnas.1814338116) figure 2 in [this paper](https://www.nature.com/articles/nature17993)).
 
-Your simulated tree sequence contains a time-series of European individuals over time. Use the *slendr* function `ts_f4ratio()` to compute (and then plot) the proportion (commonly designated as `alpha`) of Neanderthal ancestry in Europe over time. Use $f_4$-ratio statistic of the following form:
+Your simulated tree sequence contains a time-series of European individuals over time. Use the _slendr_ function `ts_f4ratio()` to compute (and then plot) the proportion (commonly designated as `alpha`) of Neanderthal ancestry in Europe over time. Use $f_4$-ratio statistic of the following form:
 
 ```{r}
 #| eval: false
@@ -970,7 +1199,7 @@ summary(lm(alpha ~ time, data = nea_ancestry))
 ```
 :::
 
-### Bonus 4 -- how many unique f4 quartets are there?
+### Bonus 5: How many unique f4 quartets are there?
 
 In your lecture about $f$-statistics, you've probably learned about various symmetries in $f_4$ (but also other $f$-statistics) depending on the arrangement of the "quartet". As a trivial example, an $f_3(A; B, C)$ and $f_3(A; C, B)$ will give you exactly the same value, and the same thing applies even to more complex $f$-statistics like $f_4$.
 
@@ -1046,9 +1275,11 @@ distinct(all_f4s, abs(f4), .keep_all = TRUE)
 
 
 
+
+
 # Exercise 3: Simulation-based inference of $N_e$ from AFS
 
-What we did so far is learning how *slendr* models provide an easy way to encode
+What we did so far is learning how _slendr_ models provide an easy way to encode
 demographic models in R and simulate (even very large!) tree sequences from them.
 This allows us to very quickly verify our intuition about some popgen problem
 (things like _"Hmmm, I wonder what would an $f_4$ statistic look like if my model
@@ -1069,7 +1300,7 @@ just those $N_e$ values (or just one $N_e$ value) which produced a simulated AFS
 closest to the observed AFS. **This is exactly what you'll be doing just now 
 in Exercise 3.**
 
-## Part 1: A self-contained *slendr* function of $N_e \rightarrow \textrm{AFS}$
+## Part 1: A self-contained _slendr_ function of $N_e \rightarrow \textrm{AFS}$
 
 **In a new script `exercise3.R` write a custom R function called `simulate_afs()`,
 which will take `Ne` as its only parameter. Use this function to compute AFS
@@ -1108,7 +1339,7 @@ afs_1 <- simulate_afs(Ne = 1000) # simulate AFS from a Ne = 1000 model...
 plot(afs_1, type ="o")           # ... and plot it
 ```
 
-**Note:** Remember that you should drop the first element of the AFS vector produced by `ts_afs()` (for instance with something like `result[-1]` if `result` contains the output of `ts_afs()`) technical reasons related to *tskit*. You don't have to worry about that here, but you can read [this](https://tskit.dev/tutorials/analysing_tree_sequences.html#sec-tutorial-afs-zeroth-entry) for more detail.
+**Note:** Remember that you should drop the first element of the AFS vector produced by `ts_afs()` (for instance with something like `result[-1]` if `result` contains the output of `ts_afs()`) technical reasons related to _tskit_. You don't have to worry about that here, but you can read [this](https://tskit.dev/tutorials/analysing_tree_sequences.html#sec-tutorial-afs-zeroth-entry) for more detail.
 
 When used in R, your function should work like this:
 
@@ -1440,6 +1671,18 @@ legend("topright", legend = c("observed AFS", paste("best fitting Ne =", Ne_grid
 
 
 
+
+
+
+
+
+
+
+
+```{r}
+#| echo: false
+knitr::knit_exit()
+```
 
 
 
