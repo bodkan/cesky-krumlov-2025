@@ -1,4 +1,4 @@
-# **Building intuition into population genetic concepts and simulation-based inference**
+# Building intuition into popgen fundamentals and inference
 
 ## Workshop on population and speciation genomics
 
