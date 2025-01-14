@@ -11,7 +11,7 @@ slides:
 handouts:
 	sed -i '/### slides/ s/^/#/' slides.qmd
 	quarto render slides.qmd -o handouts.html
-	quarto publish quarto-pub --id e1b4dcad-9c7b-40ca-bfc0-47cfbdc91bed slides.qmd
+	quarto publish quarto-pub --id b153e680-e955-4aa2-8042-3d19c43bfb51 slides.qmd
 	sed -i '/### slides/ s/^#//' slides.qmd
 	git checkout slides.html
 	git add slides.qmd; git commit -m "Update slides.qmd"; git push
