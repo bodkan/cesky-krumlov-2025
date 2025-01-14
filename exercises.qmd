@@ -262,7 +262,9 @@ like Emacs, vim, VSCode, or anything else, really, feel free to use that as
 long as you are able to plot and inspect figures.
 
 Each exercise is compose of individual _parts_, which are designed to build
-one upon the other in the order they are specified.
+one upon the other in the order they are specified. **As you progress through
+sequential parts of each exercise, you will be adding code to your script for
+that exercise.**
 
 #### Don't worry about the number of exercises you're _"supposed to do"_
 
@@ -1277,7 +1279,7 @@ distinct(all_f4s, abs(f4), .keep_all = TRUE)
 
 
 
-# Exercise 3: Simulation-based inference of $N_e$ from AFS
+# Exercise 3: Simulation-based inference of $N_e$
 
 What we did so far is learning how _slendr_ models provide an easy way to encode
 demographic models in R and simulate (even very large!) tree sequences from them.
@@ -1288,23 +1290,25 @@ been able to even answer some questions like this directly in a meeting, pretty
 much on the spot! This makes _slendr_ a very powerful "popgen calculator".
 
 Now let's take things one step forward. Imagine you gathered some empirical
-data, like an allele frequency spectrum (AFS). That data was, in the real world,
-produced by some (hidden) biological process (demographic history) that we
-generally don't know anything about a priori For instance, the population we study
-had some $N_e$, which we don't know -- the only thing we have is the observed AFS.
+data, like an allele frequency spectrum (AFS) from a population that you
+study. That data was, in the real world, produced by some (hidden) biological
+process (demographic history) that we generally don't know anything about _a
+priori_. For instance, the population we study had some $N_e$, which we don't
+know the value of -- the only thing we have is the observed AFS.
 
-Simulations can be a great tool to estimate the most likely value of an unknown
-parameter. Staying with this $N_e$ and AFS example, can simulate a large number
-of AFS vectors (each resulting from a different assumed $N_e$ value) and then pick
-just those $N_e$ values (or just one $N_e$ value) which produced a simulated AFS
-closest to the observed AFS. **This is exactly what you'll be doing just now 
-in Exercise 3.**
+Simulations can be a great tool to estimate the most likely value of such an
+unknown parameter. Briefly speaking, and staying with this $N_e$ and AFS example,
+we can simulate a large number of AFS vectors (each resulting from a different
+assumed $N_e$ value) and then pick just those $N_e$ values (or just one $N_e$
+value) which produced a simulated AFS closest to the observed AFS.
+**This is exactly what you'll be doing just now in Exercise 3.**
 
 ## Part 1: A self-contained _slendr_ function of $N_e \rightarrow \textrm{AFS}$
 
 **In a new script `exercise3.R` write a custom R function called `simulate_afs()`,
-which will take `Ne` as its only parameter. Use this function to compute AFS
-vectors for a couple of `Ne` values of your choosing, but staying between
+which will take `Ne` as its only parameter. Use this function to compute (and
+return) [AFS vectors](https://en.wikipedia.org/wiki/Allele_frequency_spectrum)
+for a couple of `Ne` values of your choosing, but staying between
 `Ne = 1000` and `Ne = 30000` Plot those AFS vectors and observe how (and why?)
 do they differ based on `Ne` parameter you used in each respective simulation.**
 
@@ -1421,7 +1425,8 @@ afs_observed <- ts_afs(ts, list(samples))
 ```
 
 Imagine you sequenced 10 samples from a population and computed the following
-AFS vector (which contains, sequentially, the number of singletons, doubletons, etc.):
+AFS vector (which contains, sequentially, the number of singletons, doubletons,
+etc., in your sample from a population):
 
 <!-- dput(as.vector(observed_afs)) -->
 
@@ -1439,9 +1444,7 @@ implemented by your `simulate_afs()` function).
 AFS by running simulations for a range of $N_e$ values and comparing each run to
 the `afs_observed` vector above.**
 
-**Hints:**
-
-Depending on your level of comfort with R (and programming in general), you can
+**Hint:** Depending on your level of comfort with R (and programming in general), you can
 choose one of the following approaches:
 
 - **Option 1** [easy]: Plot AFS vectors for various $N_e$ values, then eyeball
@@ -1538,7 +1541,7 @@ legend("topright",
 
 
 ::: callout-note
-#### Click to see the solution to "Option 1"
+#### Click to see the solution to "Option 2"
 
 ```{r}
 # This is our starting observed AFS which we want to compare simulated AFS vectors to
@@ -1679,23 +1682,15 @@ legend("topright", legend = c("observed AFS", paste("best fitting Ne =", Ne_grid
 
 
 
-```{r}
-#| echo: false
-knitr::knit_exit()
-```
-
-
-
-
-
 # Exercise 4: Simulating dynamics of positive selection
 
-My primary motivation for designing _slendr_ was to make demographic modelling
+The primary motivation for designing _slendr_ was to make demographic modelling
 in R as trivially easy and fast as possible, focusing exclusively on neutral
-models. However, after _slendr_ became popular, people have been asking me
-about the possibility of simulating natural selection. After all, a large
-part of _slendr_'s functionality deals with population genetic models across
-geographical landscapes, which requires SLiM. Even though these models are
+models. However, as _slendr_ became popular, people have been asking for
+the possibility of simulating natural selection. After all, a large
+part of _slendr_'s functionality deals with population genetic [models across
+geographical landscapes](https://www.slendr.net/articles/vignette-06-locations.html),
+which requires SLiM. Even though these models are
 neutral, SLiM is _the_ most famous and popular tool for simulating various
 aspects of natural selection.
 
@@ -1708,13 +1703,13 @@ model of ancient human history, which we will use as a basis for simulating
 the frequency trajectory of an allele under positive selection, and implementing
 a simpleselection scan summary statistic using Tajima's D.
 
-To speed things up, create a new `exercise4.R` script and copy the following
-code as a starting point for this exercise:
+To speed things up, **create a new `exercise4.R` script and copy the following
+code as a starting point for this exercise**:
 
 ```{r}
 #| collapse: true
 library(slendr)
-init_env()
+init_env(quiet = TRUE)
 
 # This line sources a script in which I provide a few useful helper functions
 # which you can use in this exercise
@@ -1761,10 +1756,11 @@ schedule <- rbind(
 )
 ```
 
-When you visualize the model, you might recognize it as a very simplified model
+**Next, visualize the demographic model.** If you did a bit of work in human
+population genetics, you might recognize it as a very simplified model
 of demographic history of Europe over the past 50 thousand years or so.
 As you can see, we are recording 50 individuals from four populations -- for
-EURopeans we sample 50 individuals at "present-day", for the remaining populations
+Europeans we sample 50 individuals at "present-day", for the remaining populations
 we're recording 50 individuals just before their disappearance. Also note that
 there's quite a bit of gene-flow! This was an important thing we've learned about
 human history in the past 10 years or so -- everyone is mixed with pretty much
@@ -1814,9 +1810,7 @@ As you've learned, _tskit_ functions in _slendr_ generally operate on vectors
 (or lists) of individual names, like those produced by `ts_names()` above.
 **Get a vector of names of individuals in every population recorded in the
 tree sequence, then use this to compute Tajima's D using the _slendr_ function
-`ts_tajima()`.**
-
-**Do you see any striking differences in the Tajima's D values across populations? Check [this](https://en.wikipedia.org/wiki/Tajima%27s_D#Interpreting_Tajima's_D)
+`ts_tajima()`. Do you see any striking differences in the Tajima's D values across populations? Check [this](https://en.wikipedia.org/wiki/Tajima%27s_D#Interpreting_Tajima's_D)
 for some general guidance.**
 
 ::: callout-note
@@ -1840,18 +1834,19 @@ ts_tajima(ts, sample_sets = samples, mode = "branch")
 
 Let's take this one step forward. Even if there is a locus under positive selection
 somewhere along our chromosome, it might be quite unlikely that we would find a
-Tajima's D value significant enough for the entire chromosome. Fortunately,
-thanks to the flexibility of the _tskit_ module, the _slendr_ function 
-`ts_tajima()` has an argument `windows =`, which allows us to specify the
-coordinates of windows into which a sequence should be broken into, with Tajima's
-D computed separately for each window. Perhaps this will allow us to see the
-impact of positive selection?
+Tajima's D value significant enough for the entire chromosome (which is basically
+what we did in the previous Part 1). Fortunately, thanks to the flexibility of
+the _tskit_ module, the _slendr_ function  `ts_tajima()` has an argument
+`windows =`, which allows us to specify the coordinates of windows into which
+a sequence should be broken into, with Tajima's D computed separately for each
+window. Perhaps this will allow us to see the impact of positive selection?
 
 **Define a variable `windows` which will contain a vector of coordinates of
-100 windows, starting at position `0`, and ending at position `10e6` (i.e. end
+100 windows, starting at position `0`, and ending at position `10e6` (i.e., the end
 of our chromosome). Then provide this variable as the `windows =` argument of
-`ts_tajima()`. Save the result of `ts_tajima()` into the variable `tajima_wins`,
-and inspect its contents in the R console.***
+`ts_tajima()` on a new, separate line of your script. Save the result of
+`ts_tajima()` into the variable `tajima_wins`, and inspect its contents in the
+R console.***
 
 **Hint:** You can use the R function `seq()` and its argument `length.out = 100`,
 to create the coordinates of window boundaries very easily.
@@ -1879,6 +1874,11 @@ the result using a helper function `process_tajima(tajima_wins)` that I provided
 for you (perhaps save it as `tajima_df`), and visualize it using another
 of my helper functions `plot_tajima(tajima_df)`.**
 
+::: aside
+**Note:** Making the `process_tajima()` and `plot_tajima()` function available
+in your R code is the purpose of the `source(here::here("utils.R"))` command
+at the beginning of your script for this exercise.
+:::
 
 ::: callout-note
 #### Click to see the solution
@@ -1937,21 +1937,23 @@ look for the strange `{{elements}}` in curly brackets in the first ten lines
 of the script.** Those are the parameters of the selection model we will be
 customizing are standard neutral demographic model from in the next step.
 
-The SLiM extension script has three parameters:
+Specifically, when you inspect the `slim_extension.txt` file, you can see
+that this "SLiM extension script" I provided for you has three parameters:
 
 - `origin_pop` -- in which population should a beneficial allele appear,
 - `s` -- what should be the selection coefficient of the beneficial allele, and
 - `onset_time` -- at which time should the allele appear in the `origin_pop`.
 
 However, at the start, the SLiM extension snippet doesn't contain any concrete
-values of those parameters, but only their `{{origin_pop}}`, `{{s}}`, and
-`{{onset_time}}` placeholders.
+values of those parameters, but only their `\{{origin_pop}\}`, `\{{s}\}`, and
+`\{{onset_time}\}` placeholders.
 
 **Use the _slendr_ function `substitute_values()` to substitute concrete values
 for those parameters like this:**
 
 ```{r}
-extension <- substitute_values(template = here::here("slim_extension.txt"),
+extension <- substitute_values(
+  template = here::here("slim_extension.txt"),
   origin_pop = "EUR",
   s = 0.15,
   onset_time = 12000
@@ -1979,13 +1981,19 @@ cat(paste(readLines(extension)[1:15], collapse = "\n"))
 ```
 :::
 
+And that's all the extra work we need to turn our purely neutral demographic
+_slendr_ model into a model which includes natural selection! (In this case,
+only a simple selection acting on a single locus, as you'll see later, but
+this can be generalized to any imaginable selection scenario.)
+
 How do we use the SLiM extension for our simulation? It's very simple -- we
 just have to provide the `extension` variable as an additional argument of
 good old `compile_model()`. This will compile a new _slendr_ model which will
 now include the new functionality for simulating natural selection:
 
 **Compile a new `model` of the history of populations `afr`, `ooa`, `ehg`, 
-etc., by following the instructions above.**
+etc., by following the instructions above, providing a new `extension =`
+argument to the `compile_model()` function.**
 
 ::: callout-note
 #### Click to see the solution
@@ -2035,12 +2043,14 @@ also generate a table of allele frequencies in each population (SLiM experts
 might have noticed the revelant SLiM code when they were inspecting
 [`slim_extension.txt`](https://github.com/bodkan/cesky-krumlov-2025/blob/main/slim_extension.txt)). We need to be able to load both of these files after
 the simulation and thus need a path to a location we can find those files.
-We can do this by specifying calling the `slim()` function as `path <- slim(..., path = TRUE)` (so with the extra `path =` argument). This will return a path
-to where the `slim()` engine saved all output files.
+We can do this by calling the `slim()` function as `path <- slim(..., path = TRUE)`
+(so with the extra `path =` argument). This will return a path to where the
+`slim()` engine saved all files with our desired results.
 
 **Run a simulation from the modified model of selection with the `slim()` engine
-as instructed in 1. and 2. above, then use the `list.files(path)` function in R
-to take a look in the directory. Which files were produced by the simulation?**
+as instructed in points number 1. and 2. above, then use the `list.files(path)`
+function in R to take a look in the directory. Which files were produced by
+the simulation?**
 
 ::: callout-note
 #### Click to see the solution (you have a working SLiM installation)
@@ -2077,10 +2087,13 @@ list.files(path)
 exercise to read the simulated frequency trajectories of the positively
 selected mutation in all of our populations into a variable `traj_df`. Then
 run a second helper function `plot_trajectory(traj_df)` to inspect the trajectories
-visually. The allele was programmed to occur in EURopeans 15 thousand years ago,
-and was configured to have been under very strong selection of $s = 0.15$.
-Do the trajectories make sense given the demographic model of European prehistory
-plotted above?**
+visually.**
+
+**Recall that you used the function `substitute_values()` to parametrize your
+selection model so that the allele under selection occurs in Europeans 15 thousand
+years ago, and is programmed to be under very strong selection of $s = 0.15$.
+Do the trajectories visualized by `plot_trajectory()` make sense given the
+demographic model of European prehistory plotted above?**
 
 ::: callout-note
 #### Click to see the solution
@@ -2103,7 +2116,8 @@ plot_grid(
 
 ## Part 6: Tajima's D (genome-wide and window-based) from the selection model
 
-Our simulation run saved results in the location stored in the `path` variable.
+Recall that your simulation run saved results in the location stored in the
+`path` variable:
 
 ```{r}
 list.files(path)
@@ -2116,9 +2130,9 @@ model. Hopefully we should see an interesting pattern in our selection scan?
 For instance, we don't know yet _where_ in the genome is the putative locus
 under selection!
 
-To read a tree sequence simulated with `slim()` in the customized setup, we need
-to do a bit of work. To simplify things a bit, here's the R code which makes it
-possible to do. Just copy it in your `exercise4.R` script as it is:
+To read a tree sequence simulated with `slim()` by our customized selection setup,
+we need to do a bit of work. To simplify things a bit, here's the R code which makes
+it possible to do. Just copy it in your `exercise4.R` script as it is:
 
 ```{r}
 ts <-
@@ -2131,7 +2145,7 @@ Very briefly, because our tree sequence was generated by SLiM, it's very likely
 that not all genealogies along the simulated genome will be fully coalesced
 (i.e., not all tree will have a single root). To explain why this is the case
 is out of the scope of this session, but read [here](https://tskit.dev/pyslim/docs/latest/tutorial.html) if you're interested
-in learning more. For the time being, it suffices to say that we can plug the
+in learning more. For the time being, it suffices to say that we can pass the
 (uncoalesced) tree sequence into the `ts_recapitate()` function, which then
 takes a SLiM tree sequence and simulates all necessary "ancestral history" that
 was missing on the uncoalesced trees, thus ensuring that the entire tree
@@ -2191,7 +2205,7 @@ beneficial allele never had a chance to "make it" into those populations.
 :::::: callout-tip
 ## Bonus exercises
 
-#### Bonus 1: Program your own model
+#### Bonus 1: Investigate the impact of recombination around the selected locus
 
 Vary the uniform recombination rate and observe what happens with Tajima's D
 in windows along the genome.
@@ -2262,14 +2276,13 @@ model <- compile_model(
 
 
 
-
-
-
-
-
+<hr>
 
 
 # Exercise 5: Playing around with PCA patterns
+
+**Note:** We're unlikely to make it to this part, so this is extra bonus which
+can be ignored!
 
 In earlier lectures you've learned about the
 [Principal Component Analysis](https://en.wikipedia.org/wiki/Principal_component_analysis),
