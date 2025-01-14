@@ -29,7 +29,8 @@ self-contained HTML files, just in case Quarto Pub server is down:
 
 ## Installation setup, and other instructions
 
-Refer to the [exercises materials](exercises.md) for all necessary information
+Refer to the [exercises materials](https://bodkan.quarto.pub/cesky-krumlov-2025-exercises/)
+for all necessary information
 on installation and setup.
 
 ## Information for TAs
