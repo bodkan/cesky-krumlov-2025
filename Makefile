@@ -19,5 +19,5 @@ handouts:
 
 exercises:
 	quarto render exercises.qmd -o exercises.html
-	quarto publish quarto-pub --id 21452ae4-076d-46a3-a620-c85e064edb1e exercises.qmd
+	quarto publish quarto-pub --id 31de4a78-15a1-4cb8-a3ac-296a0bbc7d8b exercises.qmd
 	git add exercises*; git commit -m "Update exercises"; git push
