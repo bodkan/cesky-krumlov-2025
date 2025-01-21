@@ -1,9 +1,11 @@
 initialize() {
     // create a neutral mutation type
     initializeMutationType("m1", 0.5, "f", 0.0);
+
     // initialize 1Mb segment
     initializeGenomicElementType("g1", m1, 1.0);
     initializeGenomicElement(g1, 0, 999999);
+
     // set mutation rate and recombination rate of the segment
     initializeMutationRate(1e-8);
     initializeRecombinationRate(1e-8);
@@ -24,6 +26,6 @@ initialize() {
     p2_subset = sample(p2.individuals, 100);
     p3_subset = sample(p3.individuals, 100);
     c(p2_subset, p3_subset).genomes.outputVCF("/tmp/slim_output.vcf.gz");
+
     sim.simulationFinished();
-    catn("DONE!");
 }
