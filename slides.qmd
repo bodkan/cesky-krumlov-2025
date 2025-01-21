@@ -849,7 +849,8 @@ _slendr_ has two simulation "engine scripts" built-in:
 
 . . .
 
-They are designed to understand _slendr_ `model`s, which means that you don't need more than this to simulate data:
+They are designed to understand _slendr_ `model`s, which means that you
+can simulate data just with this command:
 
 ```{r}
 #| eval: false
@@ -872,7 +873,10 @@ ts <- msprime(model, sequence_length = 100e6, recombination_rate = 1e-8)
 
 
 
-# The result of a _slendr_ simulation is a tree sequence (`ts`)
+# The result of a simulation is a tree sequence (`ts`)
+
+
+
 
 
 
@@ -944,7 +948,7 @@ An understanding of our samples' evolutionary history:
 
 ## The magic of tree sequences
 
-They allow computing of statistics _without genotypes_!
+They allow us to compute statistics _without genotypes_!
 
 <center>![](images/tree_sequence_diagram_no_muts.png)</center>
 
@@ -957,19 +961,6 @@ See an amazing paper by [Ralph et al. (2020)](https://academic.oup.com/genetics/
 
 
 
-
-
-
-
-
-
-## What if we need mutations though?
-
-::: {.fragment}
-Coalescent and mutation processes can be decoupled!
-
-<center>![](images/tree_sequence_diagram_no_muts.png)</center>
-:::
 
 
 
@@ -989,7 +980,7 @@ Coalescent and mutation processes can be decoupled!
 ![](images/tree_sequence_diagram.png)
 
 ::: {.fragment}
-<h3>With *slendr*, we can add mutations *after* the simulation using `ts_mutate()`.</h3>
+<h3>This means we can add mutations to `ts` _after_ the simulation using `ts_mutate()`.</h3>
 :::
 
 </center>
@@ -1002,7 +993,10 @@ Coalescent and mutation processes can be decoupled!
 
 
 
-## Let's take the `model` from earlier...
+
+
+
+## Let's go back to our example `model`...
 
 ```{r}
 #| fig-align: center
@@ -1019,7 +1013,7 @@ plot_model(model)
 
 
 
-## ... and simulate data from it
+## ... simulate a tree sequence...
 
 <br>
 
@@ -1027,7 +1021,10 @@ In our script we'll have something like this:
 
 ```{r}
 #| eval: false
-#| code-line-numbers: 1-3|5-6
+#| code-line-numbers: "8-9"
+library(slendr)
+init_env()
+
 <... population() definitions ...>
 
 model <- compile_model(...)
@@ -1045,7 +1042,7 @@ ts <-
 
 
 
-## ... and simulate data from it
+## ... and overlay mutations on it
 
 <br>
 
@@ -1053,7 +1050,10 @@ In our script we'll have something like this:
 
 ```{r}
 #| eval: false
-#| code-line-numbers: "5-7"
+#| code-line-numbers: "8-10"
+library(slendr)
+init_env()
+
 <... population() definitions ...>
 
 model <- compile_model(...)
@@ -1075,7 +1075,8 @@ ts <-
 
 <center>
 
-<h3>Always use `ts_mutate()` during exercises! Otherwise you'll get weird results due to the lack of mutations on the tree sequence.</h3>
+<h4>In some exercises, mutations won't be necessary. Where we will need them,
+you can use `ts_mutate()` like this.</h4>
 
 </center>
 :::
