@@ -33,7 +33,10 @@ format:
 
 ::: {.columns} 
 ::: {.column width="70%"}
-> Many problems in population genetics cannot be solved by a mathematician, no matter how gifted. \[It\] is already clear that computer methods are very powerful. This is good. It \[...\] permits people with limited mathematical knowledge to work on important problems \[...\].
+> Many problems in population genetics cannot be solved by a mathematician,
+no matter how gifted. \[It\] is already clear that computer methods are very
+powerful. This is good. It \[...\] permits people with limited mathematical
+knowledge to work on important problems \[...\].
 :::
 
 ::: {.column width="30%"}
@@ -331,9 +334,9 @@ cat script.py
 
   - create populations (splits and $N_e$ changes)
 
-  - specify if/how they should mix (rates and times)
+  - specify admixture rates and admixture times
 
-  - ... all this means duplication across projects
+- ... all this means duplication across projects
 :::
 
 ::: {.fragment}
@@ -355,6 +358,17 @@ cat script.py
 
 # _slendr_ crash course
 
+<br>
+
+<center>
+
+This will be a quick whirlwind tour of _slendr_.
+
+<br>The exercises will reintroduce all the necessary topics much
+more gradually, with additional explanation.
+
+<br>What follows is intended as a condensed reference, or cheatsheet of
+sorts, which you can refer to later.</center>
 
 
 
@@ -363,13 +377,13 @@ cat script.py
 
 
 
+## Typical _slendr_ workflow
 
-## Typical steps of a _slendr_ R workflow
-
-We will always start with this:
+We will always start our R scripts with this:
 
 ```{r}
-library(slendr); init_env()
+library(slendr)
+init_env()
 ```
 
 <br>Followed by some combination of the following:
@@ -397,13 +411,15 @@ At minimum, we need its name, size and "time of appearance":
 pop1 <- population("pop1", N = 1000, time = 1)
 ```
 
-. . .
+::: {.fragment}
 
-This creates a normal R object. Typing it out gives a summary:
+This creates a normal R object! Typing it out gives a summary:
 
 ```{r}
 pop1
 ```
+
+:::
 
 ::: {.aside}
 **Note:** Because _slendr_ uses either _msprime_ or SLiM internally for simulation
@@ -430,14 +446,15 @@ pop2 <- population("pop2", N = 100, time = 50, parent = pop1)
 **Note:** Here `pop1` is an R object created above, not a string `"pop1"`!
 :::
 
-. . .
+::: {.fragment}
 
-The split is reported in the "historical summary":
+The split is again reported in the "historical summary":
 
 ```{r}
 pop2
 ```
 
+:::
 
 
 
@@ -548,10 +565,12 @@ the previous code chunk:
 pop5
 ```
 
-. . .
+::: {.fragment}
 
 This way, you can build up complex models step by step, checking everything
 by interacting with the R console.
+
+:::
 
 
 
@@ -574,7 +593,7 @@ gf <- gene_flow(from = pop1, to = pop2, start = 2000, end = 2200, rate = 0.13)
 **Note:** Here `rate = 0.13` means 13% migrants over the given time window will come from "pop1" into "pop2".
 :::
 
-. . .
+::: {.fragment}
 
 <br>
 
@@ -589,6 +608,7 @@ gf <- list(
 )
 ```
 
+:::
 
 
 
@@ -598,6 +618,10 @@ gf <- list(
 
 
 ## Model compilation
+
+<br>
+
+This is the final step before we can simulate data.
 
 <br>
 
@@ -613,7 +637,7 @@ model <- compile_model(
 
 <br>
 
-<center>**This takes a list of model components, performs some consistency checks, and again returns a single R object.**</center>
+<center>**`compile_model()` takes a list of components, performs some consistency checks, and returns a single R object**</center>
 
 
 
@@ -625,6 +649,10 @@ model <- compile_model(
 
 
 ## Model compilation
+
+<br>
+
+This is the final step before we can simulate data.
 
 <br>
 
@@ -641,7 +669,7 @@ model <- compile_model(
 
 <br>
 
-<center>**Gene flow(s) are included via the `gene_flow` argument.**</center>
+<center>**Gene flow(s) can be included via the `gene_flow` argument.**</center>
 
 
 
@@ -847,7 +875,7 @@ _slendr_ has two simulation "engine scripts" built-in:
 -   SLiM engine ([_slendr_ source](https://github.com/bodkan/slendr/blob/main/inst/scripts/script.slim))
 -   _msprime_ engine ([_slendr_ source](https://github.com/bodkan/slendr/blob/main/inst/scripts/script.py))
 
-. . .
+::: {.fragment}
 
 They are designed to understand _slendr_ `model`s, which means that you
 can simulate data just with this command:
@@ -857,14 +885,15 @@ can simulate data just with this command:
 ts <- msprime(model, sequence_length = 100e6, recombination_rate = 1e-8)
 ```
 
+:::
 
-. . .
+::: {.fragment}
 
 <br>
 
 <center><h3>**No need to write any _msprime_ or SLiM code!**</h3></center>
 
-
+:::
 
 
 
@@ -972,7 +1001,7 @@ They allow us to compute statistics _without genotypes_!
 There is a "duality" between mutations and branch lengths.
 
 ::: aside
-See an amazing paper by [Ralph _et al._ (2020)](https://academic.oup.com/genetics/article/215/3/779/5930459) for more detail.
+**Note:** See an amazing paper by [Ralph _et al._ (2020)](https://academic.oup.com/genetics/article/215/3/779/5930459) for more detail.
 :::
 
 
@@ -1110,12 +1139,10 @@ ts <-
 <center>
 
 <h4>In some exercises, mutations won't be necessary. Where we will need them,
-you can use `ts_mutate()` like this.</h4>
+you can use `ts_mutate()`.</h4>
 
 </center>
 :::
-
-
 
 
 
@@ -1213,17 +1240,18 @@ ts_samples(ts) %>% head(1) # returns a data frame (one row only, for brevity)
 ts_samples(ts) %>% as.data.frame %>% head(1)
 ```
 
-. . .
-
+::: {.fragment}
 2. A shortcut `ts_names()` can also be useful:
 
 ```{r}
 ts_names(ts) %>% head(5) # returns a vector of individuals' names
 ```
 
-. . .
+:::
 
-3. We can also get a per-population list of individuals:
+::: {.fragment}
+
+3. We can get a per-population list of individuals like this:
 
 ```{r}
 #| eval: false
@@ -1234,6 +1262,8 @@ ts_names(ts, split = "pop") # returns a named list of such vectors
 #| echo: false
 ts_names(ts, split = "pop") %>% lapply(sample, 5) %>% .[1]
 ```
+
+:::
 
 
 
@@ -1262,10 +1292,12 @@ ts_names(ts, split = "pop") %>% lapply(sample, 5) %>% .[1]
 
 <center>This is modelled after the `sample_sets=` argument of the respective [_tskit_ Python methods](https://tskit.dev/tskit/docs/stable/python-api.html#statistics) (except you use names of individuals directly, not tree-sequence node numbers).</center>
 
-. . .
+::: {.fragment}
 
 <br>
 <center>Let's take a look at how it works in general...</center>
+
+:::
 
 
 
@@ -1287,7 +1319,7 @@ a vector of names to compute on like this:
 samples <- c("popX_1", "popX_2", "popY_42")
 ```
 
-. . .
+::: {.fragment}
 
 <br>
 
@@ -1298,6 +1330,8 @@ Then we can calculate the statistic of interest like this:
 # this computes nucleotide diversity in our set of individuals
 df_result <- ts_diversity(ts, sample_sets = list(samples))
 ```
+
+:::
 
 ::: {.aside}
 **Note:** In this case, we write `sample_sets = list(samples)` to compute
@@ -1361,7 +1395,7 @@ df_result <- ts_f3(
 )
 ```
 
-. . .
+::: {.fragment}
 
 Doing this manually can be annoying --- `ts_names()` helps by preparing 
 the list of names in the correct format:
@@ -1374,6 +1408,8 @@ samples <- ts_names(ts, split = "pop")
 # use this list directly by specifying which vectors to take out
 ts_f3(ts, A = samples$popX, B = samples$popY, C = samples$popZ)
 ```
+
+:::
 
 
 
@@ -1441,9 +1477,8 @@ We can index into the list via population name:
 ```{r}
 samples$pop1 %>% head(3)
 ```
-:::
 
-::: {.fragment}
+
 ```{r}
 samples$pop2 %>% head(3)
 ```
