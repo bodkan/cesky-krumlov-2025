@@ -2,11 +2,11 @@ suppressPackageStartupMessages({
   library(cowplot)
   library(dplyr)
   library(ggplot2)
+  library(tidyr)
   # library(ggrepel)
   # library(readr)
   # library(smartsnp)
   # library(scales)
-  # library(tidyr)
   # library(viridis)
 })
 
