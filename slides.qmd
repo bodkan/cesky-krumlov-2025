@@ -344,7 +344,7 @@ cat script.py
 :::
 
 ::: {.fragment}
-<center><h3>_slendr_ makes this <u>easy</u>, even for complex models</h3></center>
+<center><h4>_slendr_ makes this <u>easy</u>, even for complex models</h4></center>
 :::
 
 
