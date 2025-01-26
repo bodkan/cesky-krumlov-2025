@@ -117,6 +117,16 @@ is where you can find more information about it.
 
 # Installation setup
 
+**Note:** If you're using the RStudio browser-based cloud instance, you don't
+have to do anything! Just open the RStudio session in your browser and
+navigate to the directory for this activity via `File -> Open Project...`
+in the RStudio menu.
+
+---
+
+**If you want to set up everything on your local machine from scratch,
+just follow these couple of steps.**
+
 The easiest way to set up everything on your computer is to download all of
 the exercise materials (slides, code, data, everything) to your working machine
 by following these steps:
@@ -134,41 +144,14 @@ already set up. Unfortunately I don't know much about that so my recommendation
 is that, if you do use Windows, just do the exercises on the cloud instance
 provided by the course organizers.)
 
-2. **Install all R package dependencies** by going into the activity repository
-directory you just cloned and installing the necessary R packages by following
-these steps:
-
-- First **go into the project directory you just cloned**:
+2. **Open RStudio and install all of the following dependencies:**
 
     ```         
-    $ cd ~/slendr_activity
+    > install.packages(c("slendr", "combinat", "cowplot", "dplyr", "readr",
+                         "tidyr", "ggplot2", "rmarkdown", "yaml"))
     ```
 
-- **Open the R terminal in that directory**. You should get a note that the _renv_
-package is being automatically setup, like this:
-
-    ```         
-    $ R
-
-    [... R startup information stuff ...]
-
-    # Bootstrapping renv 1.0.11 --------------------------------------------------
-    - Downloading renv ... OK
-    - Installing renv  ... OK
-
-    - Project '~/slendr_activity' loaded. [renv 1.0.11]
-    - One or more packages recorded in the lockfile are not installed.
-    - Use `renv::status()` for more details.
-    ```
-
-- **Install R package dependencies** (still in the R console!):
-
-    ```         
-    > renv::restore(prompt = FALSE)
-    ```
-
--   **Set up the Python environment** used by the _slendr_ R package for simulation
-and tree-sequence analysis (still in the R console!):
+3. **Set up the Python environment used by the _slendr_ R package** for simulation and tree-sequence analysis (still in the R console!):
 
     ```         
     > slendr::setup_env(agree = TRUE)
@@ -185,10 +168,9 @@ and tree-sequence analysis (still in the R console!):
     =======================================================================
     ```
 
-4. **Open the repository directory in RStudio** (on your laptop if you cloned
-the repository there, or in your browser if you're using the provided cloud
-instance) and navigate to your project directory via `File -> Open Project...`
-in the RStudio menu.
+4. **Open your RStudio (unless you did the above steps already in RStudio)**, and you're good to go!
+
+---
 
 **If the `setup_env()` installation procedure fails, try the following:**
 
@@ -204,7 +186,9 @@ slendr::clear_env(force = TRUE, all = TRUE)
 slendr::setup_env(agree = TRUE, pip = TRUE)
 ```
 
-In every previous installments of this workshop, this is all that was needed to resolve problems.
+In every previous installments of this workshop, this is all that was needed to resolve problems.*
+
+---
 
 **Installing SLiM**
 
@@ -214,7 +198,7 @@ It's unclear whether we will manage to go through the entirety of the selection
 for your, don't worry. You'll be able to do most of that exercise even without
 SLiM by using cached results of the SLiM simulation that I provided.
 
-
+---
 
 
 
