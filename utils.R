@@ -1,16 +1,55 @@
-# PCA ---------------------------------------------------------------------
-
 suppressPackageStartupMessages({
-library(cowplot)
-library(dplyr)
-library(ggplot2)
-# library(ggrepel)
-library(readr)
-# library(smartsnp)
-library(scales)
-library(tidyr)
-# library(viridis)
+  library(cowplot)
+  library(dplyr)
+  library(ggplot2)
+  # library(ggrepel)
+  library(readr)
+  # library(smartsnp)
+  library(scales)
+  library(tidyr)
+  # library(viridis)
 })
+
+# Tajima's D --------------------------------------------------------------
+
+read_trajectory <- function(path) {
+  list.files(path, pattern = ".tsv$", full.names = TRUE) %>%
+    read_tsv(show_col_types = FALSE) %>%
+    mutate(pop = factor(pop, levels = c("AFR", "OOA", "EHG", "ANA", "EUR", "YAM")))
+}
+
+plot_trajectory <- function(traj_df) {
+  ggplot(traj_df, aes(time, freq, color = pop)) +
+    geom_line() +
+    scale_x_reverse() +
+    facet_wrap(~ pop) +
+    coord_cartesian(ylim = c(0, 1), xlim = c(15e3, 0)) +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    geom_vline(aes(xintercept = onset), linetype = "dashed", alpha = 0.6) +
+    ggtitle("Trajectory of the allele frequency under positive selection")
+}
+
+process_tajima <- function(tajima_wins) {
+  tajima_wins %>%
+    unnest(cols = D) %>%
+    group_by(set) %>%
+    mutate(window = row_number()) %>%
+    ungroup
+}
+
+plot_tajima <- function(tajima_df) {
+  ggplot(tajima_df, aes(window, D, color = set)) +
+    geom_line() +
+    geom_hline(yintercept = 0, linetype = "dashed") +
+    geom_vline(xintercept = 50, linetype = "dashed") +
+    scale_x_continuous(breaks = seq(0, 100, 10)) +
+    coord_cartesian(ylim = c(-4, 4)) +
+    theme_minimal()
+}
+
+
+# PCA ---------------------------------------------------------------------
 
 plot_pca <- function(prefix, ts, pc = c(1, 2), color_by = c("time", "pop"), return = c("plot", "pca", "both")) {
   if (length(pc) != 2)
@@ -180,42 +219,4 @@ plot_tracts <- function(tracts, ind) {
     facet_grid(haplotype ~ .) +
     expand_limits(x = 0) +
     scale_x_continuous(labels = scales::comma)
-}
-
-# Tajima's D --------------------------------------------------------------
-
-read_trajectory <- function(path) {
-  list.files(path, pattern = ".tsv$", full.names = TRUE) %>%
-  read_tsv(show_col_types = FALSE) %>%
-    mutate(pop = factor(pop, levels = c("AFR", "OOA", "EHG", "ANA", "EUR", "YAM")))
-}
-
-plot_trajectory <- function(traj_df) {
-  ggplot(traj_df, aes(time, freq, color = pop)) +
-    geom_line() +
-    scale_x_reverse() +
-    facet_wrap(~ pop) +
-    coord_cartesian(ylim = c(0, 1), xlim = c(15e3, 0)) +
-    theme_bw() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    geom_vline(aes(xintercept = onset), linetype = "dashed", alpha = 0.6) +
-    ggtitle("Trajectory of the allele frequency under positive selection")
-}
-
-process_tajima <- function(tajima_wins) {
-  tajima_wins %>%
-    unnest(cols = D) %>%
-    group_by(set) %>%
-    mutate(window = row_number()) %>%
-    ungroup
-}
-
-plot_tajima <- function(tajima_df) {
-  ggplot(tajima_df, aes(window, D, color = set)) +
-    geom_line() +
-    geom_hline(yintercept = 0, linetype = "dashed") +
-    geom_vline(xintercept = 50, linetype = "dashed") +
-    scale_x_continuous(breaks = seq(0, 100, 10)) +
-    coord_cartesian(ylim = c(-4, 4)) +
-    theme_minimal()
 }
