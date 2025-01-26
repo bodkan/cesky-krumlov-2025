@@ -3,13 +3,11 @@
 # the R package dependencies, follow the instructions at this link:
 # https://github.com/bodkan/cesky-krumlov-2025
 
-renv::init(bare = TRUE)
+# renv::init(bare = TRUE)
 
-install.packages(c("combinat", "cowplot", "dplyr", "ggplot2", "rmarkdown", "yaml", "slendr"))
+# install.packages(c("combinat", "cowplot", "dplyr", "ggplot2", "rmarkdown", "yaml", "slendr"))
 
-                   # "tidyr", "scales", "readr", "admixr", "ggrepel", "viridis", "smartsnp", "sf", "stars", "rnaturalearth"))
-# devtools::install_github("bodkan/slendr")
-
+# renv::snapshot()
 
 library(combinat)
 library(cowplot)
