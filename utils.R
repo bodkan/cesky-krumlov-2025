@@ -3,10 +3,10 @@ suppressPackageStartupMessages({
   library(dplyr)
   library(ggplot2)
   # library(ggrepel)
-  library(readr)
+  # library(readr)
   # library(smartsnp)
-  library(scales)
-  library(tidyr)
+  # library(scales)
+  # library(tidyr)
   # library(viridis)
 })
 
@@ -48,6 +48,13 @@ plot_tajima <- function(tajima_df) {
     theme_minimal()
 }
 
+
+#
+#
+# The following code won't be used in the Workshop in Cesky Krumlov 2025
+# (it's part of a larger course on applied popgen)
+#
+#
 
 # PCA ---------------------------------------------------------------------
 
