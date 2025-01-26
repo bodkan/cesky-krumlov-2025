@@ -120,7 +120,7 @@ is where you can find more information about it.
 **Note:** If you're using the RStudio browser-based cloud instance, you don't
 have to do anything! Just open the RStudio session in your browser and
 navigate to the directory for this activity via `File -> Open Project...`
-in the RStudio menu.
+in the RStudio menu (selecting the `cesky-krumlov-2025.Rproj` project file).
 
 ---
 
