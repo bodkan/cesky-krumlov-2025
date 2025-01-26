@@ -5,7 +5,7 @@
 
 # renv::init(bare = TRUE)
 
-# install.packages(c("combinat", "cowplot", "dplyr", "readr", "tidyr", "ggplot2", "rmarkdown", "yaml", "slendr"))
+# install.packages(c("slendr", "combinat", "cowplot", "dplyr", "readr", "tidyr", "ggplot2", "rmarkdown", "yaml"))
 
 # renv::snapshot()
 
