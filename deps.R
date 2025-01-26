@@ -3,7 +3,7 @@
 # the R package dependencies, follow the instructions at this link:
 # https://github.com/bodkan/cesky-krumlov-2025
 
-# renv::init(bare = TRUE)
+renv::init(bare = TRUE)
 
 install.packages(c("combinat", "cowplot", "dplyr", "ggplot2", "readr", "scales", "tidyr",
                    "rmarkdown", "yaml", "slendr"))
