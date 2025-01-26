@@ -336,7 +336,7 @@ cat script.py
 
   - specify admixture rates and admixture times
 
-- ... all this means duplication across projects
+- ... all this means duplication of code across many projects
 :::
 
 ::: {.fragment}
@@ -344,7 +344,7 @@ cat script.py
 :::
 
 ::: {.fragment}
-<center><h4>_slendr_ makes this <u>trivial</u>, even for complex models</h4></center>
+<center><h3>_slendr_ makes this <u>trivial</u>, even for complex models</h3></center>
 :::
 
 
