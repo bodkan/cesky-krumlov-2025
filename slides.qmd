@@ -567,7 +567,7 @@ pop5
 
 ::: {.fragment}
 
-This way, you can build up complex models step by step, checking everything
+This way, you can build up complex models step by step, checking things
 as you go by interacting with the R console.
 
 :::
