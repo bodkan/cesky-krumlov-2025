@@ -51,8 +51,9 @@ plot_tajima <- function(tajima_df) {
 
 #
 #
-# The following code won't be used in the Workshop in Cesky Krumlov 2025
-# (it's part of a larger course on applied popgen)
+# The following code won't be used in the Workshop in Cesky Krumlov 2025,
+# as it's part of a larger course on applied popgen. Follow me @bodkan on
+# Bluesky if you want to hear about it. :)
 #
 #
 
