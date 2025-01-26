@@ -1,5 +1,5 @@
-devtools::load_all("~/Projects/slendr")
-init_env()
+# devtools::load_all("~/Projects/slendr")
+# init_env()
 
 library(cowplot)
 
