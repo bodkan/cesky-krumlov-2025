@@ -5,10 +5,8 @@
 
 renv::init(bare = TRUE)
 
-install.packages(c("combinat", "cowplot", "dplyr", "ggplot2", "readr", "scales", "tidyr",
-                   "rmarkdown", "yaml", "slendr"))
-                   # "admixr", "ggrepel", "viridis", "smartsnp", "sf", "stars", "rnaturalearth",
-                   # "devtools"))
+install.packages(c("combinat", "cowplot", "dplyr", "ggplot2", "rmarkdown", "yaml", "slendr"))
+                   # "tidyr", "scales", "readr", "admixr", "ggrepel", "viridis", "smartsnp", "sf", "stars", "rnaturalearth"))
 # devtools::install_github("bodkan/slendr")
 
 
