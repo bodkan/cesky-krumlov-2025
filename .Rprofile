@@ -1,1 +1,1 @@
-source("renv/activate.R")
+if(system("uname -n", intern = TRUE) == "Feanor.local") source("renv/activate.R")
