@@ -3,7 +3,8 @@
 # the R package dependencies, follow the instructions at this link:
 # https://github.com/bodkan/cesky-krumlov-2025
 
-install.packages(c("combinat", "cowplot", "dplyr", "ggplot2", "readr", "scales", "tidyr", "slendr"))
+install.packages(c("combinat", "cowplot", "dplyr", "ggplot2", "readr", "scales", "tidyr",
+                   "rmarkdown", "yaml", "slendr"))
                    # "admixr", "ggrepel", "viridis", "smartsnp", "sf", "stars", "rnaturalearth",
                    # "devtools"))
 # devtools::install_github("bodkan/slendr")
