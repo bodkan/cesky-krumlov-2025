@@ -4,12 +4,12 @@ suppressPackageStartupMessages({
 library(cowplot)
 library(dplyr)
 library(ggplot2)
-library(ggrepel)
+# library(ggrepel)
 library(readr)
-library(smartsnp)
+# library(smartsnp)
 library(scales)
 library(tidyr)
-library(viridis)
+# library(viridis)
 })
 
 plot_pca <- function(prefix, ts, pc = c(1, 2), color_by = c("time", "pop"), return = c("plot", "pca", "both")) {
