@@ -61,8 +61,8 @@ in handy. In general, pretty much all of the exercises are based around my
 popgen simulation R package [_slendr_](https://slendr.net). Whenever you need
 help, I recommed consulting the following reference materials:
 
-1.  First and foremost, you should refer to the slides with the _slendr_ "crash
-course" which we startedour activity session with. Ideally, they should cover pretty
+1.  First and foremost, you should refer to the **slides with the _slendr_ "crash
+course"** which we started our activity session with. Ideally, they should cover pretty
 much every bit of _slendr_ functionality you will need. You can find the material
 rendered as [normal slides](https://bodkan.quarto.pub/cesky-krumlov-2025-slides/)
 or [one-page handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/)
@@ -72,14 +72,14 @@ are not working, it could be because their servers are overloaded. In this case,
 you can simply download `slides.html` or `handouts.html` from the
 [GitHub repository](https://github.com/bodkan/cesky-krumlov-2025/) for this activity.
 
-2.  Relevant tutorials on the [_slendr_ website](https://www.slendr.net) which
+2.  Relevant **tutorials on the [_slendr_ website](https://www.slendr.net)** which
 you can find under the "Articles" link in the header of the webpage. In general,
 the website contains much more detailed information which is available in the
 [handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/) in a much more
 condensed form.
 
-3.  [Manual pages](https://www.slendr.net/reference/index.html) of all available
-_slendr_ functions. Note that you can get the help page of every _slendr_ R
+3.  **[Manual pages](https://www.slendr.net/reference/index.html) of all available
+_slendr_ functions**. Note that you can get the help page of every _slendr_ R
 `function()` by typing `?function` in the R console. For instance, typing
 `?ts_tajima` gives you the help page of the _tskit_/_slendr_ function implementing
 the tree-based computation of Tajima's D. Whenever I discuss an optional parameter
@@ -144,7 +144,7 @@ these steps:
     $ cd ~/slendr_activity
     ```
 
-- **Open the R terminal in that directory. You should get a note that the _renv_
+- **Open the R terminal in that directory**. You should get a note that the _renv_
 package is being automatically setup, like this:
 
     ```         
@@ -337,7 +337,10 @@ history in _slendr_.**
 
 ![](images/intro_model1.png){width="50%"}
 
-**Hint:** Start script `exercise1.R` script in your RStudio session using this "template":
+**Hint:** Start script `exercise1.R` script in your RStudio session using this "template". Then build a sequence of appropriate `population()` calls using
+the syntax from the introductory slides (using the `parent = <pop>` argument
+for programming splits of daughter populations -- which will be all except
+the CHIMP lineage in our example), etc.
 
 ```{r}
 #| eval: false
@@ -356,7 +359,11 @@ model <- compile_model(
 ```
 
 ::: aside
-**Note:** With _slendr_ you can specify time in whatever format is more convenient or readable for your model. For instance here, because we're dealing with historical events which are commonly expressed in times given as"years ago", we can write them in a decreasing order – i.e. 7Mya → 6Mya → ..., as shown above – or, in terms of R code, 7e6 (or 7000000), 6e6 (6000000), etc..
+**Note:** With _slendr_ you can specify time in whatever format is more convenient or readable for your model. For instance here, because we're dealing with historical events which are commonly expressed in times given as"years ago", we can write them in a decreasing order – i.e. 7Mya → 6Mya → ..., as shown above – or, in terms of R code, 7e6 (or 7000000), 6e6 (6000000), etc.
+
+In a later example, you will see that you can also encode the events in the time
+direction going "forward" (i.e., the first event starting in generation 1, a
+following event in generation 42, and so on).
 :::
 
 ::: callout-note
@@ -2135,6 +2142,10 @@ we need to do a bit of work. To simplify things a bit, here's the R code which m
 it possible to do. Just copy it in your `exercise4.R` script as it is:
 
 ```{r}
+# Let's use my own saved simulation results, so that we're all on the
+# same page going forward
+path <- here::here("data/selection")
+
 ts <-
   file.path(path, "slim.trees") %>%  # 1. compose full path to the slim.trees file
   ts_read(model) %>%                 # 2. read the tree sequence file into R
@@ -2249,6 +2260,27 @@ model <- compile_model(
 )
 ```
 :::
+
+
+
+#### Bonus 3: Other statistics in windows
+
+As a practice of your newly acquired tree-sequence computation skills with
+_slendr_, calculate some other statistics in the same windows along the
+simulated genome, visualize them yourself, and compare the results to the
+window-based Tajima's D pattern. For instance, `ts_diversity()`, `ts_divergence()`,
+or `ts_segregating()` might be quite interesting to look at.
+
+::: callout-note
+#### Click to see the solution
+
+Use the same tree sequence file you've computed Tajima's D on, and then
+apply the functions `ts_diversity()`, `ts_divergence()`, and `ts_segregating()`
+on that tree sequence.
+:::
+
+
+
 
 :::
 <!-- End of Bonus exercises for Exercise 4 -->
