@@ -83,24 +83,6 @@
       ],
       "Hash": "c232938949fcd8126034419cc529333a"
     },
-    "admixr": {
-      "Package": "admixr",
-      "Version": "0.9.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "dplyr",
-        "magrittr",
-        "readr",
-        "rlang",
-        "stats",
-        "stringr",
-        "tibble",
-        "utils"
-      ],
-      "Hash": "0928a1eb3005863f26ee9da999a00bf9"
-    },
     "ape": {
       "Package": "ape",
       "Version": "5.8-1",
