@@ -460,8 +460,10 @@ to simulate data from a _slendr_ model!
 useful for debugging.
 
 **Simulate a tree sequence from your compiled `model` using the `msprime()`
-engine, storing it to a variable `ts` as shown right above. Then experiment with
-setting `debug = TRUE` (this prints out _msprime_'s own debugging summary) and
+engine, storing it to a variable `ts` as shown right above.
+Use `sequence_length = 1e6` (so 1 Mb of sequence) and `recombination_rate = 1e-8`. Then experiment with
+setting `debug = TRUE` (this prints out _msprime_'s own debugging summary
+which you might already be familiar with from your previous activity?) and
 then `run = FALSE` (this prints out a raw command-line which can run a _slendr_
 simulation in the shell).**
 
@@ -718,13 +720,6 @@ ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
 ```
 :::
 
-:::::: callout-tip
-## Bonus exercises
-
-### Bonus 1: Program your own model
-
-Do you have a favourite model organism or you study another species? **Take some of the most important features of its demographic history and program them as a new _slendr_ model.** If you'd like, you will be able to work with it even in later exercises.
-:::
 
 <!-- End of Bonus exercises for Exercise 1 -->
 
@@ -2287,6 +2282,29 @@ on that tree sequence.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Exercise 4: Programming of your own model
+
+Do you have a favourite model organism or you study another species? **Take some of the most important features of its demographic history and program them as a new _slendr_ model.** If you'd like, you will be able to work with it even in later exercises.
 
 
 
