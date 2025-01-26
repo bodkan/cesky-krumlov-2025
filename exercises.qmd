@@ -2304,10 +2304,25 @@ on that tree sequence.
 
 # Exercise 4: Programming of your own model
 
-Do you have a favourite model organism or you study another species? **Take some of the most important features of its demographic history and program them as a new _slendr_ model.** If you'd like, you will be able to work with it even in later exercises.
+Do you have a favourite model organism or you study another species? **Take some of the most important features of its demographic history and program them as a new _slendr_ model.**
 
+**Then, think about some interesting population genetic statistics that you
+either know from the literature or that you perhaps computed on your own
+empirical data. Try to compute them on a tree sequence simulated from your 
+model using `msprime()`. Do you get results which are in the ballpark of
+your expectations?**
 
+::: callout-note
+### Click to see the solution
 
+I don't have a solution, of course! :) But I would be really happy if you
+send me a _slendr_ script with your model, especially if you get to use it
+in your own projects!
+
+If you would be OK with it, I think it would be great to create a gallery
+of models created by people for all kinds of different species and publish
+it on the [_slendr_ website](https://slendr.net).
+:::
 
 
 
