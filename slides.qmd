@@ -344,7 +344,7 @@ cat script.py
 :::
 
 ::: {.fragment}
-<center><h3>_slendr_ makes this <u>trivial</u>, even for complex models</h3></center>
+<center><h3>_slendr_ makes this <u>easy</u>, even for complex models</h3></center>
 :::
 
 
@@ -568,7 +568,7 @@ pop5
 ::: {.fragment}
 
 This way, you can build up complex models step by step, checking everything
-by interacting with the R console.
+as you go by interacting with the R console.
 
 :::
 
