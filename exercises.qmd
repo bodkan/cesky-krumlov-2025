@@ -125,7 +125,8 @@ in the RStudio menu.
 ---
 
 **If you want to set up everything on your local machine from scratch,
-just follow these couple of steps.**
+(maybe after the workshop is over) just follow the couple of steps right
+below.**
 
 The easiest way to set up everything on your computer is to download all of
 the exercise materials (slides, code, data, everything) to your working machine
