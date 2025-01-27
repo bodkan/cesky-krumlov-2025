@@ -506,6 +506,17 @@ For now, **type out the `ts` object in the terminal – what do you see?** You
 should get a summary of a tree-sequence object that you're familiar with from
 your _msprime_ and _tskit_ activity earlier in the day.
 
+::: {.aside}
+This is a very important feature of _slendr_ -- when a simulation is
+concluded (doesn't matter if it was a `slim()` or `msprime()` simulation),
+you will get a normal _tskit_ object. In fact, the fact that _slendr_ supports
+(so far, and likely always) only a "subset" of all of _tskit_'s functionality
+isn't stopping you to write custom Python/_tskit_ processing code of a tree
+sequence generated from a _slendr_ model. Under the hood, a _slendr_ simulation
+_really is_ just an _msprime_ (or SLiM) simulation! It's just executed through
+a simplified interface (and dare I say a bit more convenient, for some purposes).
+:::
+
 ::: callout-note
 #### Click to see the solution
 
@@ -515,6 +526,13 @@ your _msprime_ and _tskit_ activity earlier in the day.
 ts
 ```
 :::
+
+The brilliance of the tree-sequence data structure rests on its elegant
+table-based implementation (much more information on that is [here](https://tskit.dev/tskit/docs/stable/data-model.html)). _slendr_ isn't
+really designed to run very complex low-level manipulations of tree-sequence
+data (it's strength lies in the convenient interface to popgen statistical
+functions implemented by _tskit_), but it does contain a couple of functions
+which can be useful for inspecting the lower-level nature of a tree sequence.
 
 **Use the `ts_table` function to inspect the low-level table-based representation of a tree sequence.** For instance, you can get the table of nodes with `ts_table(ts, "nodes")`, edges with `ts_table(ts, "edges")`, and do the same thing for "individuals", "mutations", and "sites". **Does your tree sequence contain any mutations? If not, why, and how can we even do any popgen with data without any mutations?**
 
