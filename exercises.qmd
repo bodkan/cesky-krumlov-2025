@@ -551,7 +551,12 @@ ts_table(ts, "sites")
 ```
 :::
 
-There are also two _slendr_-specific functions called `ts_samples()` and `ts_nodes()`. **You can run them simply as `ts_samples(ts)` and `ts_nodes(ts)`. What do the tables they produce represent?**
+There are also two _slendr_-specific functions called `ts_samples()` (which
+retrieves the "symbolic names" and dates of all recorded individuals at
+the end of a simulation) and `ts_nodes()`. **You can run them simply as
+`ts_samples(ts)` and `ts_nodes(ts)`. How many individuals (samples) are
+in your tree sequence as you simulated it? How is the result of `ts_nodes()`
+different from `ts_samples()`?**
 
 ::: callout-note
 #### Click to see the solution
