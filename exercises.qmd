@@ -1366,9 +1366,7 @@ do they differ based on `Ne` parameter you used in each respective simulation.**
 and `generation_time` 1), simulate 10Mb tree sequence (recombination and mutation
 rates of 1e-8), compute AFS for 10 samples and return it the AFS vector as its result.
 
-**Hint:**
-
-If you've never programmed before, the concept of a "custom function" might
+**Hint:** If you've never programmed before, the concept of a "custom function" might
 be very alien to you. If you need help, feel free to start building your
 `exercise3.R` solution based on this "template" (just fill in missing relevant
 bits of _slendr_ code that you should be already familiar with):
@@ -1829,7 +1827,9 @@ plot_model(model, proportions = TRUE, samples = schedule)
 Although the point of this exercise is to simulate selection, let's first
 simulate a normal neutral model using slendr's `msprime()` engine as a sanity
 check. **Simulate 10 Mb of sequence with a recombination rate `1e-8` and a
-sampling `schedule` defined above.**
+sampling `schedule` defined above.** Let's not worry about adding any mutations, just to change things up a little bit. We'll be working with
+branch-based statistics here (which means adding `mode = "branch"` whenever
+we will be computing a statistic, such as Tajima's D).
 
 ::: callout-note
 #### Click to see the solution
