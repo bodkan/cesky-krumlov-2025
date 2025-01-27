@@ -126,8 +126,8 @@ RStudio).**
 
 If you want to open the most up-to date resources from the cloud instance
 directly (rather than from the quarto.pub hosting service accessible via the
-links to `handouts.html` and `exercises.html` above), you might want to run
-this _inside the directory with this activity's files on the cloud_:
+links to `handouts.html` and `exercises.html` above), **you might want to run
+this _inside the directory with this activity's files on the cloud_**:
 
 ```
 # first go to the directory with the activity files
@@ -137,7 +137,8 @@ cd <path to the activity directory on the cloud>
 git pull https://github.com/bodkan/cesky-krumlov-2025 main
 ```
 
----
+::: callout-note
+#### Setup on your own computer
 
 **If you want to set up everything on your local machine from scratch
 (maybe after the workshop is over and you want to return to the material on
@@ -207,7 +208,7 @@ least version 4.2 (and it being available in your unix `$PATH!`) is required. If
 that exercise even without SLiM by using cached results of the SLiM
 simulation that I provided.
 
----
+:::
 
 
 
@@ -2378,24 +2379,6 @@ it on the [_slendr_ website](https://slendr.net).
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Conclusion
-
-That's all folks! I hope that this session of practical exercises has convinced
-you that _slendr_ is a very useful tool to get from an idea about a model or
-a statistic to a concrete tangible result in just a few lines of R code.
 
 
 
