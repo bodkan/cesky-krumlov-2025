@@ -124,6 +124,18 @@ in the RStudio menu (selecting the `cesky-krumlov-2025.Rproj` project file
 in that directory with open a fresh R session for that project in your
 RStudio).
 
+If you want to open the most up-to date resources from the cloud instance
+directly (rather than from the quarto.pub hosting service accessible via the
+links to `handouts.html` and `exercises.html` above), you might want to run
+this _inside the directory with this activity's files on the cloud_:
+
+```
+# first go to the directory with the activity files
+cd <path to the activity directory on the cloud>
+# then pull the latest changes from GitHub
+git pull https://github.com/bodkan/cesky-krumlov-2025 main
+```
+
 ---
 
 **If you want to set up everything on your local machine from scratch
