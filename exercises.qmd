@@ -498,9 +498,9 @@ msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, run = FALSE)
 
 ### Part 4: Inspecting the tree-sequence object
 
-As we'll see later, _slendr_ tries to provide an R-friendly interface to
-accessing a subset of _tskit_'s functionality for working with tree sequence and
-for computing various popgen statistics.
+As we'll see later, _slendr_ provides an R-friendly interface to
+accessing a [subset of _tskit_'s functionality](https://tskit.dev/tskit/docs/stable/python-api.html)
+for working with tree sequence and for computing various popgen statistics.
 
 For now, **type out the `ts` object in the terminal – what do you see?** You
 should get a summary of a tree-sequence object that you're familiar with from
