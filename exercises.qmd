@@ -56,29 +56,23 @@ filters:
 
 # Reference materials
 
-As you're working on the following exercises, some reference materials might come
-in handy. In general, pretty much all of the exercises are based around my
-popgen simulation R package [_slendr_](https://slendr.net). Whenever you need
-help, I recommed consulting the following reference materials:
+As you're working on the exercises below, some reference materials will be 
+useful. In general, all of the exercises are based around my
+popgen simulation R package [_slendr_](https://slendr.net), which is why
+I recommed consulting the following reference materials:
 
 1.  First and foremost, you should refer to the **slides with the _slendr_ "crash
-course"** which we started our activity session with. Ideally, they should cover pretty
+course"** which we started our activity session with, and which cover pretty
 much every bit of _slendr_ functionality you will need. You can find the material
 rendered as [normal slides](https://bodkan.quarto.pub/cesky-krumlov-2025-slides/)
 or [one-page handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/)
-(the latter being probably a bit more practical for reference rather than
-searching for help through individual slides). If these Quarto Pub links
+(the latter will be a bit more practical for reference, as you won't have to
+search for information by flipping through individual slides). If these Quarto Pub links
 are not working, it could be because their servers are overloaded. In this case,
-you can simply download `slides.html` or `handouts.html` from the
-[GitHub repository](https://github.com/bodkan/cesky-krumlov-2025/) for this activity.
+you can simply open `slides.html` or `handouts.html` from the
+[GitHub repository](https://github.com/bodkan/cesky-krumlov-2025/) for this activity (you will have them also in the cloud -- instructions below).
 
-2.  Relevant **tutorials on the [_slendr_ website](https://www.slendr.net)** which
-you can find under the "Articles" link in the header of the webpage. In general,
-the website contains much more detailed information which is available in the
-[handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/) in a much more
-condensed form.
-
-3.  **[Manual pages](https://www.slendr.net/reference/index.html) of all available
+2.  **[Manual pages](https://www.slendr.net/reference/index.html) of all available
 _slendr_ functions**. Note that you can get the help page of every _slendr_ R
 `function()` by typing `?function` in the R console. For instance, typing
 `?ts_tajima` gives you the help page of the _tskit_/_slendr_ function implementing
@@ -86,6 +80,12 @@ the tree-based computation of Tajima's D. Whenever I discuss an optional paramet
 of some function (or whenever you want to modify a function's behavior), this
 is where you can find more information about it.
 
+3.  Relevant **tutorials on the [_slendr_ website](https://www.slendr.net)** which
+you can find under the "Articles" link in the header of the webpage. In general,
+the website contains much more detailed information which is available in the
+[handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/) in a much more
+condensed form. I think this is probably _too much information_ for this
+activity, but don't hesitate to read a bit more if you're interested!
 
 
 
@@ -117,12 +117,12 @@ is where you can find more information about it.
 
 # Installation setup
 
-**Note:** If you're using the RStudio browser-based cloud instance, you don't
+**If you're using the RStudio browser-based cloud instance, you don't
 have to do anything! Just open the RStudio session in your browser and
 navigate to the directory for this activity via `File -> Open Project...`
 in the RStudio menu (selecting the `cesky-krumlov-2025.Rproj` project file
 in that directory with open a fresh R session for that project in your
-RStudio).
+RStudio).**
 
 If you want to open the most up-to date resources from the cloud instance
 directly (rather than from the quarto.pub hosting service accessible via the
@@ -132,6 +132,7 @@ this _inside the directory with this activity's files on the cloud_:
 ```
 # first go to the directory with the activity files
 cd <path to the activity directory on the cloud>
+
 # then pull the latest changes from GitHub
 git pull https://github.com/bodkan/cesky-krumlov-2025 main
 ```
@@ -139,12 +140,8 @@ git pull https://github.com/bodkan/cesky-krumlov-2025 main
 ---
 
 **If you want to set up everything on your local machine from scratch
-(maybe after the workshop is over), just follow the couple of steps right
-below.**
-
-The easiest way to set up everything on your computer is to download all of
-the exercise materials (slides, code, data, everything) to your working machine
-by following these steps:
+(maybe after the workshop is over and you want to return to the material on
+yor own), just follow the couple of steps right below.**
 
 1. **Clone the repository with the activity materials**. In a shell terminal on
 Linux or macOS, in your home directory (or anywhere else, really) you can run:
@@ -153,11 +150,8 @@ Linux or macOS, in your home directory (or anywhere else, really) you can run:
     $ git clone https://github.com/bodkan/cesky-krumlov-2025 ~/slendr_activity
     ```
 
-(For Windows users only: You should be able to do all of this on Windows too, but
-that would require you having some kind of Linux environment (terminal, R, etc.)
-already set up. Unfortunately I don't know much about that so my recommendation
-is that, if you do use Windows, just do the exercises on the cloud instance
-provided by the course organizers.)
+(For Windows users: You can download a zip file with the whole course
+even without git.)
 
 2. **Open RStudio and install all of the following dependencies:**
 
@@ -207,11 +201,11 @@ In every previous installments of this workshop, this is all that was needed to 
 
 **Installing SLiM**
 
-It's unclear whether we will manage to go through the entirety of the selection
--based exercise. However, to be able to do this, having SLiM at least version 4.2
-(and it being available in your unix `$PATH!`) is required. If this isn't possible
-for your, don't worry. You'll be able to do most of that exercise even without
-SLiM by using cached results of the SLiM simulation that I provided.
+It's unclear whether we will manage to go through the entirety of the
+selection-based exercise. However, to be able to do this, having SLiM at
+least version 4.2 (and it being available in your unix `$PATH!`) is required. If this isn't possible for your, don't worry. You'll be able to do most of
+that exercise even without SLiM by using cached results of the SLiM
+simulation that I provided.
 
 ---
 
@@ -247,38 +241,44 @@ SLiM by using cached results of the SLiM simulation that I provided.
 
 For each exercise, you will get a brief explanation of the problem at hand and
 some information about functions that could be useful to solve the exercise.
-**The concrete, specific task will be always written like this in bold.** As you
-work on each part of each exercises, look for these bold lines.
+**The concrete, specific task will be always written like this in bold. As you
+work on each part of each exercises, look for these bold lines.**
 
-Your goal for each exercise is to write a complete R script script. I suggest
+**Your goal for each exercise is to write a complete R script script. I suggest
 you name the script for each exercise as `exercise1.R`, `exercise2.R`, etc.,
-just to keep things tidy and easy to troubleshoot if needed.
+just to keep things tidy and easy to troubleshoot if needed.**
 
 Unless you have a strong preference for another editor or IDE, I recommend you
 use RStudio (either on your machine or in the cloud, as provided by the
 workshop organizers, depending on where you did the setup steps above). If you
 like Emacs, vim, VSCode, or anything else, really, feel free to use that as
-long as you are able to plot and inspect figures.
+long as you are able to visualize figures.
 
-Each exercise is compose of individual _parts_, which are designed to build
-one upon the other in the order they are specified. **As you progress through
+**Each exercise is compose of individual _parts_, which are designed to build
+one upon the other in the order they are specified. As you progress through
 sequential parts of each exercise, you will be adding code to your script for
 that exercise.**
 
 #### Don't worry about the number of exercises you're _"supposed to do"_
 
-How far we manage to crunch through in this session will largely depend on
+How far we manage to crunch through the content of this session will depend on
 everybody's level of confidence in programming _and_ population genetics.
 The contents of the activities as a whole are designed so that no matter
-the point we run out of time, you will take home enough knowledge of
+the moment at which we run out of time, you will take home enough knowledge of
 _slendr_ to be able to immediately apply it to your own projects.
 
-**After each exercise I will pause a little bit, go through the intended
-solutions and answer questions.** If you're way ahead, there are bonus exercises
-(which I will not be going through with everyone) -- those should provide at
-least some entertainment for you while the rest of us are catching up. If you're
-_really_ far ahead, just continue to following exercises without waiting for the
-rest of us.
+**To avoid anyone getting overwhelmed, I'll be stopping the activity at
+some "checkpoints", to check in with how everything is going and quickly go
+through the example solutions for the parts until that point, and give a quick
+explanation.**
+
+If you find yourself way ahead, there are bonus exercises (which I will not be
+going through with everyone) -- those should provide at least some
+entertainment for you while the rest of us are catching up. If you're
+_really_ far ahead, just continue to following exercises without waiting for
+the rest of us. You can also try to design your own models from scratch, such
+as models relevant for your model organism and popgen statistics relevant for
+your own work.
 
 #### Note on the programming aspect of the exercises
 
@@ -293,7 +293,8 @@ If you find yourself [_totally lost_](https://scryfall.com/card/gtc/54/totally-l
 don't hesitate to read my solutions from the get go, copy-pasting them into your
 own script in the RStudio, executing them line by line, and trying to understand
 what's going on. **It's the understanding that we're after here. Whether or not
-you can implement everything yourself from scratch does not actually matter at all.**
+you can implement everything yourself from scratch does not actually matter at all.** (Nobody in history has learned to program from scratch. Everyone
+started by copy-pasting code examples written by someone else.)
 
 
 
@@ -330,13 +331,13 @@ you can implement everything yourself from scratch does not actually matter at a
 ### Part 1: Building a demographic model in _slendr_
 
 **Use functions such as `population()`, `gene_flow()`, and `compile_model()`,
-which we discussed in the ["crash course"](https://bodkan.quarto.pub) at the
+which we discussed in the ["crash course"](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/) at the
 start of this session, to program the following toy model of human demographic
 history in _slendr_.**
 
 ![](images/intro_model1.png){width="50%"}
 
-**Hint:** Start script `exercise1.R` script in your RStudio session using this "template". Then build a sequence of appropriate `population()` calls using
+**Hint:** Start script `exercise1.R` script in your RStudio session using the following "template". Then add a sequence of appropriate `population()` calls using
 the syntax from the introductory slides (using the `parent = <pop>` argument
 for programming splits of daughter populations -- which will be all except
 the CHIMP lineage in our example), etc.
@@ -364,6 +365,12 @@ In a later example, you will see that you can also encode the events in the time
 direction going "forward" (i.e., the first event starting in generation 1, a
 following event in generation 42, and so on).
 :::
+
+**Hint:** Remember that _slendr_ is designed with interactivity in mind!
+When you write a chunk of code (such as a command to create a population
+through a population split, or model compilation to create a `model` object),
+execute that bit of code in the R console and inspect the summary information
+printed by evaluating the respective R object you just created.
 
 ::: callout-note
 #### Click to see the solution
@@ -400,8 +407,9 @@ model <- compile_model(
 
 ### Part 2: Inspecting the model visually
 
-To visualize a _slendr_ model, you can use the function `plot_model()`.
+To visualize a _slendr_ model, you use the function `plot_model()`.
 **Plot your compiled `model` to make sure you programmed it correctly!**
+Your figure should roughly correspond to my handdrawn doodle above.
 
 ::: aside
 **Note:** Plotting of models can be sometimes a little wonky. When plotting your
@@ -424,18 +432,24 @@ plot_model(model, sizes = FALSE, log = TRUE, proportions = TRUE)
 ### Part 3: Simulating genomic data
 
 Once you have a compiled _slendr_ model stored in an R variable (from now on,
-`model` will always mean a variable containing a compiled _slendr_ model object,
+`model` will always mean a variable containing a compiled _slendr_ model object relevant for the given exercise,
 for simplicity), we can simulate data from it. By default, _slendr_ models
 always produce a [tree sequence](https://tskit.dev/tutorials/what_is.html).
 
 There are two simulation engines built into _slendr_ implemented by functions
 `msprime()` and `slim()`. For traditional, non-spatial, neutral demographic
 models, the engine provided by the `msprime()` function is much more efficient,
-so we'll be using that. However, from a popgen theoretical perspective, both
+so we'll be using that for the time being. However, from a popgen theoretical perspective, both simulation functions
 will give you the same results for any given compiled _slendr_ model (up to
 some level of stochastic noise, of course).
 
-Here's how you can use the function to simulate a tree sequence:
+::: aside
+**Note:** Yes, this means you don't have to write any _msprime_ (or SLiM) code
+to simulate data from a _slendr_ model!
+:::
+
+Here's how you can use the function to simulate a tree sequence from the
+model you've just created using `compile_model()` in your script:
 
 ```{r}
 #| eval: false
@@ -450,13 +464,8 @@ ts <- msprime(
 You will be seeing this kind of pattern over and over again in this exercise, so
 it's a good idea to keep it in mind.
 
-::: aside
-**Note:** Yes, this means you don't have to write any _msprime_ (or SLiM) code
-to simulate data from a _slendr_ model!
-:::
 
-**Hint:** The function has also arguments `debug` and `run` which can be extremely
-useful for debugging.
+**Hint:** The `msprime()` function has also arguments `debug` and `run` which can be extremely useful for debugging.
 
 **Simulate a tree sequence from your compiled `model` using the `msprime()`
 engine, storing it to a variable `ts` as shown right above.
