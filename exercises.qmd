@@ -1443,15 +1443,16 @@ have been instances in which we've been able to even answer questions like
 this directly in a meeting, pretty much on the spot! This makes _slendr_ a
 very powerful "popgen calculator".
 
-Now let's take things one step forward. Imagine you gathered some empirical
+Now let's take things one step further. Imagine you gathered some empirical
 data, like an allele frequency spectrum (AFS) from a population that you
 study. That data was, in the real world, produced by some (hidden) biological
-process (demographic history) that we generally don't know anything about _a
-priori_. For instance, the population we study had some $N_e$, which we don't
-know the value of -- the only thing we have is the observed AFS.
+process (demographic history) that we want to learn about.
+For instance, the population we study had some $N_e$, which we don't
+know the value of -- the only thing we have is the observed AFS -- but we
+want to infer that value.
 
 Simulations can be a great tool to estimate the most likely value of such an
-unknown parameter. Briefly speaking, and staying with this $N_e$ and AFS example,
+unknown parameter. Briefly speaking, in this particular toy example,
 we can simulate a large number of AFS vectors (each resulting from a different
 assumed $N_e$ value) and then pick just those $N_e$ values (or just one $N_e$
 value) which produced a simulated AFS closest to the observed AFS.
@@ -1466,10 +1467,11 @@ for a couple of `Ne` values of your choosing, but staying between
 `Ne = 1000` and `Ne = 30000` Plot those AFS vectors and observe how (and why?)
 do they differ based on `Ne` parameter you used in each respective simulation.**
 
-**Hint:** The function should create a one-population *forward-time* model
-(our population starting at `time = 1`, with the model `simulation_length` 100000
-and `generation_time` 1), simulate 10Mb tree sequence (recombination and mutation
-rates of 1e-8), compute AFS for 10 samples and return it the AFS vector as its result.
+**Hint:** The function should create a one-population _forward-time_ model
+(our population starting at `time = 1`, with the model
+`simulation_length = 100000`
+and `generation_time = 1` in `compile_model()`),
+simulate 10Mb tree sequence using `msprime()` (recombination rate 1e-8) and then overlay neutral mutations on it at `mutation_rate = 1e-8`), compute AFS for 10 samples and return the AFS vector as result of this custom function.
 
 **Hint:** If you've never programmed before, the concept of a "custom function" might
 be very alien to you. If you need help, feel free to start building your
