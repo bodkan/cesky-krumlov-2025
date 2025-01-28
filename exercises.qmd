@@ -333,6 +333,20 @@ ability.)
 
 ![](images/intro_model1.png){width="50%"}
 
+::: {.aside}
+**Note:** You could easily program the model so that different ancestral
+populations are represented by separate `population()` commands (i.e.,
+your model would start with a population called "human_chimp_ancestor" from
+which a "CHIMP" and "hominin_ancestor" populations would split, etc.) but
+generally this is too annoying to do and normally it's unnecessary. Feel free
+to write the model so that "CHIMP" is the first population, then "AFR" population
+splits from it, etc... Although it probably isn't the most accurate way to
+describe the real evolutionary history, it simplified the coding significantly.
+
+[Mya = million years ago;  kya = thousand years ago]
+:::
+
+
 **Hint:** Start script `exercise1.R` script in your RStudio session using the following "template". Then add a sequence of appropriate `population()` calls using
 the syntax from the introductory slides (using the `parent = <pop>` argument
 for programming splits of daughter populations -- which will be all except
