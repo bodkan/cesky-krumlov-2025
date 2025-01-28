@@ -1082,7 +1082,7 @@ function `ts_f4()`:
 
 2. $f_4$(\<some African\>, \<a test European\>; \<Neanderthal\>, \<Chimp\>),
 
-here <individual> can be the name of any individual recorded in your
+here `<individual>` can be the name of any individual recorded in your
 tree sequence, such as names you saw as `name` column in the table returned
 by `ts_samples(ts)` or the vectors of strings returned by `ts_names(ts)`.
 
@@ -2197,7 +2197,7 @@ list.files(path)
 :::
 
 ::: callout-note
-#### Click to see the solution (you don't have a working SLiM installation)
+#### Click to see the solution (you don't have a working SLiM installation _or_ the simulation takes too long)
 
 ```{r}
 # If you don't have SLiM set up, just use the simulated results from my own
