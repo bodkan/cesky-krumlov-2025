@@ -1656,6 +1656,10 @@ afs_observed <- c(2520, 1449, 855, 622, 530, 446, 365, 334, 349, 244,
 Ne_grid <- seq(from = 1000, to = 30000, by = 500)
 Ne_grid
 
+# I'm not entirely sure if your workshop cloud instances support big
+# parallelization runs -- if not, you can modify the `mc.cores =` argument
+# a couple of lines below to a smaller number (`mc.cores = 1` would make
+# the simulation run on a single processor, i.e. no parallelization).
 library(parallel)
 
 # Compute AFS (in parallel, to make things faster) across the entire grid of possible Ne values
