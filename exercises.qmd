@@ -28,7 +28,7 @@ filters:
 
 ```{r}
 #| echo: FALSE
-RERUN <- FALSE
+RERUN <- TRUE
 ```
 
 
@@ -1841,7 +1841,7 @@ legend("topright", legend = c("observed AFS", paste("best fitting Ne =", Ne_grid
 
 
 
-# Exercise 4: Simulating dynamics of positive selection
+# Exercise 4: Simulating (and detecting) natural selection
 
 The primary motivation for designing _slendr_ was to make demographic modelling
 in R as trivially easy and fast as possible, focusing exclusively on neutral
@@ -2489,7 +2489,9 @@ on that tree sequence.
 
 # Exercise 5: Programming of your own model
 
-Do you have a favourite model organism or you study another species? **Take some of the most important features of its demographic history and program them as a new _slendr_ model.**
+Do you have a favourite model organism? **Take some of the most important
+features of its demographic history and program them as a new _slendr_ model
+in a new R script.**
 
 **Then, think about some interesting population genetic statistics that you
 either know from the literature or that you perhaps computed on your own
@@ -2505,7 +2507,7 @@ send me a _slendr_ script with your model, especially if you get to use it
 in your own projects!
 
 If you would be OK with it, I think it would be great to create a gallery
-of models created by people for all kinds of different species and publish  
+of models created by people for all kinds of different species and publish
 it on the [_slendr_ website](https://slendr.net).
 :::
 
