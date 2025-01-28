@@ -1162,10 +1162,12 @@ orthogonal to the problem of investigating the expectations and trends of
 statistics given some underlying evolutionary model, which is what we're after
 in these exercises.
 
-In short, how much is "significantly different from zero compared to some
-baseline expectation" can be easily drowned in noise in a simple
-single-individual comparisons as we did above. Let's increase the sample
-size a bit to see if a statistical pattern becomes more apparent.
+That said, even in perfect simulated data, what exactly does
+"significantly different from zero compared to some baseline expectation"
+mean can be blurred by noise with simple single-individual comparisons that we
+did above. Let's increase the sample size a bit to see if a statistical
+pattern expected in $f_4$ statistic from our Neanderthal introgression model
+becomes more apparent.
 
 **Compute the first $f_4$ statistic of the baseline expectation between
 a pair of Africans and the second $f_4$ statistic comparing an African and
@@ -1174,7 +1176,10 @@ Europeans_, respectively. Plot the *distributions* of those two sets of
 statistics. This should remove lots of the uncertainty and make a statistical
 trend stand out much more clearly.**
 
-**Hint:** Whenever you need to compute something for many things in sequence, looping is very useful. One way to do compute, say, an $f_4$ statistic over many individuals is use this kind of pattern using R's looping function `lapply()`:
+**Hint:** Whenever you need to compute something for many things in sequence,
+looping is very useful. One way to do compute, say, an $f_4$ statistic over
+many individuals is by using this kind of pattern using R's looping function 
+`lapply()`:
 
 ```{r}
 #| eval: false
