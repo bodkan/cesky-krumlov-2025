@@ -26,6 +26,10 @@ filters:
 <!-- https://examples.quarto.pub/collapse-callout/ -->
 
 
+```{r}
+#| echo: FALSE
+RERUN <- FALSE
+```
 
 
 
@@ -2149,7 +2153,7 @@ the simulation?**
 ::: callout-note
 #### Click to see the solution (you have a working SLiM installation)
 
-```{r}
+```{r, eval=RERUN}
 # tstart <- Sys.time()
 path <- slim(model, sequence_length = 10e6, recombination_rate = 1e-8, samples = schedule, path = TRUE, random_seed = 59879916)
 # tend <- Sys.time()
