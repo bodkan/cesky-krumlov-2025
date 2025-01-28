@@ -1484,13 +1484,16 @@ library(slendr)
 init_env()
 
 simulate_afs <- function(Ne) {
-  # In here you should write code which will compile a single-population
-  # demographic model based on the parameters specified above. It should
-  # then simulate 10Mb of tree sequence using `msprime()`, compute an AFS
-  # vector using the function `ts_afs()` for any subset of 10 individuals
-  # in the tree sequence, and finally return that vector.
-
-  return(result) # `result` is a variable with your 10-sample AFS, return it
+  # In here you should write code which will:
+  #   1. create a single population (choose whatever name you want, like "pop")
+  #   2. compile a model using `simulation_length =` and `generation_time =`
+  #   3. simulate a tree sequence
+  #   4. select names of 10 samples (doesn't matter which, "pop_1", "po2_", ...)
+  #   5. compute AFS vector from those 10 individuals using `ts_afs()`
+  
+  # `result` is a variable with your 10-sample AFS vector (we remove the
+  # first element because it's not meaningful for our example)
+  return(result[-1]) 
 }
 
 afs_1 <- simulate_afs(Ne = 1000) # simulate AFS from a Ne = 1000 model...
