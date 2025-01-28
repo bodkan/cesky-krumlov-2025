@@ -382,7 +382,7 @@ sorts, which you can refer to later.</center>
 We will always start our R scripts with this:
 
 ```{r}
-library(slendr)
+library(slendr) # you can safely ignore any potential warnings!
 init_env()
 ```
 
