@@ -18,5 +18,6 @@ handouts:
 	git add handouts.html; git commit -m "Update handouts.html"; git push
 
 exercises:
+	quarto render exercises.qmd -o exercises.html
 	quarto publish quarto-pub --id 31de4a78-15a1-4cb8-a3ac-296a0bbc7d8b exercises.qmd
 	git add exercises*; git commit -m "Update exercises"; git push

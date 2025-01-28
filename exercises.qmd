@@ -452,6 +452,16 @@ Once you have a compiled _slendr_ model stored in an R variable (from now on,
 for simplicity), we can simulate data from it. By default, _slendr_ models
 always produce a [tree sequence](https://tskit.dev/tutorials/what_is.html).
 
+::: {.aside}
+**Note:** Tree sequence provides an extremely efficient means to store and
+work with genomic data at a massive scale. However, you can always get
+simulated data even in [traditional file formats](https://www.slendr.net/reference/index.html#tree-sequence-format-conversion),
+such as VCF, EIGENSTRAT, or a plain old table of ancestral/derived genotypes.
+
+In this activity we will be only working with tree sequences, because it's much
+easier and faster to get interesting statistics from it directly in R.
+:::
+
 There are two simulation engines built into _slendr_ implemented by functions
 `msprime()` and `slim()`. For traditional, non-spatial, neutral demographic
 models, the engine provided by the `msprime()` function is much more efficient,
@@ -471,7 +481,7 @@ model you've just created using `compile_model()` in your script:
 #| eval: false
 #| code-fold: false
 ts <- msprime(
-  <model object>,
+  model,
   sequence_length = <length of sequence to simulate [as bp]>,
   recombination_rate = <uniform recombination rate [per bp per generation]>
 )
@@ -485,7 +495,7 @@ it's a good idea to keep it in mind.
 
 **Simulate a tree sequence from your compiled `model` using the `msprime()`
 engine, storing it to a variable `ts` as shown right above.
-Use `sequence_length = 1e6` (so 1 Mb of sequence) and `recombination_rate = 1e-8`. Then experiment with
+Use `sequence_length = 1e6` (so 1 Mb of sequence) and `recombination_rate = 1e-8` (crossover events per base pair per generation). Then experiment with
 setting `debug = TRUE` (this prints out _msprime_'s own debugging summary
 which you might already be familiar with from your previous activity?) and
 then `run = FALSE` (this prints out a raw command-line which can run a _slendr_
@@ -514,7 +524,7 @@ msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, run = FALSE)
 
 ### Part 4: Inspecting the tree-sequence object
 
-As we'll see later, _slendr_ provides an R-friendly interface to
+As we will see later, _slendr_ provides an R-friendly interface to
 accessing a [subset of _tskit_'s functionality](https://tskit.dev/tskit/docs/stable/python-api.html)
 for working with tree sequence and for computing various popgen statistics.
 
@@ -549,8 +559,12 @@ really designed to run very complex low-level manipulations of tree-sequence
 data (it's strength lies in the convenient interface to popgen statistical
 functions implemented by _tskit_), but it does contain a couple of functions
 which can be useful for inspecting the lower-level nature of a tree sequence.
+Let's look at a couple of them now.
 
-**Use the `ts_table` function to inspect the low-level table-based representation of a tree sequence.** For instance, you can get the table of nodes with `ts_table(ts, "nodes")`, edges with `ts_table(ts, "edges")`, and do the same thing for "individuals", "mutations", and "sites". **Does your tree sequence contain any mutations? If not, why, and how can we even do any popgen with data without any mutations?**
+**Use the `ts_table` function to inspect the low-level table-based representation of a tree sequence.** For instance, you can get the table of nodes with `ts_table(ts, "nodes")`, edges with `ts_table(ts, "edges")`, and do the same thing for "individuals", "mutations", and "sites". **Does your tree sequence contain any mutations? If not, why, and how can we even do any popgen with data without any mutations? As you're doing this, take a look at at the following
+figure (this was made from a different tree sequence than you have, but that's
+OK) to help you relate the information in the tables to a tree sequence which
+those tables (particularly tables of nodes and edges) implicitly encode.**
 
 ::: callout-note
 #### Click to see the solution
@@ -587,6 +601,9 @@ different from `ts_samples()`?**
 ts_samples(ts)
 ts_samples(ts) %>% nrow()
 
+library(dplyr)
+ts_samples(ts) %>% group_by(pop) %>% tally
+
 # This function returns a table similar to the one produced by `ts_table(ts, "nodes")`
 # above, except that it contains additional slendr metadata (names of individuals
 # belonging to each node, spatial coordinates of nodes for spatial models, etc.).
@@ -597,7 +614,7 @@ ts_nodes(ts)
 
 ### Part 5: Scheduling sampling events
 
-In the table produced by the `ts_samples()` function, you saw that the tree
+In the table produced by the `ts_samples()` function you saw that the tree
 sequence we simulated recorded _everyone_. It's very unlikely, unless we're
 extremely lucky, that we'll ever have a sequence of every single individual
 in a population that we study. To get a little closer to the scale of the
@@ -618,7 +635,8 @@ This function simply returns a data frame. As such, we can create multiple of su
 ```{r}
 #| eval: false
 
-# Note that the `times =` argument can be a vector of times like here...
+# Note that the `times =` argument of the `schedule_sampling()` function can be
+# a vector of times like here...
 ancient_times <- c(40000, 30000, 20000, 10000)
 eur_samples <- schedule_sampling(model, times = ancient_times, list(eur, 1))
 
