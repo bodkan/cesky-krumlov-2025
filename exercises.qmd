@@ -2128,8 +2128,8 @@ that this "SLiM extension script" I provided for you has three parameters:
 - `onset_time` -- at which time should the allele appear in the `origin_pop`.
 
 However, at the start, the SLiM extension snippet doesn't contain any concrete
-values of those parameters, but only their `\{{origin_pop}\}`, `\{{s}\}`, and
-`\{{onset_time}\}` placeholders.
+values of those parameters, but only their `{{origin_pop}}`, `{{s}}`, and
+`{{onset_time}}` placeholders.
 
 **Use the _slendr_ function `substitute_values()` to substitute concrete values
 for those parameters like this:**
@@ -2155,12 +2155,16 @@ Let's take a look at the first 15 lines of the extension file before and
 after calling `substitute_values()`. We'll do this in R for simplicity, but
 you can use `less` in plain unix terminal.
 
-```{R}
-# Before -- see the {{placeholder}} parameters in their original form
-cat(paste(readLines("slim_extension.txt")[1:15], collapse = "\n"))
+**Before -- see the {{placeholder}} parameters in their original form:**
+```{r}
+#| echo: false
+cat(paste(readLines("slim_extension.txt")[1:11], collapse = "\n"))
+```
 
-# After -- see the {{placeholder}} parameters with concrete values!
-cat(paste(readLines(extension)[1:15], collapse = "\n"))
+**After -- see the {{placeholder}} parameters with concrete values!**
+```{r}
+#| echo: false
+cat(paste(readLines(extension)[1:11], collapse = "\n"))
 ```
 :::
 
