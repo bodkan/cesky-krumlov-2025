@@ -1974,8 +1974,9 @@ ts <- msprime(model, sequence_length = 10e6, recombination_rate = 1e-8, samples 
 :::
 
 **Inspect the table of all individuals recorded in our tree sequence using
-the function `ts_samples()`, making use we have all the individuals scheduled
-for tree-sequence recording.**
+the function `ts_samples()`, making sure we have all the individuals scheduled
+for tree-sequence recording.** (Again, there's no such a thing as too many
+sanity checks when doing research.)
 
 ::: callout-note
 #### Click to see the solution
