@@ -1078,11 +1078,15 @@ and `mode = "branch"` does exactly that).
 to compute (and compare) the values of these two statistics using the _slendr_
 function `ts_f4()`:
 
--   $f_4$(\<some African\>, \<another African\>; \<Neanderthal\>, \<Chimp\>)
+1. $f_4$(\<some African\>, \<another African\>; \<Neanderthal\>, \<Chimp\>)
 
--   $f_4$(\<some African\>, \<a test European\>; \<Neanderthal\>, \<Chimp\>)
+2. $f_4$(\<some African\>, \<a test European\>; \<Neanderthal\>, \<Chimp\>),
 
-Roughly speaking, we can understand this computation in terms of comparing the
+here <individual> can be the name of any individual recorded in your
+tree sequence, such as names you saw as `name` column in the table returned
+by `ts_samples(ts)` or the vectors of strings returned by `ts_names(ts)`.
+
+To simplify things a lot, we can understand the above equations as comparing the
 counts of so-called BABA and ABBA allele patterns between the quarted of samples
 specified in the statistics:
 
