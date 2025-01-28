@@ -1200,15 +1200,29 @@ df_f4 <- do.call(rbind, list_f4)
 ### Click to see the solution
 
 ```{r}
-# Let's compute the f4 statistic for all Africans and Europeans to see the
-# f4 introgression patterns more clearly
-f4_afr <- lapply(sample_sets$AFR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "branch")) %>% do.call(rbind, .)
-f4_afr
-f4_eur <- lapply(sample_sets$EUR, function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "branch")) %>% do.call(rbind, .)
-f4_eur
+# This gives us list of vectors of the names of all individuals in each
+# population...
+sample_sets <- ts_names(ts, split = "pop")
+# ... which we can then access like this
+sample_sets$AFR # all Africans
+sample_sets$EUR # all Europeans
 
-# Let's add population columns to each of the two results, and bind them together
-# for plotting
+# Let's compute the f4 statistic for all Africans... 
+f4_afr_list <- lapply(
+  sample_sets$AFR,
+  function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "branch")
+)
+# ... and Europeans
+f4_eur_list <- lapply(
+  sample_sets$EUR,
+  function(x) ts_f4(ts, W = "AFR_1", X = x, Y = "NEA_1", Z = "CHIMP_1", mode = "branch")
+)
+
+# Bind each list of data frames into a single data frame
+f4_afr <- do.call(rbind, f4_afr_list)
+f4_eur <- do.call(rbind, f4_eur_list)
+
+# Let's add population columns to each of the two results for easier plotting
 f4_afr$pop <- "AFR"
 f4_eur$pop <- "EUR"
 
