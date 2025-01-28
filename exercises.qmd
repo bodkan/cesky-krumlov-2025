@@ -56,12 +56,11 @@ filters:
 
 # Reference materials
 
-As you're working on the exercises below, some reference materials will be 
-useful. In general, all of the exercises are based around my
-popgen simulation R package [_slendr_](https://slendr.net), which is why
-I recommed consulting the following reference materials:
+As you will be working on the exercises below (all of which focus on the 
+popgen simulation R package [_slendr_](https://slendr.net)), some reference
+materials will be  useful:
 
-1.  First and foremost, you should refer to the **slides with the _slendr_ "crash
+1. First and foremost, you should refer to the **slides with the _slendr_ "crash
 course"** which we started our activity session with, and which cover pretty
 much every bit of _slendr_ functionality you will need. You can find the material
 rendered as [normal slides](https://bodkan.quarto.pub/cesky-krumlov-2025-slides/)
@@ -72,15 +71,16 @@ are not working, it could be because their servers are overloaded. In this case,
 you can simply open `slides.html` or `handouts.html` from the
 [GitHub repository](https://github.com/bodkan/cesky-krumlov-2025/) for this activity (you will have them also in the cloud -- instructions below).
 
-2.  **[Manual pages](https://www.slendr.net/reference/index.html) of all available
+2. **[Manual pages](https://www.slendr.net/reference/index.html) of all available
 _slendr_ functions**. Note that you can get the help page of every _slendr_ R
-`function()` by typing `?function` in the R console. For instance, typing
+`function()` by typing `?function` in the R console, and read it directly in
+the RStudio. For instance, typing
 `?ts_tajima` gives you the help page of the _tskit_/_slendr_ function implementing
 the tree-based computation of Tajima's D. Whenever I discuss an optional parameter
 of some function (or whenever you want to modify a function's behavior), this
 is where you can find more information about it.
 
-3.  Relevant **tutorials on the [_slendr_ website](https://www.slendr.net)** which
+3. Relevant **tutorials on the [_slendr_ website](https://www.slendr.net)** which
 you can find under the "Articles" link in the header of the webpage. In general,
 the website contains much more detailed information which is available in the
 [handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/) in a much more
@@ -117,8 +117,9 @@ activity, but don't hesitate to read a bit more if you're interested!
 
 # Installation setup
 
-**If you're using the RStudio browser-based cloud instance, you don't
-have to do anything! Just open the RStudio session in your browser and
+**If you're using the RStudio browser-based cloud instance provided by
+the workshop organizes, you don't actually
+have to do anything! Just log in to the RStudio session in your browser and
 navigate to the directory for this activity via `File -> Open Project...`
 in the RStudio menu (selecting the `cesky-krumlov-2025.Rproj` project file
 in that directory with open a fresh R session for that project in your
