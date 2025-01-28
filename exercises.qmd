@@ -1872,8 +1872,7 @@ pretty much any arbitrary selection scenario you might be interested in.
 This exercise is a quick demonstration of how this works and how you might
 simulate selection using _slendr_. We will do this using another toy
 model of ancient human history, which we will first use as a basis for simulating
-the frequency trajectory of an allele under positive selection, and implementing
-a simpleselection scan summary statistic using Tajima's D.
+the frequency trajectory of an allele under positive selection, and then implementing a toy selection scan summary statistic using Tajima's D.
 
 To speed things up, **create a new `exercise4.R` script and copy the following
 code as a starting point for this exercise**:
@@ -1937,6 +1936,16 @@ we're recording 50 individuals just before their disappearance. Also note that
 there's quite a bit of gene-flow! This was an important thing we've learned about
 human history in the past 10 years or so -- everyone is mixed with pretty much
 everyone, there isn't (and never was) anything as a "pure population".
+
+::: {.aside}
+**Note:** We didn't discuss it earlier, but _slendr_ also provides the option to
+specify a `remove =` argument in a `population()` call which instructs the
+simulation engine to delete a population from a simulation at a given point.
+For our `msprime()` simulations in earlier examples it wasn't really important,
+but for the `slim()` simulation we will be running below, we want to make a
+population extinct at a certain timepoint. Which is why our ancient populations
+in the starting script model have the `remove =` parameter specified.
+:::
 
 ```{r}
 #| fig-width: 6
