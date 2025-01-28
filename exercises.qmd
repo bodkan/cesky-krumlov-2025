@@ -914,8 +914,9 @@ about in your activity on _tskit_), except that they allow symbolic names
 of individuals, rather then integer indices of nodes in a tree sequence.
 
 Although you can get all the above information by processing the table produced
-by the `ts_samples()` function, _slendr_ provides a useful helper `ts_names()`
-which only returns the names of individuals.
+by the `ts_samples()` function, _slendr_ provides a useful helper function
+`ts_names()` which only returns the names of individuals as a vector 
+(or a named list of such vectors, one vector per population as shown below).
 
 When you call it directly, you get a plain vector of individual names:
 
@@ -952,8 +953,7 @@ various _slendr_ / _tskit_ functions to compute statistics on subsets of
 all individuals sub-sampled in this way.
 
 **After you computed the nucleotide diversity per-population, compute it for
-each individual separately using the same function `ts_diversity()`, which
-gives you the heterozygosity for each individual.**
+each individual separately using the same function `ts_diversity()`** (which, in this way, gives you effectively the heterozygosity for each individual).**
 
 **Hint:** You can do this by giving a vector of names as `sample_sets =` (so
 not an R list of vectors). Feel free to take a look at the solution if you
@@ -977,6 +977,9 @@ sample_sets
 pi_pop <- ts_diversity(ts, sample_sets = sample_sets)
 arrange(pi_pop, diversity)
 ```
+
+You can see that this simple computation fits  the extreme differences in
+long-term $N_e$ encoded by your _slendr_ demografr model.
 
 **Per-individual heterozygosity:**
 
