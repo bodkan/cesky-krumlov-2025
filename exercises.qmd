@@ -644,7 +644,8 @@ eur_samples <- schedule_sampling(model, times = ancient_times, list(eur, 1))
 afr_samples <- schedule_sampling(model, times = 0, list(afr, 1), list(eur, 42))
 nea_samples <- schedule_sampling(model, time = 60000, list(nea, 1))
 
-# And that multiple such sampling schedules can be bound together like this
+# But whatever the means you create the individual sampling schedules with,
+# you can always bind them all to a single table with the `rbind()` function
 schedule <- rbind(eur_samples, afr_samples, nea_samples)
 schedule
 ```
@@ -659,7 +660,8 @@ sample sets at given times, saving it to variable called `schedule`:**
 | 40000 | nea             | 1              |
 | 0     | chimp, afr, eur | 5              |
 
-**Additionally, schedule the sampling of one `eur` individual at these times:**
+**Additionally, schedule the sampling of a single `eur` individual at the
+following times:**
 
 ```{r}
 t <- seq(40000, 2000, by = -2000)
@@ -727,10 +729,9 @@ You have now both a compiled _slendr_ `model` and a well-defined sampling `sched
 new tree-sequence simulation from your model (again using the `msprime()` function),
 this time restricted to just those individuals scheduled for recording. You can
 do this by providing the combined sampling `schedule` as the `samples = schedule` argument
-of the function `msprime` you used above.** Don't worry about overwriting the
-previous contents of `ts <- msprime(...)` in your script, just replace your old
-`msprime()` call with the new one which uses the `schedule` for your customized
-sampling.
+of the function `msprime` you used above.** Just replace the line(s) with your first
+`msprime()` from the previous part of this exercise with the new one, which
+uses the `schedule` for your customized sampling.
 
 **Also, while you're doing this, use the `ts_mutate()` function to add
 overlay neutral mutations on the simulated tree sequence right after the
@@ -883,6 +884,14 @@ ts_samples(ts) %>% filter(pop == "EUR") %>% pull(time)
 ts_samples(ts) %>% filter(pop == "NEA") %>% pull(time)
 ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
 ```
+
+::: {.aside}
+**Note:** These bits of tidyverse code are extremely helpful when you're working
+with large tree sequences with many individuals as sanity checks that your
+sampling worked as intended. I'm listing them here in case you've never worked
+with the tidyverse family of R packages before (such as the _dplyr_ package
+where `filter()`, `group_by()`, `tally()`, and `pull()` come from).
+:::
 
 Everything looks good! Having made sure that the `ts` object contains the
 individuals we want, let's move to the exercise.
