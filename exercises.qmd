@@ -1067,6 +1067,13 @@ format. Take a look at the help page available as `?ts_f4` for more information.
 **When you're computing the $f_4$, make sure to set `mode = "branch"` argument
 of the `ts_f4()` function (we will get to why a bit later).**
 
+::: {.aside}
+**Note:** By default, each _slendr_ / _tskit_ statistic function operates
+on mutations, and this will switch them to use branch length (as you might
+know, $f$-statistics are mathematically defined using branch lengths in trees
+and `mode = "branch"` does exactly that).
+:::
+
 **Hint:** If you haven't learned this in your $f$-statistics lecture, you want
 to compute (and compare) the values of these two statistics using the _slendr_
 function `ts_f4()`:
