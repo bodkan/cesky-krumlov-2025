@@ -42,7 +42,7 @@ It's quite likely you haven't worked with _slendr_ before and that's quite
 alright, there's no reason to panic. :) Although some of the exercises can get
 quite complex, even students who have only begun learning population genetics
 (and aren't even comfortable with R) will be able to follow the activities
-easily because the exact solutions are built in the [exercise materials](https://bodkan.quarto.pub/cesky-krumlov-2025-exercises/).
+easily because the exact solutions are built in the exercise materials.
 In ideal circumstances, students might only need a bit of help with R coding,
 and you (and I, obviously) will be able to do that by taking a peek at each
 respective solution R script, as needed. **You don't really have to know
