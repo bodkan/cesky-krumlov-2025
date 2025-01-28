@@ -246,17 +246,12 @@ some information about functions that could be useful to solve the exercise.
 **The concrete, specific task will be always written like this in bold. As you
 work on each part of each exercises, look for these bold lines.**
 
-**Your goal for each exercise is to write a complete R script script. I suggest
-you name the script for each exercise as `exercise1.R`, `exercise2.R`, etc.,
+**Your goal for each exercise is to write a complete R script script (in
+RStudio `File -> New file -> R script`). I suggest
+you save the script for each exercise as `exercise1.R`, `exercise2.R`, etc.,
 just to keep things tidy and easy to troubleshoot if needed.**
 
-Unless you have a strong preference for another editor or IDE, I recommend you
-use RStudio (either on your machine or in the cloud, as provided by the
-workshop organizers, depending on where you did the setup steps above). If you
-like Emacs, vim, VSCode, or anything else, really, feel free to use that as
-long as you are able to visualize figures.
-
-**Each exercise is compose of individual _parts_, which are designed to build
+**Each exercise is composed of individual _parts_, which are designed to build
 one upon the other in the order they are specified. As you progress through
 sequential parts of each exercise, you will be adding code to your script for
 that exercise.**
@@ -275,19 +270,17 @@ through the example solutions for the parts until that point, and give a quick
 explanation.**
 
 If you find yourself way ahead, there are bonus exercises (which I will not be
-going through with everyone) -- those should provide at least some
-entertainment for you while the rest of us are catching up. If you're
-_really_ far ahead, just continue to following exercises without waiting for
-the rest of us. You can also try to design your own models from scratch, such
-as models relevant for your model organism and popgen statistics relevant for
-your own work.
+going through with everyone) -- those should provide at entertainment and
+a bit more challenge for you while the rest of us are catching up. If you're
+_really_ far ahead, just continue to the next exercise without waiting for
+the rest of us.
 
 #### Note on the programming aspect of the exercises
 
 All the exercises will involve "real coding"! If you've never really programmed
 entire scripts before, this could feel a little intimidating. Don't worry.
 If you're ever lost, just take a peek at the solutions which are (by default
-hidden) under each exercise section. Always try to work on a solution on your
+hidden) under each exercise part. Always try to work on a solution on your
 own, but never let this be a barrier to your progress. Feel free to copy-paste
 bits of my solutions into your own scripts.
 
@@ -335,7 +328,8 @@ started by copy-pasting code examples written by someone else.)
 **Use functions such as `population()`, `gene_flow()`, and `compile_model()`,
 which we discussed in the ["crash course"](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/) at the
 start of this session, to program the following toy model of human demographic
-history in _slendr_.**
+history in _slendr_.** (Apologies for my bad handwriting and poor artistic
+ability.)
 
 ![](images/intro_model1.png){width="50%"}
 
