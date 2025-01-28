@@ -37,9 +37,6 @@ on installation and setup.
 
 The goal of every exercise in the activity is to write a self-contained script
 in R using the _slendr_ R package (one script for each exercise).
-I recommend that everyone works in RStudio, but this is mostly for convenience.
-As long as the students can make figures in R, they can you whatever method of
-programming that they are accustomed to.
 
 It's quite likely you haven't worked with _slendr_ before and that's quite
 alright, there's no reason to panic. :) Although some of the exercises can get
@@ -48,18 +45,17 @@ quite complex, even students who have only begun learning population genetics
 easily because the exact solutions are built in the [exercise materials](https://bodkan.quarto.pub/cesky-krumlov-2025-exercises/).
 In ideal circumstances, students might only need a bit of help with R coding,
 and you (and I, obviously) will be able to do that by taking a peek at each
-respective solution R script, as needed.
-
-As for installation and setup, there are detailed instructions in the exercises
-materials [here](https://github.com/bodkan/cesky-krumlov-2025/blob/main/exercises.md).
+respective solution R script, as needed. **You don't really have to know
+_slendr_ to be able to help the students! Just use the provided solutions
+to guide them.**
 
 Note that there's quite a lot of content in the exercises, and a lot of it is
 marked as "bonus". This bonus content is designed for expert R programmers and
 people who would be otherwise bored. If someone does run into an issue with
 that and has a question, I will be able to deal with that easily. Don't worry
 about those at all. In fact, unless things go extremely smoothly, we might not
-even make it to the final Exercise 5. It all depends on how comfortable the
-participants will be with R programming.
+even make it to the very final part of the last exercise. It all depends on how
+comfortable the participants will be with R programming.
 
 All the information that the students might need to do the exercises is
 available in the [slides](https://bodkan.quarto.pub/cesky-krumlov-2025-slides/)
