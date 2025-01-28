@@ -1995,7 +1995,10 @@ generally operate on vectors
 (or lists) of individual names, like those produced by `ts_names()` above.
 **Get a vector of names of individuals in every population recorded in the
 tree sequence, then use this to compute Tajima's D using the _slendr_ function
-`ts_tajima()`. Do you see any striking differences in the Tajima's D values across populations? Check [this](https://en.wikipedia.org/wiki/Tajima%27s_D#Interpreting_Tajima's_D)
+`ts_tajima()`.** (Use the same approach as you have with `ts_diversity()` or 
+`ts_divergence()` above, using the list of names of individuals as the
+`sample_sets =` argument for `ts_tajima()`). **Do you see any striking
+differences in the Tajima's D values across populations? Check [this](https://en.wikipedia.org/wiki/Tajima%27s_D#Interpreting_Tajima's_D)
 for some general guidance.**
 
 ::: callout-note
