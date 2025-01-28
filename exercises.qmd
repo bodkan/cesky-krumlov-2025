@@ -1485,7 +1485,7 @@ init_env()
 
 simulate_afs <- function(Ne) {
   # In here you should write code which will:
-  #   1. create a single population (choose whatever name you want, like "pop")
+  #   1. create one population with a given Ne (provided as a function argument)
   #   2. compile a model using `simulation_length =` and `generation_time =`
   #   3. simulate a tree sequence
   #   4. select names of 10 samples (doesn't matter which, "pop_1", "po2_", ...)
