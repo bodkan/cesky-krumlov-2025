@@ -1990,7 +1990,8 @@ ts_samples(ts) %>% group_by(pop, time) %>% tally
 :::
 
 
-As you've learned, _tskit_ functions in _slendr_ generally operate on vectors
+As you've already learned in an earlier exercise, _tskit_ functions in _slendr_
+generally operate on vectors
 (or lists) of individual names, like those produced by `ts_names()` above.
 **Get a vector of names of individuals in every population recorded in the
 tree sequence, then use this to compute Tajima's D using the _slendr_ function
