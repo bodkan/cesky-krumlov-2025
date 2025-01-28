@@ -1434,13 +1434,14 @@ distinct(all_f4s, abs(f4), .keep_all = TRUE)
 
 # Exercise 3: Simulation-based inference of $N_e$
 
-What we did so far is learning how _slendr_ models provide an easy way to encode
+So far we've learned how _slendr_ provides an easy way to define
 demographic models in R and simulate (even very large!) tree sequences from them.
-This allows us to very quickly verify our intuition about some popgen problem
+This allows us to quickly verify our intuition about some popgen problem
 (things like _"Hmmm, I wonder what would an $f_4$ statistic look like if my model
-includes this particular gene-flow event?_), in just a few lines of R. We have
-been able to even answer some questions like this directly in a meeting, pretty
-much on the spot! This makes _slendr_ a very powerful "popgen calculator".
+includes this particular gene-flow event?_), in just a few lines of R. There
+have been instances in which we've been able to even answer questions like
+this directly in a meeting, pretty much on the spot! This makes _slendr_ a
+very powerful "popgen calculator".
 
 Now let's take things one step forward. Imagine you gathered some empirical
 data, like an allele frequency spectrum (AFS) from a population that you
