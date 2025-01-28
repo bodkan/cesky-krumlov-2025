@@ -1500,7 +1500,13 @@ afs_1 <- simulate_afs(Ne = 1000) # simulate AFS from a Ne = 1000 model...
 plot(afs_1, type ="o")           # ... and plot it
 ```
 
-**Note:** Remember that you should drop the first element of the AFS vector produced by `ts_afs()` (for instance with something like `result[-1]` if `result` contains the output of `ts_afs()`) technical reasons related to _tskit_. You don't have to worry about that here, but you can read [this](https://tskit.dev/tutorials/analysing_tree_sequences.html#sec-tutorial-afs-zeroth-entry) for more detail.
+::: {.aside}
+**Note:** Remember that you should drop the first element of the AFS vector
+produced by `ts_afs()` (for instance with something like `result[-1]` if
+`result` contains the output of `ts_afs()`) technical reasons related to
+_tskit_. You don't have to worry about that here, but you can read
+[this](https://tskit.dev/tutorials/analysing_tree_sequences.html#sec-tutorial-afs-zeroth-entry) for more detail.
+:::
 
 **Hint:** **If the above still doesn't make any sense to you, feel free to
 copy-paste the function from the solution below into your script and work with
