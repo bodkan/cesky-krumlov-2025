@@ -1608,14 +1608,14 @@ and had mutation and recombination rates of 1e-8 (i.e., parameters already
 implemented by your `simulate_afs()` function).
 
 **Use _slendr_ simulations to guess the true (and hidden!) $N_e$ given the observed
-AFS by running simulations for a range of $N_e$ values and comparing each run to
-the `afs_observed` vector above.**
-
-**Hint:** Depending on your level of comfort with R (and programming in general), you can
-choose one of the following approaches:
+AFS by running simulations for a range of $N_e$ values and finding out
+which $N_e$ produces the closest AFS vector to the `afs_observed` vector above
+using one of the following two approaches.**
 
 - **Option 1** [easy]: Plot AFS vectors for various $N_e$ values, then eyeball
-which looks closest to the observed AFS based on the figures alone.
+which looks closest to the observed AFS based on the figures alone. (This is,
+of course, not how proper statistical inference is done, but it will be
+good enough for this exercie!)
 
 - **Option 2** [hard]: Simulate AFS vectors in steps of possible `Ne` (maybe
 `lapply()`?), and find the $N_e$ which gives the closest AFS to the observed AFS based on [Mean squared error](https://en.wikipedia.org/wiki/Mean_squared_error).
@@ -1630,7 +1630,8 @@ afs_observed <- c(2520, 1449, 855, 622, 530, 446, 365, 334, 349, 244,
                   264, 218,  133, 173, 159, 142, 167, 129, 125, 143)
 
 # We know that the Ne is between 1000 and 30000, so let's simulate
-# a bunch of AFS vectors for different Ne values
+# a bunch of AFS vectors for different Ne values using our custom
+# AFS simulation function
 afs_Ne1k <- simulate_afs(Ne = 1000)
 afs_Ne5k <- simulate_afs(Ne = 5000)
 afs_Ne6k <- simulate_afs(Ne = 6000)
@@ -1861,16 +1862,16 @@ models. However, as _slendr_ became popular, people have been asking for
 the possibility of simulating natural selection. After all, a large
 part of _slendr_'s functionality deals with population genetic [models across
 geographical landscapes](https://www.slendr.net/articles/vignette-06-locations.html),
-which requires SLiM. Even though these models are
-neutral, SLiM is _the_ most famous and popular tool for simulating various
-aspects of natural selection.
+which requires SLiM. So why not support selection simulations using _slendr_
+as well?
 
-Recently I caved in and added support for modifying
-_slendr_ demographic models with bits of SLiM code which allows simulating
+In December 2024 I caved in and added support for modifying
+_slendr_ demographic models with bits of SLiM code, which allows simulating
 pretty much any arbitrary selection scenario you might be interested in. 
-This exercise is a quick demonstration of how this work and how you might
+
+This exercise is a quick demonstration of how this works and how you might
 simulate selection using _slendr_. We will do this using another toy
-model of ancient human history, which we will use as a basis for simulating
+model of ancient human history, which we will first use as a basis for simulating
 the frequency trajectory of an allele under positive selection, and implementing
 a simpleselection scan summary statistic using Tajima's D.
 
