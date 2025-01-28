@@ -965,7 +965,7 @@ various _slendr_ / _tskit_ functions to compute statistics on subsets of
 all individuals sub-sampled in this way.
 
 **After you computed the nucleotide diversity per-population, compute it for
-each individual separately using the same function `ts_diversity()`** (which, in this way, gives you effectively the heterozygosity for each individual).**
+each individual separately using the same function `ts_diversity()`** (which, in this setting, gives you effectively the heterozygosity for each individual).
 
 **Hint:** You can do this by giving a vector of names as `sample_sets =` (so
 not an R list of vectors). Feel free to take a look at the solution if you
