@@ -337,12 +337,15 @@ ability.)
 **Note:** You could easily program the model so that different ancestral
 populations are represented by separate `population()` commands (i.e.,
 your model would start with a population called "human_chimp_ancestor" from
-which a "CHIMP" and "hominin_ancestor" populations would split, etc.) but
-generally this is too annoying to do and normally it's unnecessary. Feel free
-to write the model so that "CHIMP" is the first population, then "AFR" population
-splits from it, etc... Although it probably isn't the most accurate way to
-describe the real evolutionary history, it simplified the coding significantly.
+which a "CHIMP" and "hominin_ancestor" populations would split at 6 Mya, etc.) but
+generally this is too annoying to do and requires too much code.
 
+Feel free to write the model so that "CHIMP" is the first population, then
+"AFR" population splits from it at 6 Mya, etc... Although it probably isn't
+the most accurate way to describe the real evolutionary history, it simplifies
+the coding significantly.
+
+<br>
 [Mya = million years ago;  kya = thousand years ago]
 :::
 
@@ -380,7 +383,9 @@ following event in generation 42, and so on).
 When you write a chunk of code (such as a command to create a population
 through a population split, or model compilation to create a `model` object),
 execute that bit of code in the R console and inspect the summary information
-printed by evaluating the respective R object you just created.
+printed by evaluating the respective R object you just created. You can either
+copy-pasted stuff from your script to the R console, or used a convenient 
+RStudio shortcut like Ctrl+Enter (Linux and Windows), or Cmd+Enter (Mac).
 
 ::: callout-note
 #### Click to see the solution
@@ -410,7 +415,7 @@ model <- compile_model(
   gene_flow = gf,
   generation_time = 30,
   path = here::here("data/introgression"),  # <--- don't worry about these two
-  overwrite = TRUE, force = TRUE            #      lines of code (ask me if interested)
+  overwrite = TRUE, force = TRUE            # <--- lines of code (ask me if interested)
 )
 ```
 :::
@@ -419,10 +424,11 @@ model <- compile_model(
 
 To visualize a _slendr_ model, you use the function `plot_model()`.
 **Plot your compiled `model` to make sure you programmed it correctly!**
-Your figure should roughly correspond to my handdrawn doodle above.
+Your figure should roughly correspond to my doodle above.
 
 ::: aside
-**Note:** Plotting of models can be sometimes a little wonky. When plotting your
+**Note:** Plotting of models in _slendr_ can be sometimes a little wonky,
+especially if many things are happening at once. When plotting your
 model, experiment with arguments `log = TRUE`, `proportions = TRUE`,
 `gene_flow = TRUE`. Check `?plot_model` for more information on these.
 :::
