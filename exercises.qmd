@@ -883,10 +883,18 @@ of European individuals and the two Neanderthals):
 ```{r}
 library(dplyr)
 
+# total number of recorded individuals in the tree sequence
 ts_samples(ts) %>% nrow
+# times of sampling of each recorded European individual
 ts_samples(ts) %>% filter(pop == "EUR") %>% pull(time)
+# times of sampling of each recorded Neanderthal
 ts_samples(ts) %>% filter(pop == "NEA") %>% pull(time)
-ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
+# count of individuals in each population
+ts_samples(ts) %>%
+  group_by(pop, present_day = time == 0) %>%
+  tally %>%
+  select(pop, present_day, n) %>%
+  arrange(present_day)
 ```
 
 ::: {.aside}
@@ -1639,7 +1647,7 @@ legend("topright",
 ::: callout-note
 #### Click to see the solution to "Option 2"
 
-```{r}
+```{r, eval=RERUN}
 # This is our starting observed AFS which we want to compare simulated AFS vectors to
 afs_observed <- c(2520, 1449, 855, 622, 530, 446, 365, 334, 349, 244,
                   264, 218,  133, 173, 159, 142, 167, 129, 125, 143)
