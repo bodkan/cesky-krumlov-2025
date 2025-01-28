@@ -1094,9 +1094,11 @@ $$
 f_4(AFR, X; NEA, CHIMP) = \frac{\#BABA - \#ABBA}{\#SNPs}
 $$
 
-The first is not expected to give values "too different" from 0 because we
+The first $f_4$ statistic above is not expected to give values "too different"
+from 0 (even in case of Neanderthal introgression into Europeans) because we
 don't expect two African individuals to differ "significantly" in terms of how
-much alleles they share with a Neanderthal. The other should -- if there was
+much alleles they share with a Neanderthal (because their ancestors
+never met Neanderthals!). The other should -- if there was
 a Neanderthal introgression into Europeans some time in their history -- be
 "significantly negative".
 
