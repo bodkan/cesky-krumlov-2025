@@ -913,7 +913,7 @@ individuals we want, let's move to the exercise.
 The toy model of ancient human history plotted above makes a fairly clear prediction of what would be the
 nucleotide diversity expected in the simulated populations.
 **Compute the nucleotide diversity in all populations using the _slendr_ function
-[`ts_diversity()`](https://www.slendr.net/reference/ts_diversity.html#ref-examples).
+[`ts_diversity()`](https://www.slendr.net/reference/ts_diversity.html#ref-examples), as simulated in your tree-sequence result `ts`.
 Do you get results you would expect from the model?**
 
 **Hint:** Nearly every _slendr_ statistic function interfacing with _tskit_
