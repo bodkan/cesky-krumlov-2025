@@ -1144,18 +1144,23 @@ f4_alt$f4 / f4_null$f4
 The fact that we don't get something equivalent to a p-value in these kinds of
 simulations is generally not a problem, because we're often interested in
 establishing a trend of a statistic under various conditions, and understanding
-when and how it behaves in a certain way. If statistical noise is a problem, we
-can easily work around it by computing a statistic on multiple simulation
-replicates or even increasing the sample sizes. I used this approach quite
-successfully on a related problem in [this paper](https://www.pnas.org/doi/10.1073/pnas.1814338116#fig02).
+when and how its _expected value_ behaves in a certain way.
+If statistical noise is a problem, we work around this by computing a
+statistic on multiple simulation replicates or even increasing the sample sizes.
+
+::: {.aside}
+**Note:** To see this in practice, you can check out a
+[paper](https://www.pnas.org/doi/10.1073/pnas.1814338116#fig02) in which I used
+this approach quite successfully on a related problem.
+:::
 
 On top of that, p-value of something like an $f$-statistic (whether it's
 significantly different from zero) is also strongly affected by quality of
-the data, sequencing errors, coverage, etc. (which can certainly be done
-using simulations!). However, these are an orthogonal issue which has little
-to do with the underlying evolutionary model in question anyway -- and it's
-the investigation of expected patterns of behavior of popgen statistics
-what we're after in our exercises.
+the data, sequencing errors, coverage, etc. (which can certainly be examined
+using simulations!). However, these are aspects of modeling which are quite
+orthogonal to the problem of investigating the expectations and trends of
+statistics given some underlying evolutionary model, which is what we're after
+in these exercises.
 
 In short, how much is "significantly different from zero compared to some
 baseline expectation" can be easily drowned in noise in a simple
