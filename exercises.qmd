@@ -1022,11 +1022,17 @@ ggplot(pi_df, aes(pop, diversity, color = pop, group = pop)) +
 
 ## Part 2: Computing pairwise divergence
 
-**Use the function [`ts_divergence()`](https://www.slendr.net/reference/ts_divergence.html#ref-examples) to compute genetic divergence between all pairs of populations.** Do you get results compatible with our demographic model?
+**Use the function
+[`ts_divergence()`](https://www.slendr.net/reference/ts_divergence.html#ref-examples)
+to compute genetic divergence between all pairs of populations. Again, do you
+get results compatible with our demographic model in terms of expectation
+given the split times between populations as you programmed them for your
+model?**
 
-**Hint:** Again, you can use the same concept of `sample_sets =` we discussed in the previous part. In this case, the function computes _pairwise_ divergence between
-each element of the list given as `sample_sets =` (i.e., for each vector of
-individual names).
+**Hint:** Again, you can use the same concept of `sample_sets =` we discussed
+in the previous part. In this case, the function computes _pairwise_
+divergence between each element of the list given as `sample_sets =` (i.e.,
+for each vector of individual names).
 
 ::: callout-note
 ### Click to see the solution
