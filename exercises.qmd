@@ -1084,7 +1084,9 @@ function `ts_f4()`:
 
 here `<individual>` can be the name of any individual recorded in your
 tree sequence, such as names you saw as `name` column in the table returned
-by `ts_samples(ts)` or the vectors of strings returned by `ts_names(ts)`.
+by `ts_samples(ts)` (i.e. `"NEA_1"` could be used as a "representative"
+`<Neanderthal>` in those equations, similarly for `"CHIMP_1"` as the fourth
+sample in the $f_4$ quarted representing the outgroup).
 
 To simplify things a lot, we can understand the above equations as comparing the
 counts of so-called BABA and ABBA allele patterns between the quarted of samples
