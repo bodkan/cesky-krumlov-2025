@@ -383,7 +383,7 @@ We will always start our R scripts with this:
 
 ```{r}
 library(slendr) # you can safely ignore any potential warnings!
-init_env()
+init_env() # takes a moment on a shared server (but we run it just once)
 ```
 
 <br>Followed by some combination of the following:
