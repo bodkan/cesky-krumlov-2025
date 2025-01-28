@@ -2012,18 +2012,20 @@ ts_tajima(ts, sample_sets = samples, mode = "branch")
 Let's take this one step forward. Even if there is a locus under positive selection
 somewhere along our chromosome, it might be quite unlikely that we would find a
 Tajima's D value significant enough for the entire chromosome (which is basically
-what we did in the previous Part 1). Fortunately, thanks to the flexibility of
+what we did in Part 1 now). Fortunately, thanks to the flexibility of
 the _tskit_ module, the _slendr_ function  `ts_tajima()` has an argument
 `windows =`, which allows us to specify the coordinates of windows into which
 a sequence should be broken into, with Tajima's D computed separately for each
-window. Perhaps this will allow us to see the impact of positive selection?
+window. Perhaps this will allow us to see the impact of positive selection
+after we get to adding selection to our model. So let's first built some code
+towards that.
 
 **Define a variable `windows` which will contain a vector of coordinates of
 100 windows, starting at position `0`, and ending at position `10e6` (i.e., the end
 of our chromosome). Then provide this variable as the `windows =` argument of
 `ts_tajima()` on a new, separate line of your script. Save the result of
 `ts_tajima()` into the variable `tajima_wins`, and inspect its contents in the
-R console.***
+R console.**
 
 **Hint:** You can use the R function `seq()` and its argument `length.out = 100`,
 to create the coordinates of window boundaries very easily.
@@ -2068,11 +2070,15 @@ tajima_df <- process_tajima(tajima_wins)
 tajima_df
 
 # Now let's visualize the window-based Tajima's D along the simulated genome
-# using another helper function `plot_tajima()` (hint: we still don't expect
-# anything interesting here because we ran a purely neutral simulation, so this
-# is more like a control)
+# using another helper function `plot_tajima()`
 plot_tajima(tajima_df)
 ```
+
+It's no surprise that we don't see any Tajima's D outliers in any of our
+windows, because we're still working with a tree sequence produced by our
+a purely neutral simulation. But we have everything set up for the next part,
+in which we will add selection acting on a beneficial allele.
+
 :::
 
 
