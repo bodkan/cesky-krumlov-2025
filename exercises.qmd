@@ -970,8 +970,9 @@ in this setting, gives you effectively the heterozygosity for each individual).
 heterozygosities across all populations.**
 
 **Hint:** You can do this by giving a vector of names as `sample_sets =` (so
-not an R list of vectors). Feel free to take a look at the solution if you
-find this distinction confusing.
+not an R list of vectors). You could also use the data frame produced by
+`ts_samples(ts)` to get the names, just adding the heterozygosities to that
+data frame as a new column.
 
 ::: callout-note
 ### Click to see the solution
@@ -1043,6 +1044,10 @@ sample_sets <- ts_names(ts, split = "pop")
 div_df <- ts_divergence(ts, sample_sets)
 arrange(div_df, divergence)
 ```
+
+We can see that the pairwise nucleotide divergences between populations
+recapitulate the known population/species relationships we would expect from
+our model.
 :::
 
 ## Part 3: Detecting Neanderthal admixture in Europeans
@@ -1062,7 +1067,7 @@ history of those samples is compatible with there not having been an introgressi
 
 **Compute the $f_4$ test of Neanderthal introgression in EUR individuals using
 the _slendr_ function `ts_f4()`.** When you're running it, you will have to
-provide individuals to compute the statistic on using a slightly different
+provide individuals to compute the statistic using a slightly different
 format. Take a look at the help page available as `?ts_f4` for more information.
 **When you're computing the $f_4$, make sure to set `mode = "branch"` argument
 of the `ts_f4()` function (we will get to why a bit later).**
@@ -1085,7 +1090,7 @@ function `ts_f4()`:
 here `<individual>` can be the name of any individual recorded in your
 tree sequence, such as names you saw as `name` column in the table returned
 by `ts_samples(ts)` (i.e. `"NEA_1"` could be used as a "representative"
-`<Neanderthal>` in those equations, similarly for `"CHIMP_1"` as the fourth
+\<Neanderthal\> in those equations, similarly for `"CHIMP_1"` as the fourth
 sample in the $f_4$ quarted representing the outgroup).
 
 To simplify things a lot, we can understand the above equations as comparing the
@@ -1107,10 +1112,11 @@ a Neanderthal introgression into Europeans some time in their history -- be
 **Is the second of those two statistics "much more negative" than the first,
 as expected assuming introgression from Neanderthals into Europeans?**
 
-**In the text right above, why am I putting "significantly" and "much more
-negative" in quotes? What are we missing here for this being a true hypothesis
-test as you might be accustomed to from computing** $f$-statistics using
-a tool such as ADMIXTOOLS? (We will get to this again in the following part
+**Why am I putting "significantly" and "much more
+negative" in quotes in the previous sentence?
+What are we missing here for this being a true hypothesis
+test as you might be accustomed to from computing $f$-statistics using
+a tool such as ADMIXTOOLS?** (We will get to this again in the following part
 of this exercise.)
 
 ::: callout-note
@@ -1131,7 +1137,7 @@ f4_alt
 # negative than the first test, indicating that a European in our test carries
 # "significantly more" Neanderthal alleles compared to the baseline expectation
 # of no introgression established by the comparison to an African ...
-f4_alt$f4 / f4_null$f4
+abs(f4_alt$f4 / f4_null$f4)
 
 # ... although this is not a real test of significance (we have no Z-score or
 # standard error which would give us something like a p-value for the hypothesis
@@ -1169,9 +1175,9 @@ did above. Let's increase the sample size a bit to see if a statistical
 pattern expected in $f_4$ statistic from our Neanderthal introgression model
 becomes more apparent.
 
-**Compute the first $f_4$ statistic of the baseline expectation between
-a pair of Africans and the second $f_4$ statistic comparing an African and
-a European, but this time on _all recorded Africans_ and _all recorded
+**Compute the first $f_4$ statistic (the baseline expectation between
+a pair of Africans) and the second $f_4$ statistic (comparing an African and
+a European), but this time on _all recorded Africans_ and _all recorded
 Europeans_, respectively. Plot the *distributions* of those two sets of
 statistics. This should remove lots of the uncertainty and make a statistical
 trend stand out much more clearly.**
@@ -1238,6 +1244,10 @@ f4_results %>%
   ggtitle("f4(AFR, EUR; NEA, CHIMP)") +
   theme_bw()
 ```
+
+We can see that the $f_4$ statistic test of Neanderthal introgression in
+Europeans indeed does give a much more negative distribution of values compared
+to the baseline expectation which compares two Africans to each other.
 :::
 
 ::: callout-tip
@@ -1448,7 +1458,7 @@ data, like an allele frequency spectrum (AFS) from a population that you
 study. That data was, in the real world, produced by some (hidden) biological
 process (demographic history) that we want to learn about.
 For instance, the population we study had some $N_e$, which we don't
-know the value of -- the only thing we have is the observed AFS -- but we
+know the value of (the only thing we have is the observed AFS) but we
 want to infer that value.
 
 Simulations can be a great tool to estimate the most likely value of such an
@@ -1456,7 +1466,8 @@ unknown parameter. Briefly speaking, in this particular toy example,
 we can simulate a large number of AFS vectors (each resulting from a different
 assumed $N_e$ value) and then pick just those $N_e$ values (or just one $N_e$
 value) which produced a simulated AFS closest to the observed AFS.
-**This is exactly what you'll be doing just now in Exercise 3.**
+
+This is exactly what you'll be doing just now in Exercise 3.
 
 ## Part 1: A self-contained _slendr_ function of $N_e \rightarrow \textrm{AFS}$
 
