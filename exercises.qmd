@@ -124,10 +124,12 @@ activity, but don't hesitate to read a bit more if you're interested!
 **If you're using the RStudio browser-based cloud instance provided by
 the workshop organizes, you don't actually
 have to do anything! Just log in to the RStudio session in your browser and
-navigate to the directory for this activity via `File -> Open Project...`
-in the RStudio menu (selecting the `cesky-krumlov-2025.Rproj` project file
-in that directory with open a fresh R session for that project in your
-RStudio).**
+navigate to the directory for this activity
+(`~/workshop_materials/29_slendr`)
+via `File -> Open Project...`
+in RStudio menu (selecting the `cesky-krumlov-2025.Rproj` project file
+in that directory will open a fresh R session for that project in your
+RStudio).** Then you're good to go!
 
 ::: callout-note
 #### Setup on your own computer
@@ -280,7 +282,8 @@ don't hesitate to read my solutions from the get go, copy-pasting them into your
 own script in the RStudio, executing them line by line, and trying to understand
 what's going on. **It's the understanding that we're after here. Whether or not
 you can implement everything yourself from scratch does not actually matter at all.** (Nobody in history has learned to program from scratch. Everyone
-started by copy-pasting code examples written by someone else.)
+started by copy-pasting code examples written by someone else. So feel free
+to do the same!)
 
 
 
@@ -317,7 +320,7 @@ started by copy-pasting code examples written by someone else.)
 ### Part 1: Building a demographic model in _slendr_
 
 **Use functions such as `population()`, `gene_flow()`, and `compile_model()`,
-which we discussed in the ["crash course"](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/) at the
+which we discussed in the "crash course" at the
 start of this session, to program the following toy model of human demographic
 history in _slendr_.** (Apologies for my bad handwriting and poor artistic
 ability.)
@@ -341,7 +344,7 @@ the coding significantly.
 :::
 
 
-**Hint:** Start script `exercise1.R` script in your RStudio session using the following "template". Then add a sequence of appropriate `population()` calls using
+**Hint:** Create a new script `exercise1.R` in your RStudio session using the following "template". Then add a sequence of appropriate `population()` calls using
 the syntax from the introductory slides (using the `parent = <pop>` argument
 for programming splits of daughter populations -- which will be all except
 the CHIMP lineage in our example), etc.
@@ -357,7 +360,7 @@ init_env()
 
 model <- compile_model(
   populations = list(...), # <put your list of populations here>
-  gene_flow = <...>,       # <put your gene-flow variable `gf` here
+  gene_flow = gf,
   generation_time = 30
 )
 ```
@@ -375,7 +378,7 @@ When you write a chunk of code (such as a command to create a population
 through a population split, or model compilation to create a `model` object),
 execute that bit of code in the R console and inspect the summary information
 printed by evaluating the respective R object you just created. You can either
-copy-pasted stuff from your script to the R console, or used a convenient 
+copy-pasted stuff from your script to the R console, or use a convenient 
 RStudio shortcut like Ctrl+Enter (Linux and Windows), or Cmd+Enter (Mac).
 
 ::: callout-note
@@ -432,7 +435,7 @@ model, experiment with arguments `log = TRUE`, `proportions = TRUE`,
 plot_model(model)
 plot_model(model, sizes = FALSE)
 plot_model(model, sizes = FALSE, log = TRUE)
-plot_model(model, sizes = FALSE, log = TRUE, proportions = TRUE)
+plot_model(model, log = TRUE, proportions = TRUE)
 ```
 :::
 
@@ -517,21 +520,21 @@ msprime(model, sequence_length = 1e6, recombination_rate = 1e-8, run = FALSE)
 
 As we will see later, _slendr_ provides an R-friendly interface to
 accessing a [subset of _tskit_'s functionality](https://tskit.dev/tskit/docs/stable/python-api.html)
-for working with tree sequence and for computing various popgen statistics.
+for working with tree sequences and for computing various popgen statistics.
 
 For now, **type out the `ts` object in the terminal – what do you see?** You
 should get a summary of a tree-sequence object that you're familiar with from
 your _msprime_ and _tskit_ activity earlier in the day.
 
 ::: {.aside}
-This is a very important feature of _slendr_ -- when a simulation is
+**Note:** This is a very important feature of _slendr_ -- when a simulation is
 concluded (doesn't matter if it was a `slim()` or `msprime()` simulation),
 you will get a normal _tskit_ object. In fact, the fact that _slendr_ supports
 (so far, and likely always) only a "subset" of all of _tskit_'s functionality
 isn't stopping you to write custom Python/_tskit_ processing code of a tree
 sequence generated from a _slendr_ model. Under the hood, a _slendr_ simulation
 _really is_ just an _msprime_ (or SLiM) simulation! It's just executed through
-a simplified interface (and dare I say a bit more convenient, for some purposes).
+a simplified interface.
 :::
 
 ::: callout-note
@@ -547,15 +550,20 @@ ts
 The brilliance of the tree-sequence data structure rests on its elegant
 table-based implementation (much more information on that is [here](https://tskit.dev/tskit/docs/stable/data-model.html)). _slendr_ isn't
 really designed to run very complex low-level manipulations of tree-sequence
-data (it's strength lies in the convenient interface to popgen statistical
+data (its strength lies in the convenient interface to popgen statistical
 functions implemented by _tskit_), but it does contain a couple of functions
 which can be useful for inspecting the lower-level nature of a tree sequence.
 Let's look at a couple of them now.
 
-**Use the `ts_table` function to inspect the low-level table-based representation of a tree sequence.** For instance, you can get the table of nodes with `ts_table(ts, "nodes")`, edges with `ts_table(ts, "edges")`, and do the same thing for "individuals", "mutations", and "sites". **Does your tree sequence contain any mutations? If not, why, and how can we even do any popgen with data without any mutations? As you're doing this, take a look at at the following
-figure (this was made from a different tree sequence than you have, but that's
+**Use the `ts_table` function to inspect the low-level table-based representation of a tree sequence.** For instance, you can get the table of nodes with `ts_table(ts, "nodes")`, edges with `ts_table(ts, "edges")`, and do the same thing for "individuals", "mutations", and "sites". **Does your tree sequence contain any mutations? If not, why, and how can we even do any popgen with data without any mutations? As you're doing this, take a look at at the [following
+figure](https://tskit.dev/tutorials/_images/0327585c23c21d289094cc6394cc71ecc7e43f14197d7961b9d759c5abcc0e29.svg) (this was made from a different tree sequence than you have, but that's
 OK) to help you relate the information in the tables to a tree sequence which
 those tables (particularly tables of nodes and edges) implicitly encode.**
+
+This should convince you that the final product of a _slendr_ simulation
+really is the same kind of tree-sequence object that you learned about in
+the previous activities today. You don't have to study these tables in
+detail!
 
 ::: callout-note
 #### Click to see the solution
@@ -599,7 +607,9 @@ ts_samples(ts) %>% group_by(pop) %>% tally
 # above, except that it contains additional slendr metadata (names of individuals
 # belonging to each node, spatial coordinates of nodes for spatial models, etc.).
 # It's a bit more useful for analyzing tree-sequence data than the "low-level" functions.
-ts_nodes(ts)
+ts_nodes(ts) %>% head(5)
+
+ts_nodes(ts) %>% tail(5)
 ```
 :::
 
@@ -722,9 +732,9 @@ this time restricted to just those individuals scheduled for recording. You can
 do this by providing the combined sampling `schedule` as the `samples = schedule` argument
 of the function `msprime` you used above.** Just replace the line(s) with your first
 `msprime()` from the previous part of this exercise with the new one, which
-uses the `schedule` for your customized sampling.
+uses the `schedule` for customized sampling.
 
-**Also, while you're doing this, use the `ts_mutate()` function to add
+**Also, while you're doing this, use the `ts_mutate()` function to 
 overlay neutral mutations on the simulated tree sequence right after the
 `msprime()` call.** (Take a look at the handounts for a reminder of the `%>%`
 pipe patterns I showed you.)
@@ -761,8 +771,8 @@ ts_write(ts, "data/introgression.trees")
 :::
 
 **Inspect the tree-sequence object saved in the `ts` variable by typing
-it into the R console again (this interactivity really helps with catching
-nasty bugs early during the programming of your script). You can
+it into the R console again** (this interactivity really helps with catching
+nasty bugs early during the programming of your script). **You can
 also do a similar thing via the table produced by the `ts_samples()` function.
 You should see a much smaller number of individuals being recorded, indicating
 that the simulation was much more efficient and produced genomic data for
@@ -779,6 +789,7 @@ data from tens of thousands of individuals on a simple laptop!
 
 ```{r}
 # Inspect the (tskit/Python-based) summary of the new tree sequence
+# (note the much smaller number of "sample nodes"!)
 ts
 
 # Get the table of all recorded samples in the tree sequence
