@@ -321,7 +321,7 @@ cat script.py
 
 
 
-## A somewhat broader motivation
+## A broader motivation for _slendr_
 
 - Most researchers are not expert programmers
 
@@ -731,8 +731,16 @@ plot_model(model, proportions = TRUE)
 
 # A note on units (and direction) of time
 
+<br>
 
+Sometimes you want to work with time units
+such as "years ago" (aDNA radio-carbon dated samples, etc.),
+but you have to convert those to "generations forward" for some software.
 
+<br>
+
+_slendr_ helps by allowing you to use whatever time units
+or time directions are more natural for your particular project.
 
 
 
