@@ -1499,7 +1499,8 @@ _tskit_. You don't have to worry about that here, but you can read
 copy-paste the function from the solution below into your script and work with
 that function instead!**
 
-When used in R, your custom function should work like this:
+When used in R, your custom function should work like this (the simulation
+is stochastic, so your numbers will be different, of course):
 
 ```{r}
 #| echo: false
