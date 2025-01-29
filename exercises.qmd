@@ -642,7 +642,7 @@ ancient_times <- c(40000, 30000, 20000, 10000)
 eur_samples <- schedule_sampling(model, times = ancient_times, list(eur, 1))
 
 # ... but also just a single number like here
-afr_samples <- schedule_sampling(model, times = 0, list(afr, 1), list(eur, 42))
+afr_samples <- schedule_sampling(model, times = 0, list(afr, 1))
 nea_samples <- schedule_sampling(model, time = 60000, list(nea, 1))
 
 # But whatever the means you create the individual sampling schedules with,
@@ -655,11 +655,13 @@ schedule
 shown in the previous code chunk), program the sampling of the following
 sample sets at given times, saving it to variable called `schedule`:**
 
-| time  | population(s)   | \# individuals |
-|-------|:----------------|----------------|
-| 70000 | nea             | 1              |
-| 40000 | nea             | 1              |
-| 0     | chimp, afr, eur | 5              |
+| time  | population | \# individuals |
+|-------|:-----------|----------------|
+| 70000 | nea        | 1              |
+| 40000 | nea        | 1              |
+| 0     | chimp      | 1              |
+| 0     | afr        | 5              |
+| 0     | eur        | 10             |
 
 **Additionally, schedule the sampling of a single `eur` individual at the
 following times:**
@@ -798,7 +800,7 @@ ts_samples(ts)
 # Compute the count of individuals in different time points
 library(dplyr)
 
-ts_samples(ts) %>% group_by(pop, time == 0) %>% tally %>% select(pop, n)
+ts_samples(ts) %>% group_by(pop, present_day = time == 0) %>% tally %>% select(present_day, pop, n)
 ```
 :::
 
@@ -1145,7 +1147,7 @@ abs(f4_alt$f4 / f4_null$f4)
 ```
 :::
 
-## Part 5: Detecting Neanderthal admixture in Europeans v2.0
+## Part 4: Detecting Neanderthal admixture in Europeans v2.0
 
 The fact that we don't get something equivalent to a p-value in these kinds of
 simulations is generally not a problem, because we're often interested in
