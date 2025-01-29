@@ -150,8 +150,8 @@ They are <u>very</u> powerful and (nearly) infinitely flexible.
 
 However, they both require:
 
--   a lot of code for very complex simulations,
--   quite a bit of programming knowledge.
+- quite a bit of code for complex simulations (what is "complex" is relative, of course!),
+- relatively high confidence in programming
 
 <!-- (🐛🪲🐜). -->
 :::
@@ -165,7 +165,7 @@ However, they both require:
 :::
 
 ::: {.fragment}
-<center><br>As a recap, let's look at _msprime_ and SLiM a little bit...</center>
+<center><br>But, as a recap, let's look at _msprime_ and SLiM a little bit...</center>
 :::
 
 
@@ -188,8 +188,7 @@ However, they both require:
 
 -   Extremely fast (genome-scale, population-scale data!)
 
--   You should know Python fairly well to build complex models (what's
-"complex" is of course debatable!)
+-   You should know Python fairly well to build complex models
 :::
 
 ::: {.column width="40%"}
