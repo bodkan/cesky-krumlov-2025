@@ -352,12 +352,12 @@ the CHIMP lineage in our example), etc.
 library(slendr)
 init_env()
 
-<... population definitions ...>
-<... gene-flow definition ...>
+# <replace this with `population()` definitions like in the slides>
+# <replace this with your gene-flow definition in variable `gf`>
 
 model <- compile_model(
-  populations = list(...),
-  gene_flow = <...>,
+  populations = list(...), # <put your list of populations here>
+  gene_flow = <...>,       # <put your gene-flow variable `gf` here
   generation_time = 30
 )
 ```
@@ -1503,10 +1503,28 @@ When used in R, your custom function should work like this:
 
 ```{r}
 #| echo: false
+# simulate_afs <- function(Ne) {
+#   n <- 20 # 1 is for the fixed sites included by tskit
+#   theta <- 4 * 1e-8 * Ne * 100e6
+#   round(theta * 1/1:n)
+# }
 simulate_afs <- function(Ne) {
-  n <- 20 # 1 is for the fixed sites included by tskit
-  theta <- 4 * 1e-8 * Ne * 100e6
-  round(theta * 1/1:n)
+  # create a slendr model with a single population of size Ne = N
+  pop <- population("pop", N = Ne, time = 1)
+  model <- compile_model(pop, generation_time = 1, simulation_length = 100000)
+
+  # simulate a tree sequence
+  ts <-
+    msprime(model, sequence_length = 10e6, recombination_rate = 1e-8) %>%
+    ts_mutate(mutation_rate = 1e-8)
+
+  # get a random sample of names of 10 individuals
+  samples <- ts_names(ts) %>% sample(10)
+
+  # compute the AFS vector (dropping the 0-th element added by tskit)
+  afs <- ts_afs(ts, sample_sets = list(samples))[-1]
+
+  afs
 }
 ```
 
