@@ -906,8 +906,8 @@ plot_model(model) # see time progressing from "year" 30000 backwards
 
 _slendr_ has two simulation "engine scripts" built-in:
 
--   SLiM engine ([_slendr_ source](https://github.com/bodkan/slendr/blob/main/inst/scripts/script.slim))
--   _msprime_ engine ([_slendr_ source](https://github.com/bodkan/slendr/blob/main/inst/scripts/script.py))
+-   _msprime_ engine ([_slendr_ source](https://github.com/bodkan/slendr/blob/main/inst/scripts/script.py)) -- R function `msprime()`
+-   SLiM engine ([_slendr_ source](https://github.com/bodkan/slendr/blob/main/inst/scripts/script.slim)) -- R function `slim()`
 
 ::: {.fragment}
 
