@@ -2505,7 +2505,7 @@ on that tree sequence.
 
 
 
-# Exercise 5: Your own model
+# (Homework) Exercise 5: Your own model
 
 Do you have a favourite model organism? **Take some of the most important
 features of its demographic history and program them as a new _slendr_ model
@@ -2538,12 +2538,19 @@ it on the [_slendr_ website](https://slendr.net).
 
 
 
+<hr>
 
 
 
 
 
-## More information
+
+
+
+
+
+
+# More information
 
 - The _slendr_ paper is published in [PCI EvolBiol](https://evolbiol.peercommunityin.org/articles/rec?id=630) (it has
   a lot of explanation, motivation, and plenty of examples _focusing on
