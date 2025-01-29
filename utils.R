@@ -45,7 +45,8 @@ plot_tajima <- function(tajima_df) {
     geom_vline(xintercept = 50, linetype = "dashed") +
     scale_x_continuous(breaks = seq(0, 100, 10)) +
     coord_cartesian(ylim = c(-4, 4)) +
-    theme_minimal()
+    theme_minimal() +
+    ylab("Tajima's D") + xlab("window along the genome")
 }
 
 
