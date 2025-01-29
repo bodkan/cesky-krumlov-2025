@@ -2172,7 +2172,7 @@ If you worked with SLiM before, glance through the script casually and see
 if it makes any sense to you. If you have not worked with SLiM before,
 look for the strange `{{elements}}` in curly brackets in the first ten lines
 of the script.** Those are the parameters of the selection model we will be
-customizing are standard neutral demographic model from in the next step.
+customizing the standard neutral demographic model we started with in the next step.
 
 Specifically, when you inspect the `slim_extension.txt` file, you can see
 that this "SLiM extension script" I provided for you has three parameters:
@@ -2306,6 +2306,11 @@ path <- slim(model, sequence_length = 10e6, recombination_rate = 1e-8, samples =
 # the table of allele frequencies.
 list.files(path)
 ```
+
+We can see that the `slim()` simulation generated a tree-sequence file (just
+like in previous exercises focused on `msprime()`) but it also created a new
+file -- this was done by the SLiM customization snippet we provided to
+`compile_model()`.
 :::
 
 ::: callout-note
@@ -2320,6 +2325,11 @@ path <- here::here("data/selection")
 # the table of allele frequencies.
 list.files(path)
 ```
+
+We can see that the `slim()` simulation generated a tree-sequence file (just
+like in previous exercises focused on `msprime()`) but it also created a new
+file -- this was done by the SLiM customization snippet we provided to
+`compile_model()`.
 :::
 
 ## Part 5: Investigating allele frequency trajectories
@@ -2353,6 +2363,17 @@ plot_grid(
   nrow = 1, rel_widths = c(0.7, 1)
 )
 ```
+
+We can see that the beneficial allele which appeared in the European population
+was under _extremely strong selection_ (look how its allele frequency shoots
+up immediately after its first appearance!). However, we can also se how
+the following demographic history with multiple admixture events kept "diluting"
+the allele frequency (indicated by the dips in the trajectory).
+
+This is the kind of _slendr_ simulation which could be also very useful for simulation-based
+inference, like we did in the previous exercise. Just imagine having a comparable
+aDNA time series data with empirical allele frequency trajectory over time and
+using it in an ABC setting!
 :::
 
 ## Part 6: Tajima's D (genome-wide and window-based) from the selection model
@@ -2603,7 +2624,7 @@ it on the [_slendr_ website](https://slendr.net).
 - Check out my new WIP package [_demografr_](http://github.com/bodkan/demografr)
 
   - Useful for simulation-based inference (ABC, grid-search, genetic algorithms, etc.)
-  - It builds on _slendr_! You know 90% of what you need to do inference with it.
+  - It builds on _slendr_! You now know 90% of what you need to do inference with it.
     
   - This is the coolest thing I've ever built so definitely take a look!
 
