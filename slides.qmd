@@ -172,25 +172,47 @@ They are <u>very</u> powerful but both require:
 ## 
 
 ::: {.columns} 
+
+::: {.column width="60%"}
+<h2>What is _msprime_?</h2>
+
+- A Python module for writing **coalescent simulations**
+
+-   Extremely fast (genome-scale, population-scale data)
+
+-   You must know Python fairly well to build complex models
+:::
+
+::: {.column width="40%"}
+<center>
+
+![<small>Image modified from [Alexei Drummond</small>](http://alexeidrummond.org/bayesian_phylo_lectures/lecture10/)](images/sim_sketches.001.png){width="100%"}
+
+
+</center>
+:::
+
+:::
+
+
+
+
+## 
+
+::: {.columns} 
 ::: {.column width="60%"}
 <h2>What is SLiM?</h2>
 
 - **A forward-time simulator**
 
-::: {.fragment}
-- Has its own programming language!
-:::
+- Has its own programming language
 
-::: {.fragment}
 - Massive library of functions for:
   - demographic events
   - various mating systems
   - natural selection
-:::
 
-::: {.fragment}
 -   More than 700 pages long [manual](https://github.com/MesserLab/SLiM/releases/download/v4.3/SLiM_Manual.pdf)!
-:::
 :::
 
 ::: {.column width="40%"}
@@ -227,37 +249,6 @@ cat script.slim
 
 
 
-## 
-
-::: {.columns} 
-
-::: {.column width="60%"}
-<h2>What is *msprime*?</h2>
-
-- A Python module for writing **coalescent simulations**
-
-::: {.fragment}
--   Extremely fast (genome-scale, population-scale data)
-:::
-
-::: {.fragment}
--   You must know Python fairly well to build complex models
-:::
-:::
-
-::: {.column width="40%"}
-<center>
-
-![<small>Image modified from [Alexei Drummond</small>](http://alexeidrummond.org/bayesian_phylo_lectures/lecture10/)](images/sim_sketches.001.png){width="100%"}
-
-
-</center>
-:::
-
-:::
-
-
-
 
 
 
@@ -278,10 +269,17 @@ cat script.py
 
 
 
+#
+
+<center>
+<h1>SLiM and _msprime_ are incredible pieces of software...</h1>
+</center>
 
 
 
-## And yet I built _something else_ 🙄
+
+
+## ... and yet I built _something else_ 🙄
 
 <center>
 
@@ -382,8 +380,8 @@ sorts, which you can refer to later.</center>
 We will always start our R scripts with this:
 
 ```{r}
-library(slendr) # you can safely ignore any potential warnings!
-init_env() # takes a moment on a shared server (but we run it just once)
+library(slendr) # You can safely ignore any potential warnings!
+init_env()      # This takes a moment in the cloud (but we run it just once)
 ```
 
 <br>Followed by some combination of the following:
@@ -469,18 +467,20 @@ pop2
 - Step size decrease:
 
 ```{r}
-#| code-line-numbers: "2"
+#| code-line-numbers: "1|2"
 pop1 <- population("pop1", N = 1000, time = 1)
 pop1_step <- resize(pop1, N = 100, time = 500, how = "step")
 ```
 
+::: {.fragment}
 - Exponential increase:
 
 ```{r}
-#| code-line-numbers: "2"
+#| code-line-numbers: true
 pop2 <- population("pop2", N = 100, time = 50, parent = pop1)
 pop2_exp <- resize(pop2, N = 10000, time = 500, end = 2000, how = "exponential")
 ```
+:::
 
 
 
@@ -492,6 +492,8 @@ pop2_exp <- resize(pop2, N = 10000, time = 500, end = 2000, how = "exponential")
 
 
 ## Tidyverse-style [pipe](https://magrittr.tidyverse.org) `%>%` interface
+
+The following leads to a more concise (and "elegant") code.
 
 - Step size decrease:
 
@@ -523,6 +525,8 @@ function `c`".
 
 
 ## A more complex model
+
+Using just the two functions introduced so far:
 
 ```{r}
 #| code-line-numbers: "|15-18"
@@ -567,8 +571,8 @@ pop5
 
 ::: {.fragment}
 
-This way, you can build up complex models step by step, checking things
-as you go by interacting with the R console.
+**This way, you can build up complex models step by step, checking things
+as you go by interacting with the R console.**
 
 :::
 
@@ -629,9 +633,9 @@ This is the final step before we can simulate data.
 #| code-line-numbers: true
 model <- compile_model(
   populations = list(pop1, pop2, pop3, pop4, pop5),
-  generation_time = 1,
-  simulation_length = 3000,
-  direction = "forward"
+  generation_time = 1,       # (converts the all times into generations)
+  simulation_length = 3000,  # (number of generations to run the simulation for)
+  direction = "forward"      # (not totally necessary but good practice)
 )
 ```
 
@@ -698,13 +702,25 @@ However, a better way to check a model is...
 
 
 
+
+
+
+
 ## Model visualization
+
+```{r}
+#| eval: false
+plot_model(model)
+```
 
 ```{r}
 #| fig-width: 7
 #| fig-align: center
-plot_model(model)
+#| echo: false
+plot_model(model, proportions = TRUE)
 ```
+
+
 
 
 
@@ -754,8 +770,8 @@ model <- compile_model(
 ```
 
 ::: {.aside}
-**Note:** We start `pop1` in generation 1, and each later event has an
-increasing time value.
+**We started with `pop1` in generation 1, with later events at an
+increasing time value.**
 :::
 
 
@@ -769,12 +785,12 @@ increasing time value.
 ```{r}
 #| fig-width: 7
 #| fig-align: center
-plot_model(model, proportions = TRUE)
+plot_model(model) # see time progressing from generation 1 forwards
 ```
 
 ::: {.aside}
-**Note:** We start `pop1` in generation 1, and each later event has an
-increasing time value.
+**We started with `pop1` in generation 1, with later events at an
+increasing time value.**
 :::
 
 
@@ -796,7 +812,7 @@ increasing time value.
 
 
 ```{r}
-#| code-line-numbers: "|22"
+#| code-line-numbers: "|22|23-24"
 pop1 <- population("pop1", N = 1000, time = 30000)
 
 pop2 <-
@@ -819,11 +835,13 @@ pop5 <-
 model <- compile_model(
   populations = list(pop1, pop2, pop3, pop4, pop5),
   generation_time = 10 # (10 time units for each generation)
+  # (we don't need to provide `simulation_length =` because
+  # "backwards" models end at time 0 by default, i.e. "present-day")
 )
 ```
 
 ::: {.aside}
-**Note:** Same model as before, except now expressed in units of "years before present".
+**Same model as before, except now expressed in units of "years before present".**
 :::
 
 
@@ -838,11 +856,11 @@ model <- compile_model(
 ```{r}
 #| fig-width: 7
 #| fig-align: center
-plot_model(model, proportions = TRUE)
+plot_model(model) # see time progressing from "year" 30000 backwards
 ```
 
 ::: {.aside}
-**Note:** Same model as before, except now expressed in units of "years before present".
+**Same model as before, except now expressed in units of "years before present".**
 :::
 
 
@@ -877,12 +895,12 @@ _slendr_ has two simulation "engine scripts" built-in:
 
 ::: {.fragment}
 
-They are designed to understand _slendr_ `model`s, which means that you
+They are designed to "understand" _slendr_ `model`s, meaning that you
 can simulate data just with this command:
 
 ```{r}
 #| eval: false
-ts <- msprime(model, sequence_length = 100e6, recombination_rate = 1e-8)
+ts <- msprime(model, sequence_length = 10e6, recombination_rate = 1e-8)
 ```
 
 :::
@@ -1062,9 +1080,43 @@ Coalescent and mutation processes can be decoupled!
 ## Let's go back to our example `model`...
 
 ```{r}
+#| eval: false
+plot_model(model)
+```
+
+```{r}
 #| fig-align: center
 #| echo: false
-plot_model(model)
+pop1 <- population("pop1", N = 1000, time = 1)
+
+pop2 <-
+  population("pop2", N = 1000, time = 300, parent = pop1) %>%
+  resize(N = 100, how = "step", time = 1000)
+
+pop3 <-
+  population("pop3", N = 1000, time = 400, parent = pop2) %>%
+  resize(N = 2500, how = "step", time = 800)
+
+pop4 <-
+  population("pop4", N = 1500, time = 500, parent = pop3) %>%
+  resize(N = 700, how = "exponential", time = 1200, end = 2000)
+
+pop5 <-
+  population("pop5", N = 100, time = 600, parent = pop4) %>%
+  resize(N = 50, how = "step", time = 900) %>%
+  resize(N = 1000, how = "exponential", time = 1600, end = 2200)
+
+gf <- gene_flow(from = pop1, to = pop2, start = 2000, end = 2200, rate = 0.13)
+
+model <- compile_model(
+  populations = list(pop1, pop2, pop3, pop4, pop5),
+  gene_flow = gf,
+  generation_time = 1,
+  simulation_length = 3000,
+  direction = "forward"
+)
+
+plot_model(model, proportions = TRUE)
 ```
 
 
@@ -1084,13 +1136,15 @@ In our script we'll have something like this:
 
 ```{r}
 #| eval: false
-#| code-line-numbers: "1-6|8-9"
+#| code-line-numbers: "1-8|10-11"
 library(slendr)
 init_env()
 
-<... population() definitions ...>
+# <... population() definitions ...>
 
-model <- compile_model(...)
+# <... gene_flow() definition ...>
+
+# <... compile_model(...) ...>
   
 ts <-
   msprime(model, sequence_length = 50e6, recombination_rate = 1e-8)
@@ -1113,13 +1167,15 @@ In our script we'll have something like this:
 
 ```{r}
 #| eval: false
-#| code-line-numbers: "8-10"
+#| code-line-numbers: "10-12"
 library(slendr)
 init_env()
 
-<... population() definitions ...>
+# <... population() definitions ...>
 
-model <- compile_model(...)
+# <... gene_flow() definition ...>
+
+# <... compile_model(...) ...>
   
 ts <-
   msprime(model, sequence_length = 50e6, recombination_rate = 1e-8) %>%
@@ -1133,15 +1189,10 @@ ts <-
   ts_mutate(mutation_rate = 1e-8)
 ```
 
-::: {.fragment}
-<br>
+::: {.aside}
 
-<center>
-
-<h4>In some exercises, mutations won't be necessary. Where we will need them,
-you can use `ts_mutate()`.</h4>
-
-</center>
+**Note:** In some exercises, mutations won't be necessary. Where we will need them,
+you can use `ts_mutate()` using the pattern shown here.</h4>
 :::
 
 
@@ -1226,13 +1277,13 @@ Allele-frequecy spectrum, diversity $\pi$, $F_{ST}$, Tajima's D, etc.
 
 
 
-## Specifying individuals to compute on
+## Extracting names of recorded samples
 
 1. We can get individuals recorded in `ts` with `ts_samples()`:
 
 ```{r}
 #| eval: false
-ts_samples(ts) %>% head(1) # returns a data frame (one row only, for brevity)
+ts_samples(ts) %>% head(1) # returns a data frame (one row here, for brevity)
 ```
 
 ```{r}
@@ -1292,12 +1343,9 @@ ts_names(ts, split = "pop") %>% lapply(sample, 5) %>% .[1]
 
 <center>This is modelled after the `sample_sets=` argument of the respective [_tskit_ Python methods](https://tskit.dev/tskit/docs/stable/python-api.html#statistics) (except you use names of individuals directly, not tree-sequence node numbers).</center>
 
-::: {.fragment}
-
 <br>
 <center>Let's take a look at how it works in general...</center>
 
-:::
 
 
 
@@ -1334,9 +1382,10 @@ df_result <- ts_diversity(ts, sample_sets = list(samples))
 :::
 
 ::: {.aside}
-**Note:** In this case, we write `sample_sets = list(samples)` to compute
-on the group of individuals together. Otherwise, `sample_sets = samples`
-would compute diversity in each individual separately.
+**Note:** Wherever you see `list(<vector of names>)`, you can think of it as
+_"compute a statistic for the entire group of individuals"_ (you get a single
+number). Without the `list()`, it would mean _"compute the statistic for each
+individual separately"_ (and get a value for each of them individually).
 :::
 
 
@@ -1424,7 +1473,13 @@ ts_f3(ts, A = samples$popX, B = samples$popY, C = samples$popZ)
 
 #
 
-<center><h1>A couple of examples of these patterns on real tree sequence data</h1></center>
+<center>
+
+<h1>A couple of examples of these patterns on simulated data</h1>
+
+<br><h2>(tree sequence `ts` we got from `msprime()` above)</h2>
+
+</center>
 
 
 
@@ -1461,7 +1516,7 @@ set.seed(42)
 
 ::: {.columns} 
 ::: {.column width="45%"}
-Get list of individuals in each population:
+Get a list of individuals in each population:
 
 ```{r}
 samples <- ts_names(ts, split = "pop")
@@ -1469,11 +1524,11 @@ samples <- ts_names(ts, split = "pop")
 names(samples)
 ```
 
+::: {.fragment}
 <br>
 
 We can index into the list via population name:
 
-::: {.fragment}
 ```{r}
 samples$pop1 %>% head(3)
 ```
@@ -1491,7 +1546,7 @@ samples$pop2 %>% head(3)
 
 ::: {.column width="53%"}
 ::: {.fragment}
-Compute nucleotide diversity:
+Compute nucleotide diversity (note the list `samples`):
 
 ```{r}
 ts_diversity(ts, sample_sets = samples)
@@ -1599,8 +1654,6 @@ not a data frame).
 
 ## More information
 
-<br>
-
 - The _slendr_ paper is published in [PCI EvolBiol](https://evolbiol.peercommunityin.org/articles/rec?id=630)
 
 - The website of the _slendr_ package is [here](https://www.slendr.net)
@@ -1611,7 +1664,10 @@ not a data frame).
 
 <hr>
 
-- Check out my new package [_demografr_](http://github.com/bodkan/demografr) (it builds on _slendr_!)
+- Check out my new package [_demografr_](http://github.com/bodkan/demografr)
+
+  - It builds on _slendr_!
+  - Useful for simulation-based inference (ABC, etc.)
 
 
 
@@ -1640,17 +1696,18 @@ These slides and other materials are (and always will be) at:
 
 [github.com/bodkan/cesky-krumlov-2025](https://github.com/bodkan/cesky-krumlov-2025)
 
+(also linked in the schedule of the Workshop)
+
 <br>
 
-On the GitHub page, you will find links to:
+On that GitHub page, you will find links to:
 
-- these slides (for reference during exercise)
 - a version of these slides as a single-page document
 - **exercise materials** (with solutions built-in)
 
-<br>
+The exercise materials have a note on how to open the activity
+(`~/workshop_materials/29_slendr`) in your cloud RStudio.
 
-**Open the GitHub link so you have everything at hand later.**
 
 
 
