@@ -1707,6 +1707,21 @@ not a data frame).
 
 
 
+## Topics of the exercises
+
+A quick "the best of..." tour of _slendr_ features:
+
+1. **Building a demographic model** and simulating genomic data from it
+
+2. Using _slendr_ as a sandbox for **exploring population genetic statistics**
+
+3. An example of **simulation-based inference** (a toy ABC-like inference procedure)
+
+4. **Simulating natural selection with _slendr_**
+
+
+
+
 ## Resources and exercise materials
 
 These slides and other materials are (and always will be) at:
