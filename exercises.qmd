@@ -838,7 +838,7 @@ tree sequences using
 [_slendr_'s interface](https://www.slendr.net/reference/index.html#tree-sequence-statistics)
 to the _tskit_ Python module.
 
-First, create a new R script `exercise2.R` and paste in the following code. This
+**First, create a new R script `exercise2.R` and paste in the following code.** This
 is one of the possible solutions to the Exercise 1, and it's easier if we all
 use it to be on the same page from now on, starting from the same model and
 the same simulated tree sequence:
@@ -861,9 +861,9 @@ model <- compile_model(
   generation_time = 30
 )
 
-# We will read a cached version of a tree sequence to make sure we're all on
-# the same page. That said, if you managed to do Exercise 1 on your own, feel
-# free to stick with your own simulated tree sequence!
+# We will read a cached version of a tree sequence I simulated myself
+# to make sure we're all on the same page. That said, if you managed to
+# do Exercise 1 on your own, feel free to stick with your own tree sequence!
 ts <- ts_read(here::here("data/introgression.trees"), model = model)
 
 cowplot::plot_grid(
@@ -963,9 +963,11 @@ Many of the following exercises will use these kinds of tricks to instruct
 various _slendr_ / _tskit_ functions to compute statistics on subsets of
 all individuals sub-sampled in this way.
 
-**After you computed the nucleotide diversity per-population, compute it for
+**After you computed nucleotide diversity per-population, compute it for
 each individual separately using the same function `ts_diversity()`** (which,
 in this setting, gives you effectively the heterozygosity for each individual).
+**If you are familiar with plotting in R, visualize the individual-based
+heterozygosities across all populations.**
 
 **Hint:** You can do this by giving a vector of names as `sample_sets =` (so
 not an R list of vectors). Feel free to take a look at the solution if you
