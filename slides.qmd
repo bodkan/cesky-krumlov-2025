@@ -781,7 +781,7 @@ pop5 <-
 model <- compile_model(
   populations = list(pop1, pop2, pop3, pop4, pop5),
   generation_time = 1,
-  simulation_length = 3000,
+  simulation_length = 3000, # forward-time sims need an explicit end
   direction = "forward"
 )
 ```
