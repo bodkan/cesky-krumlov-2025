@@ -18,9 +18,9 @@ simulations in population genomics that you can use for reference while working
 on the exercises (I will be going through these slides at the beginning of our
 activity session)
 
-- [exercise materials](https://bodkan.quarto.pub/cesky-krumlov-2025-exercises/)
+- **[exercise materials](https://bodkan.quarto.pub/cesky-krumlov-2025-exercises/)
 -- this is the main focus of our activity session (solutions are built-in but
-hidden by default)
+hidden by default)**
 
 The slides, handouts and exercises are also available for download as
 self-contained HTML files, just in case Quarto Pub server is down:
