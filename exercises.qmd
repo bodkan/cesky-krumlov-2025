@@ -2543,6 +2543,27 @@ it on the [_slendr_ website](https://slendr.net).
 
 
 
+## More information
+
+- The _slendr_ paper is published in [PCI EvolBiol](https://evolbiol.peercommunityin.org/articles/rec?id=630) (it has
+  a lot of explanation, motivation, and plenty of examples _focusing on
+  simulations on geographic landscapes!_)
+
+- The website of the _slendr_ package is [here](https://www.slendr.net)
+
+- Detailed tutorials are under [Articles](https://www.slendr.net/articles) on the website
+
+- _slendr_ GitHub repo (submit bug reports!) is [here](http://github.com/bodkan/slendr)
+
+<hr>
+
+- Check out my new WIP package [_demografr_](http://github.com/bodkan/demografr)
+
+  - Useful for simulation-based inference (ABC, grid-search, genetic algorithms, etc.)
+  - It builds on _slendr_! You know 90% of what you need to do inference with it.
+    
+  - This is the coolest thing I've ever built so definitely take a look!
+
 
 
 
