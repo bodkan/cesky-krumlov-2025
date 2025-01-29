@@ -87,13 +87,13 @@ knowledge to work on important problems \[...\].
 
 
 
-## Developing intuition into statistics
+<!-- ## Developing intuition into statistics -->
 
-<center>![](images/admixture.png)</center>
+<!-- <center>![](images/admixture.png)</center> -->
 
-::: {.aside}
-<small>Image from [Lawson _et al._ (2018)](https://www.nature.com/articles/s41467-018-05257-7)</small>
-:::
+<!-- ::: {.aside} -->
+<!-- <small>Image from [Lawson _et al._ (2018)](https://www.nature.com/articles/s41467-018-05257-7)</small> -->
+<!-- ::: -->
 
 
 
@@ -142,10 +142,18 @@ The most famous and widely used are [SLiM](https://messerlab.org/slim/) and [_ms
 
 ::: {.fragment}
 
-They are <u>very</u> powerful but both require:
+They are <u>very</u> powerful and (nearly) infinitely flexible.
 
--   quite a bit of programming knowledge,
--   a lot of code for non-trivial simulations (🐛🪲🐜).
+:::
+
+::: {.fragment}
+
+However, they both require:
+
+-   a lot of code for very complex simulations,
+-   quite a bit of programming knowledge.
+
+<!-- (🐛🪲🐜). -->
 :::
 
 ::: {.fragment}
@@ -157,7 +165,7 @@ They are <u>very</u> powerful but both require:
 :::
 
 ::: {.fragment}
-<center><br>But first let's look at SLiM and _msprime_ at least a little bit...</center>
+<center><br>As a recap, let's look at _msprime_ and SLiM a little bit...</center>
 :::
 
 
@@ -178,9 +186,10 @@ They are <u>very</u> powerful but both require:
 
 - A Python module for writing **coalescent simulations**
 
--   Extremely fast (genome-scale, population-scale data)
+-   Extremely fast (genome-scale, population-scale data!)
 
--   You must know Python fairly well to build complex models
+-   You should know Python fairly well to build complex models (what's
+"complex" is of course debatable!)
 :::
 
 ::: {.column width="40%"}
@@ -193,6 +202,24 @@ They are <u>very</u> powerful but both require:
 :::
 
 :::
+
+
+
+
+
+
+
+
+
+
+## Simple simulation using _msprime_
+
+```{bash}
+#| echo: false
+cat script.py
+```
+
+
 
 
 
@@ -254,25 +281,10 @@ cat script.slim
 
 
 
-
-
-## Simple simulation using _msprime_
-
-```{bash}
-#| echo: false
-cat script.py
-```
-
-
-
-
-
-
-
 #
 
 <center>
-<h1>SLiM and _msprime_ are incredible pieces of software...</h1>
+<h1>SLiM and _msprime_ are absolutely incredible pieces of software...</h1>
 </center>
 
 
@@ -291,13 +303,11 @@ cat script.py
 
 <small><br></small>
 
-::: {.fragment}
 <center>
 
-<h2>... but why?</h2>
+<h2>Why?</h2>
 
 </center>
-:::
 
 
 
@@ -342,7 +352,7 @@ cat script.py
 :::
 
 ::: {.fragment}
-<center><h4>_slendr_ makes this <u>easy</u>, even for complex models</h4></center>
+<center><h4>_slendr_ makes this <u>very easy</u>, even for "complex models"</h4></center>
 :::
 
 
@@ -693,7 +703,7 @@ model
 ```
 
 This can be useful as a quick overview of the model we are working with. 
-However, a better way to check a model is...
+However, **a better way to check a model is...**
 
 
 
@@ -729,7 +739,7 @@ plot_model(model, proportions = TRUE)
 
 
 
-# A note on units (and direction) of time
+# A note on units of time (and its direction)
 
 <br>
 
@@ -737,10 +747,8 @@ Sometimes you want to work with time units
 such as "years ago" (aDNA radio-carbon dated samples, etc.),
 but you have to convert those to "generations forward" for some software.
 
-<br>
-
-_slendr_ helps by allowing you to use whatever time units
-or time directions are more natural for your particular project.
+_slendr_ helps by making it possible to use whatever time units
+or time directions are more natural for a particular project.
 
 
 
@@ -750,6 +758,7 @@ or time directions are more natural for your particular project.
 ## "Forward time units"
 
 ```{r}
+#| code-line-numbers: "|1|22-23"
 pop1 <- population("pop1", N = 1000, time = 1)
 
 pop2 <-
@@ -820,7 +829,7 @@ increasing time value.**
 
 
 ```{r}
-#| code-line-numbers: "|22|23-24"
+#| code-line-numbers: "|1|22-24"
 pop1 <- population("pop1", N = 1000, time = 30000)
 
 pop2 <-
@@ -1713,8 +1722,8 @@ On that GitHub page, you will find links to:
 - a version of these slides as a single-page document
 - **exercise materials** (with solutions built-in)
 
-The exercise materials have a note on how to open the activity
-(`~/workshop_materials/29_slendr`) in your cloud RStudio.
+**The exercise materials have a note on opening the activity
+(`~/workshop_materials/29_slendr`) in your cloud RStudio.**
 
 
 
