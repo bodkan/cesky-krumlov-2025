@@ -1,5 +1,9 @@
 # Building intuition into popgen fundamentals and inference
 
+> [!NOTE]
+> **Note:** For anyone looking at these materials in the years since this event, it probably makes more sense for you to take a look at
+[a new workbook](https://bodkan.net/simgen/) I've been working on. It contains the basis of the materials archived here, and much, much more.
+
 ## Workshop on population and speciation genomics
 
 ### Český Krumlov, January 2025
