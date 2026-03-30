@@ -28,7 +28,7 @@ hidden by default)**
 
 ## Installation setup, and other instructions
 
-Refer to the [exercises materials](https://bodkan.quarto.pub/cesky-krumlov-2025-exercises/)
+Refer to the [exercises materials](exercises.html)
 for all necessary information
 on installation and setup.
 
