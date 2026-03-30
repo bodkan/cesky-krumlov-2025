@@ -15,21 +15,16 @@ session at the [**Workshop on population and speciation genomics**](http://evomi
 
 **Contents of this git repository**:
 
-- [slides](https://bodkan.quarto.pub/cesky-krumlov-2025-slides/) and
-[single-page handouts](https://bodkan.quarto.pub/cesky-krumlov-2025-handouts/)
+- [slides](slides.html) and
+[single-page handouts](handouts.html)
 -- these contain a crash course introduction on using the _slendr_ toolkit for
 simulations in population genomics that you can use for reference while working
 on the exercises (I will be going through these slides at the beginning of our
 activity session)
 
-- **[exercise materials](https://bodkan.quarto.pub/cesky-krumlov-2025-exercises/)
+- **[exercise materials](exercises.html)
 -- this is the main focus of our activity session (solutions are built-in but
 hidden by default)**
-
-The slides, handouts and exercises are also available for download as
-self-contained HTML files, just in case Quarto Pub server is down:
-[slides.html](slides.html), [handouts.html](handouts.html),
-[exercises.html](exercises.html).
 
 ## Installation setup, and other instructions
 
